@@ -1,0 +1,90 @@
+<div fxFlex>
+  <mat-sidenav-container fxFill>
+    <mat-sidenav
+      #sidenav
+      [mode]="isMobile ? 'over' : 'side'"
+      [opened]="!isMobile"
+      [disableClose]="!isMobile"
+      ngClass.gt-sm="has-border"
+    >
+      <!-- <mat-toolbar color="primary">
+        <span translate>APP_NAME</span>
+        <div fxFlex></div>
+        <div>
+          <button mat-icon-button [matMenuTriggerFor]="userMenu">
+            <mat-icon>person</mat-icon>
+          </button>
+          <mat-menu #userMenu="matMenu">
+            <mat-list>
+              <mat-list-item>
+                <span translate>Logged in as</span>&nbsp;<b>{{ username }}</b>
+              </mat-list-item>
+              <mat-divider></mat-divider>
+            </mat-list>
+            <button mat-menu-item (click)="logout()" translate>Logout</button>
+          </mat-menu>
+        </div>
+        <app-language-selector icon="true"></app-language-selector>
+      </mat-toolbar> -->
+      <nav class="nav-elements">
+        <mat-list>
+          <div class="main-logo">
+            <img src="assets/logo.svg" />
+          </div>
+          <mat-divider></mat-divider>
+          <a mat-list-item routerLink="/home" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+            <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon>
+            <span translate class="ml-5">Home</span>
+          </a>
+          <mat-divider></mat-divider>
+          <a mat-list-item routerLink="/home/program" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+            <mat-icon aria-hidden="false" aria-label="Example home icon">lightbulb</mat-icon>
+            <span translate class="ml-5">Program</span>
+          </a>
+          <mat-divider></mat-divider>
+          <a
+            mat-list-item
+            routerLink="/home/recommendations"
+            routerLinkActive="active"
+            (click)="isMobile && sidenav.close()"
+          >
+            <mat-icon aria-hidden="false" aria-label="Example home icon">notes</mat-icon>
+            <span translate class="ml-5">Recommendations</span>
+          </a>
+          <mat-divider></mat-divider>
+          <a mat-list-item routerLink="/home/profile" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+            <mat-icon aria-hidden="false" aria-label="Example home icon">settings</mat-icon>
+            <span translate class="ml-5">Profile</span>
+          </a>
+          <mat-divider></mat-divider>
+          <a mat-list-item routerLink="/about" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+            <mat-icon aria-hidden="false" aria-label="Example home icon">logout</mat-icon>
+            <span translate class="ml-5">Logout</span>
+          </a>
+          <mat-divider></mat-divider>
+        </mat-list>
+      </nav>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <mat-toolbar class="bg-main">
+        <button class="menu-button" mat-icon-button (click)="sidenav.toggle()" fxHide.gt-sm>
+          <mat-icon>menu</mat-icon>
+        </button>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="header-wrapper">
+              <div class="text-center">
+                <h5>{{ title }}</h5>
+              </div>
+              <!-- <div>
+                <mat-icon aria-hidden="false" aria-label="Example home icon">notifications</mat-icon>
+              </div> -->
+            </div>
+          </div>
+        </div>
+        <!-- <span class="text-bold">{{ title }}</span> -->
+      </mat-toolbar>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

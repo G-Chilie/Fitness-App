@@ -1,0 +1,44 @@
+.container {
+  text-align: center;
+  padding: 1em;
+}
+
+.logo {
+  width: 150px;
+  margin: 0 auto;
+}
+
+q {
+  font-style: italic;
+  quotes: "« " " »";
+}
+
+.card-text {
+  color: #9fa2b4;
+  font-weight: 600;
+}
+
+.card-number {
+  color: #252733;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.card-primary {
+  background-color: #fff;
+}
+
+.card-active {
+  .card-text {
+    color: #3751ff !important;
+  }
+  .card-number {
+    color: #3751ff !important;
+  }
+  border: 1px solid #3751ff;
+}
+
+// ::ng-deep .mat-sort-header-container {
+//   display:flex;
+//   justify-content:center;
+// }
