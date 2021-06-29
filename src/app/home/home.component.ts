@@ -39,6 +39,9 @@ const NAMES: string[] = [
   'Elizabeth',
 ];
 
+const token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjljZTYyMjFiLWU3ZjMtNDc3ZS1iYWQzLWFlZmEzNjFjNTZhNSIsInVzZXJuYW1lIjoiZ3Jvb2J5IiwidXNlclN0YXR1cyI6IkFETUlOIiwiaWF0IjoxNjI0OTg4MTMwLCJleHAiOjE2MjQ5OTE3MzB9.Bv_Lraf42gZW4k97pKNOjqLoLfLp67-aPiA6TEVTBp0';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -64,6 +67,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.getCustomers();
   }
 
   applyFilter(event: Event) {
@@ -95,15 +99,34 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.isLoading = true;
+    // this.quoteService
+    //   .getRandomQuote({ category: 'dev' })
+    //   .pipe(
+    //     finalize(() => {
+    //       this.isLoading = false;
+    //     })
+    //   )
+    //   .subscribe((quote: string) => {
+    //     this.quote = quote;
+    //   });
+  }
+
+  getCustomers() {
     this.quoteService
-      .getRandomQuote({ category: 'dev' })
+      .getCustomers(token)
       .pipe(
         finalize(() => {
           this.isLoading = false;
         })
       )
-      .subscribe((quote: string) => {
-        this.quote = quote;
-      });
+      .subscribe(
+        (res: any) => {
+          this.isLoading = false;
+          console.log(res);
+        },
+        (error) => {
+          this.isLoading = false;
+        }
+      );
   }
 }
