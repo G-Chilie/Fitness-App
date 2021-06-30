@@ -40,7 +40,7 @@ const NAMES: string[] = [
 ];
 
 const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjljZTYyMjFiLWU3ZjMtNDc3ZS1iYWQzLWFlZmEzNjFjNTZhNSIsInVzZXJuYW1lIjoiZ3Jvb2J5IiwidXNlclN0YXR1cyI6IkFETUlOIiwiaWF0IjoxNjI0OTg4MTMwLCJleHAiOjE2MjQ5OTE3MzB9.Bv_Lraf42gZW4k97pKNOjqLoLfLp67-aPiA6TEVTBp0';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjljZTYyMjFiLWU3ZjMtNDc3ZS1iYWQzLWFlZmEzNjFjNTZhNSIsInVzZXJuYW1lIjoiZ3Jvb2J5IiwidXNlclN0YXR1cyI6IkFETUlOIiwiaWF0IjoxNjI1MDc3NjczLCJleHAiOjE2MjUwODEyNzN9.eOIue38ierQbirVM0ztS2eAx0WzwDnrwjjqPbMiQxbE';
 
 @Component({
   selector: 'app-home',
@@ -113,7 +113,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   getCustomers() {
     this.quoteService
-      .getCustomers(token)
+      .getAllCustomers(token)
       .pipe(
         finalize(() => {
           this.isLoading = false;

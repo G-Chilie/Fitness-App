@@ -33,24 +33,40 @@ export class QuoteService {
   //   );
   // }
 
-  getCustomers(auth_token: any): Observable<any> {
-    let headers = new HttpHeaders();
+  /*
+  TODO: create a httpHeaders interceptor so that we don't have a add headers in each request 
+   */
 
-    headers.set('Content-Type', 'application/json').set('Authorization', `Bearer ${auth_token}`);
-
-    // const Headers = new HttpHeaders({
-    //   'Content-Type': 'application/json',
-    //   'Authorization': `Bearer ${auth_token}`
-    // })
-
+  getAllCustomers(auth_token: any): Observable<any> {
+    const Headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${auth_token}`,
+    });
     return this.httpClient
       .get(endPoints.getCustomers, {
-        headers: headers,
+        headers: Headers,
         observe: 'response',
       })
       .pipe(
         map((body: any) => {
           catchError(() => 'Error in fetching customers.');
+        })
+      );
+  }
+
+  getAllEmployees(auth_token: any): Observable<any> {
+    const Headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${auth_token}`,
+    });
+    return this.httpClient
+      .get(endPoints.getEmployees, {
+        headers: Headers,
+        observe: 'response',
+      })
+      .pipe(
+        map((body: any) => {
+          catchError(() => 'Error in fetching employees.');
         })
       );
   }
