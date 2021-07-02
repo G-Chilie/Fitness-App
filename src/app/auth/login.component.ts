@@ -52,7 +52,6 @@ export class LoginComponent implements OnInit {
     //   .pipe(
     //     map((res: any) => {
     //       console.log(res.accessToken);
-    //       debugger;
     //       catchError(() => 'Error in logging in.');
     //     })
     //   );
@@ -76,7 +75,7 @@ export class LoginComponent implements OnInit {
         },
         (error) => {
           this.isLoading = false;
-          if (error.status === 404) {
+          if (error.status === 404 || error.status === 401) {
             this._snackBar.open('Login failed. Check your credentials.', 'Ok', { duration: 3000 });
           }
         }
@@ -84,7 +83,6 @@ export class LoginComponent implements OnInit {
     // this.isLoading = true;
     // const xx = this.authenticationService.login(this.loginForm.value);
     // console.log(xx);
-    // debugger;
 
     // const login$ = this.authenticationService.login(this.loginForm.value);
     // login$

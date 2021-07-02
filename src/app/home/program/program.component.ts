@@ -1,38 +1,18 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { finalize } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { QuoteService } from '../quote.service';
 
-export interface UserData {
-  id: string;
+export interface ProgramData {
   name: string;
-  progress: string;
-  fruit: string;
+  productId: string;
+  questions: boolean;
+  moneyback: boolean;
+  recommendations: boolean;
+  duration: string;
 }
-
-/** Constants used to fill up our data base. */
-const FRUITS: string[] = ['blueberry', 'lychee', 'kiwi', 'mango', 'peach', 'lime', 'pomegranate', 'pineapple'];
-const NAMES: string[] = [
-  'Maia',
-  'Asher',
-  'Olivia',
-  'Atticus',
-  'Amelia',
-  'Jack',
-  'Charlotte',
-  'Theodore',
-  'Isla',
-  'Oliver',
-  'Isabella',
-  'Jasper',
-  'Cora',
-  'Levi',
-  'Violet',
-  'Arthur',
-  'Mia',
-  'Thomas',
-  'Elizabeth',
-];
 
 @Component({
   selector: 'app-program',
@@ -40,24 +20,21 @@ const NAMES: string[] = [
   styleUrls: ['./program.component.scss'],
 })
 export class ProgramComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['id', 'name', 'progress', 'fruit'];
-  dataSource: MatTableDataSource<UserData>;
+  isLoading = false;
+  programData: any;
+  colDef: string[] = ['name', 'productId', 'questions', 'moneyback', 'recommendations', 'duration'];
+  dataSource: MatTableDataSource<ProgramData>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor() {
-    // Create 100 users
-    const users = Array.from({ length: 100 }, (_, k) => this.createNewUser(k + 1));
-
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
-  }
+  constructor(private quoteService: QuoteService) {}
 
   ngOnInit(): void {}
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    setTimeout(() => {
+      this.getPrograms();
+    }, 3000);
   }
 
   applyFilter(event: Event) {
@@ -69,19 +46,43 @@ export class ProgramComponent implements OnInit, AfterViewInit {
     }
   }
 
-  /** Builds and returns a new User. */
-  createNewUser(id: number): UserData {
-    const name =
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))] +
-      ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) +
-      '.';
+  getPrograms() {
+    this.isLoading = true;
+    this.quoteService
+      .getAllPrograms()
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.status === 200 && res.body.data) {
+            this.programData = res.body.data;
+            this.filterProgramData(this.programData);
+          }
+          this.isLoading = false;
+        },
+        (error) => {
+          this.isLoading = false;
+        }
+      );
+  }
 
-    return {
-      id: id.toString(),
-      name: name,
-      progress: Math.round(Math.random() * 100).toString(),
-      fruit: FRUITS[Math.round(Math.random() * (FRUITS.length - 1))],
-    };
+  filterProgramData(data: any) {
+    if (data !== undefined) {
+      let programTableData = data.map((program: any) => {
+        return {
+          name: program.name,
+          // productId: [...program.productIds],
+          productId: program.productIds[0],
+          questions: program.question,
+          moneyback: program.moneyback,
+          recommendations: program.foodRecommendations,
+          duration: 1,
+        };
+      });
+      this.dataSource = programTableData;
+    }
   }
 }
