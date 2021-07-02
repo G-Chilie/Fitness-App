@@ -7,17 +7,21 @@ const routes = {
   quote: (c: RandomQuoteContext) => `/jokes/random?category=${c.category}`,
 };
 
+const authToken = sessionStorage.getItem('token');
+const serverLink = 'https://diet.bodysperfect.com';
+
 export interface RandomQuoteContext {
   // The quote's category: 'dev', 'explicit'...
   category: string;
 }
 
 const endPoints = {
-  getEmployees: '/api/v1/employee',
-  getPrograms: '/api/v1/program',
-  getRecommendations: '/api/v1/recommendation',
-  getCustomers: 'https://diet.bodysperfect.com/api/v1/customer',
-  getMessages: '/api/v1/message',
+  getEmployees: `${serverLink}/api/v1/employee`,
+  getPrograms: `${serverLink}/api/v1/program`,
+  getRecommendations: `${serverLink}/api/v1/recommendation`,
+  getCustomers: `${serverLink}/api/v1/customer`,
+  getMessages: `${serverLink}/api/v1/message`,
+  login: `${serverLink}/api/v1/employee/login`,
 };
 
 @Injectable({
@@ -37,10 +41,10 @@ export class QuoteService {
   TODO: create a httpHeaders interceptor so that we don't have a add headers in each request 
    */
 
-  getAllCustomers(auth_token: any): Observable<any> {
+  getAllCustomers(): Observable<any> {
     const Headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${auth_token}`,
+      Authorization: `Bearer ${authToken}`,
     });
     return this.httpClient
       .get(endPoints.getCustomers, {
@@ -54,10 +58,10 @@ export class QuoteService {
       );
   }
 
-  getAllEmployees(auth_token: any): Observable<any> {
+  getAllEmployees(): Observable<any> {
     const Headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${auth_token}`,
+      Authorization: `Bearer ${authToken}`,
     });
     return this.httpClient
       .get(endPoints.getEmployees, {
@@ -69,5 +73,20 @@ export class QuoteService {
           catchError(() => 'Error in fetching employees.');
         })
       );
+  }
+
+  login(credentials: any): Observable<any> {
+    const Headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.httpClient.post(endPoints.login, credentials).pipe(
+      map((res: any) => {
+        if (res.accessToken) {
+          return res.accessToken;
+        } else {
+          console.log('error');
+        }
+      })
+    );
   }
 }

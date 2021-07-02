@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-
 import { Credentials, CredentialsService } from './credentials.service';
 
 export interface LoginContext {
@@ -28,6 +27,7 @@ export class AuthenticationService {
     // Replace by proper authentication call
     const data = {
       username: context.username,
+      password: context.password,
       token: '123456',
     };
     this.credentialsService.setCredentials(data, context.remember);

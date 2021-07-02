@@ -6,13 +6,15 @@ import { Credentials } from './credentials.service';
 export class MockAuthenticationService {
   credentials: Credentials | null = {
     username: 'test',
-    token: '123',
+    password: 'test',
+    // token: '123',
   };
 
   login(context: LoginContext): Observable<Credentials> {
     return of({
       username: context.username,
-      token: '123456',
+      password: context.password,
+      // token: '123456',
     });
   }
 

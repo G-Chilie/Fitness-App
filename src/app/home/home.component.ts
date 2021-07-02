@@ -113,7 +113,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   getCustomers() {
     this.quoteService
-      .getAllCustomers(token)
+      .getAllCustomers()
       .pipe(
         finalize(() => {
           this.isLoading = false;
