@@ -69,14 +69,14 @@ export class LoginComponent implements OnInit {
         (res: any) => {
           sessionStorage.setItem('token', res);
           this.authenticationService.login(this.loginForm.value);
-          this._snackBar.open('User successfully logged in', 'Ok', { duration: 3000 });
+          this._snackBar.open('Login Successful.', '', { duration: 3000, verticalPosition: 'top' });
           this.router.navigate([this.route.snapshot.queryParams.redirect || '/'], { replaceUrl: true });
           this.isLoading = false;
         },
         (error) => {
           this.isLoading = false;
           if (error.status === 404 || error.status === 401) {
-            this._snackBar.open('Login failed. Check your credentials.', 'Ok', { duration: 3000 });
+            this._snackBar.open('Login failed. Check your credentials.', '', { duration: 3000 });
           }
         }
       );

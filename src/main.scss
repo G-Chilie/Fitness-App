@@ -80,3 +80,18 @@
     transform: rotate(360deg);
   }
 }
+
+th.mat-header-cell {
+  text-align: center !important;
+}
+
+simple-snack-bar {
+  display: flex !important;
+  justify-content: center !important;
+}
+
+/* theme color classes */
+.mat-theme-green {
+  background-color: #29cc97;
+  color: #fff;
+}

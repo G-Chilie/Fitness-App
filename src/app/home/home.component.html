@@ -35,39 +35,51 @@
       <div class="table-wrapper mt-3">
         <div class="card card-primary">
           <div class="mat-elevation-z0">
-            <table mat-table [dataSource]="dataSource" matSort class="w-100">
+            <table mat-table [dataSource]="dataSource" class="w-100">
               <!-- ID Column -->
               <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-                <td mat-cell *matCellDef="let row" class="text-align-left">{{ row.name }}</td>
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let row">{{ row.name }}</td>
               </ng-container>
 
               <!-- Name Column -->
               <ng-container matColumnDef="phone">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone/Telegram Chat ID</th>
-                <td mat-cell *matCellDef="let row" class="text-align-left">{{ row.phone }}</td>
+                <th mat-header-cell *matHeaderCellDef>Phone/Telegram Chat ID</th>
+                <td mat-cell *matCellDef="let row">{{ row.phone }}</td>
               </ng-container>
 
               <!-- Progress Column -->
               <ng-container matColumnDef="customerId">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer ID</th>
-                <td mat-cell *matCellDef="let row" class="text-align-left">{{ row.customerId }}</td>
+                <th mat-header-cell *matHeaderCellDef>Customer ID</th>
+                <td mat-cell *matCellDef="let row">{{ row.customerId }}</td>
               </ng-container>
 
               <!-- Fruit Column -->
               <ng-container matColumnDef="supervisor">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Supervisor</th>
-                <td mat-cell *matCellDef="let row" class="text-align-left">{{ row.supervisor }}</td>
+                <th mat-header-cell *matHeaderCellDef>Supervisor</th>
+                <td mat-cell *matCellDef="let row">{{ row.supervisor }}</td>
               </ng-container>
 
               <ng-container matColumnDef="program">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Program</th>
-                <td mat-cell *matCellDef="let row" class="text-align-left">{{ row.program }}</td>
+                <th mat-header-cell *matHeaderCellDef>Program</th>
+                <td mat-cell *matCellDef="let row">{{ row.program }}</td>
               </ng-container>
 
               <ng-container matColumnDef="timeRemaining">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Time Remaining</th>
-                <td mat-cell *matCellDef="let row" class="text-align-left">{{ row.timeRemaining }}</td>
+                <th mat-header-cell *matHeaderCellDef>Time Remaining</th>
+                <td mat-cell *matCellDef="let row">{{ row.timeRemaining }}</td>
+              </ng-container>
+
+              <!-- Actions Column -->
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let row">
+                  <button mat-flat-button color="theme-green" type="button">View</button>
+                  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </td>
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -87,3 +99,18 @@
   </div>
   <div class="loader-div" *ngIf="isLoading"></div>
 </div>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>
+    <mat-icon>delete</mat-icon>
+    <span>Delete permanently</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon>flash_on</mat-icon>
+    <span>Super User</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon>notifications_off</mat-icon>
+    <span>Notifications Off</span>
+  </button>
+</mat-menu>

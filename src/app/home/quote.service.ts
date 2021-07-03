@@ -71,6 +71,7 @@ export class QuoteService {
       })
       .pipe(
         map((body: any) => {
+          return body;
           catchError(() => 'Error in fetching employees.');
         })
       );
@@ -89,7 +90,25 @@ export class QuoteService {
       .pipe(
         map((res: any) => {
           return res;
-          catchError(() => 'Error in fetching progeams.');
+          catchError(() => 'Error in fetching programs.');
+        })
+      );
+  }
+
+  getAllRecommendations(): Observable<any> {
+    const Headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${authToken}`,
+    });
+    return this.httpClient
+      .get(endPoints.getRecommendations, {
+        headers: Headers,
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+          catchError(() => 'Error in fetching recommendations.');
         })
       );
   }
