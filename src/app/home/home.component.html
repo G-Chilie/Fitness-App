@@ -4,14 +4,14 @@
       <div class="card card-primary p-3 d-flex justify-content-center align-items-center pointer">
         <div class="card-text">All</div>
 
-        <div class="card-number mt-3">3</div>
+        <div class="card-number mt-3">{{ numberOfCustomers }}</div>
       </div>
     </div>
     <div class="col-lg-3 col-12">
       <div class="card card-active p-3 d-flex justify-content-center align-items-center pointer">
         <div class="card-text">Active</div>
 
-        <div class="card-number mt-3">2</div>
+        <div class="card-number mt-3">{{ numberOfActiveCustomers }}</div>
       </div>
     </div>
     <div class="col-lg-3 col-12">
@@ -121,7 +121,7 @@
       </div>
     </div>
   </div>
-  <div class="loader-div" *ngIf="isLoading"></div>
+  <!-- <div class="loader-div" *ngIf="isLoading"></div> -->
 </div>
 
 <mat-menu #menu="matMenu">
@@ -280,3 +280,4 @@
     <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
   </div> -->
 </ng-template>
+<ngx-ui-loader></ngx-ui-loader>

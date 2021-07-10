@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { QuoteService } from '../quote.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 export interface Profile {
   username: string;
@@ -25,10 +26,16 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private quoteService: QuoteService, private modalService: NgbModal, private _snackBar: MatSnackBar) {}
+  constructor(
+    private quoteService: QuoteService,
+    private modalService: NgbModal,
+    private _snackBar: MatSnackBar,
+    private ngxLoader: NgxUiLoaderService
+  ) {}
 
   ngOnInit(): void {
-    this.isLoading = true;
+    // this.isLoading = true;
+    this.ngxLoader.start();
   }
 
   ngAfterViewInit() {
@@ -57,12 +64,14 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   getProfiles() {
-    this.isLoading = true;
+    // this.isLoading = true;
+    this.ngxLoader.start();
     this.quoteService
       .getAllEmployees()
       .pipe(
         finalize(() => {
-          this.isLoading = false;
+          // this.isLoading = false;
+          this.ngxLoader.stop();
         })
       )
       .subscribe(
@@ -71,10 +80,12 @@ export class ProfileComponent implements OnInit, AfterViewInit {
             this.profileData = res.body.data;
             this.filterProfileData(this.profileData);
           }
-          this.isLoading = false;
+          // this.isLoading = false;
+          this.ngxLoader.stop();
         },
         (error) => {
-          this.isLoading = false;
+          // this.isLoading = false;
+          this.ngxLoader.stop();
         }
       );
   }
@@ -87,19 +98,22 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         };
       });
       this.dataSource = profileTableData;
-      this.isLoading = false;
+      // this.isLoading = false;
+      this.ngxLoader.stop();
     }
   }
 
   deleteEmp(id: string) {
     console.log(id);
-    this.isLoading = true;
+    // this.isLoading = true;
+    this.ngxLoader.start();
 
     this.quoteService
       .deleteEmployee(id)
       .pipe(
         finalize(() => {
-          this.isLoading = false;
+          // this.isLoading = false;
+          this.ngxLoader.stop();
         })
       )
       .subscribe(
@@ -110,10 +124,12 @@ export class ProfileComponent implements OnInit, AfterViewInit {
               verticalPosition: 'top',
             });
           }
-          this.isLoading = false;
+          // this.isLoading = false;
+          this.ngxLoader.stop();
         },
         (error) => {
-          this.isLoading = false;
+          // this.isLoading = false;
+          this.ngxLoader.stop();
         }
       );
   }

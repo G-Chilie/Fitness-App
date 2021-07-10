@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isLoading = false;
   durationInSeconds = 5;
+  tokenExpiry = 3600000;
 
   constructor(
     private router: Router,
@@ -67,7 +68,8 @@ export class LoginComponent implements OnInit {
       )
       .subscribe(
         (res: any) => {
-          sessionStorage.setItem('token', res);
+          localStorage.setItem('token', res);
+          this.authenticationService.autoLogOut(this.tokenExpiry);
           this.authenticationService.login(this.loginForm.value);
           this._snackBar.open('Login Successful.', '', { duration: 3000, verticalPosition: 'top' });
           this.router.navigate([this.route.snapshot.queryParams.redirect || '/'], { replaceUrl: true });

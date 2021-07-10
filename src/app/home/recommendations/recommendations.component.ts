@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { QuoteService } from '../quote.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 export interface Recommendations {
   type: string;
@@ -26,10 +27,15 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   recommendations: string[] = ['Food', 'Cardio', 'Diet'];
   selectedRec = 'Food';
 
-  constructor(private quoteService: QuoteService, private modalService: NgbModal) {}
+  constructor(
+    private quoteService: QuoteService,
+    private modalService: NgbModal,
+    private ngxLoader: NgxUiLoaderService
+  ) {}
 
   ngOnInit(): void {
-    this.isLoading = true;
+    // this.isLoading = true;
+    this.ngxLoader.start();
   }
 
   ngAfterViewInit() {
@@ -54,12 +60,14 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   }
 
   getRecommendations() {
-    this.isLoading = true;
+    // this.isLoading = true;
+    this.ngxLoader.start();
     this.quoteService
       .getAllRecommendations()
       .pipe(
         finalize(() => {
-          this.isLoading = false;
+          // this.isLoading = false;
+          this.ngxLoader.stop();
         })
       )
       .subscribe(
@@ -68,10 +76,12 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
             this.recommendationData = res.body.data;
             this.filterRecommendationData(this.recommendationData);
           }
-          this.isLoading = false;
+          // this.isLoading = false;
+          this.ngxLoader.stop();
         },
         (error) => {
-          this.isLoading = false;
+          // this.isLoading = false;
+          this.ngxLoader.stop();
         }
       );
   }
@@ -86,7 +96,8 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
       });
 
       this.dataSource = recommendationTableData;
-      this.isLoading = false;
+      // this.isLoading = false;
+      this.ngxLoader.stop();
     }
   }
 }

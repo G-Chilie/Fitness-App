@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { Credentials, CredentialsService } from './credentials.service';
 
@@ -16,7 +18,7 @@ export interface LoginContext {
   providedIn: 'root',
 })
 export class AuthenticationService {
-  constructor(private credentialsService: CredentialsService) {}
+  constructor(private credentialsService: CredentialsService, private router: Router, private _snackBar: MatSnackBar) {}
 
   /**
    * Authenticates the user.
@@ -41,6 +43,19 @@ export class AuthenticationService {
   logout(): Observable<boolean> {
     // Customize credentials invalidation here
     this.credentialsService.setCredentials();
+    localStorage.removeItem('token');
+    this._snackBar.open('Token Expired.', '', { duration: 3000 });
+    this.router.navigate(['/login']);
     return of(true);
+  }
+
+  autoLogOut(expDate: number) {
+    setTimeout(() => {
+      this.logout();
+    }, expDate);
+  }
+
+  getToken() {
+    return localStorage.getItem('token');
   }
 }

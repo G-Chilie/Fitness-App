@@ -9,10 +9,10 @@ const routes = {
 
 const authToken = sessionStorage.getItem('token');
 const serverLink = 'https://diet.bodysperfect.com';
-const Headers = new HttpHeaders({
-  'Content-Type': 'application/json',
-  Authorization: `Bearer ${authToken}`,
-});
+// const Headers = new HttpHeaders({
+//   'Content-Type': 'application/json',
+//   Authorization: `Bearer ${authToken}`,
+// });
 
 export interface RandomQuoteContext {
   category: string;
@@ -37,7 +37,6 @@ export class QuoteService {
   getAllCustomers(): Observable<any> {
     return this.httpClient
       .get(endPoints.getCustomers, {
-        headers: Headers,
         observe: 'response',
       })
       .pipe(
@@ -51,7 +50,6 @@ export class QuoteService {
   getAllEmployees(): Observable<any> {
     return this.httpClient
       .get(endPoints.getEmployees, {
-        headers: Headers,
         observe: 'response',
       })
       .pipe(
@@ -66,7 +64,6 @@ export class QuoteService {
     const bodyObj = { status: 'DEACTIVATED' };
     return this.httpClient
       .put(endPoints.deleteEmployee + '/' + id, bodyObj, {
-        headers: Headers,
         observe: 'response',
       })
       .pipe(
@@ -80,7 +77,6 @@ export class QuoteService {
   getAllPrograms(): Observable<any> {
     return this.httpClient
       .get(endPoints.getPrograms, {
-        headers: Headers,
         observe: 'response',
       })
       .pipe(
@@ -94,7 +90,6 @@ export class QuoteService {
   getAllRecommendations(): Observable<any> {
     return this.httpClient
       .get(endPoints.getRecommendations, {
-        headers: Headers,
         observe: 'response',
       })
       .pipe(

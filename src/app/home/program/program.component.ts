@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { QuoteService } from '../quote.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 export interface ProgramData {
   name: string;
@@ -28,10 +29,15 @@ export class ProgramComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private quoteService: QuoteService, private modalService: NgbModal) {}
+  constructor(
+    private quoteService: QuoteService,
+    private modalService: NgbModal,
+    private ngxLoader: NgxUiLoaderService
+  ) {}
 
   ngOnInit(): void {
-    this.isLoading = true;
+    // this.isLoading = true;
+    this.ngxLoader.start();
   }
 
   ngAfterViewInit() {
@@ -54,12 +60,14 @@ export class ProgramComponent implements OnInit, AfterViewInit {
   }
 
   getPrograms() {
-    this.isLoading = true;
+    // this.isLoading = true;
+    this.ngxLoader.start();
     this.quoteService
       .getAllPrograms()
       .pipe(
         finalize(() => {
-          this.isLoading = false;
+          // this.isLoading = false;
+          this.ngxLoader.stop();
         })
       )
       .subscribe(
@@ -68,10 +76,12 @@ export class ProgramComponent implements OnInit, AfterViewInit {
             this.programData = res.body.data;
             this.filterProgramData(this.programData);
           }
-          this.isLoading = false;
+          // this.isLoading = false;
+          this.ngxLoader.stop();
         },
         (error) => {
-          this.isLoading = false;
+          // this.isLoading = false;
+          this.ngxLoader.stop();
         }
       );
   }

@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as dayjs from 'dayjs';
 import { QuoteService } from './quote.service';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 declare const Plotly: any;
 
@@ -30,13 +31,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
   supervisors: string[] = ['one', 'two', 'three'];
   selectedSup = 'one';
   selectedProgram = 'one';
+  numberOfCustomers = '0';
+  numberOfActiveCustomers = '0';
 
   displayedColumns: string[] = ['name', 'phone', 'customerId', 'supervisor', 'program', 'timeRemaining', 'actions'];
   dataSource: MatTableDataSource<UserData>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private quoteService: QuoteService, private modalService: NgbModal) {}
+  constructor(
+    private quoteService: QuoteService,
+    private modalService: NgbModal,
+    private ngxLoader: NgxUiLoaderService
+  ) {}
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -54,7 +61,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.isLoading = true;
+    // this.isLoading = true;
+    this.ngxLoader.start();
   }
 
   getCustomers() {
@@ -70,9 +78,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
         (res: any) => {
           if (res.status === 200 && res.body.data) {
             this.customerData = res.body.data;
+            console.log('xcustomerData', this.customerData);
+            this.numberOfCustomers = this.customerData.length;
             this.filterCustomerData(this.customerData);
           }
-          this.isLoading = false;
+          // this.isLoading = false;
+          this.ngxLoader.stop();
         },
         (error) => {
           this.isLoading = false;
