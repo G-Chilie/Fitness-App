@@ -68,6 +68,7 @@ export class LoginComponent implements OnInit {
       )
       .subscribe(
         (res: any) => {
+          /* todo: if the api returns 403 unauthorized, do not let user sign in. just notify. */
           localStorage.setItem('token', res);
           this.authenticationService.autoLogOut(this.tokenExpiry);
           this.authenticationService.login(this.loginForm.value);

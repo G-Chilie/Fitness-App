@@ -44,6 +44,7 @@ export class AuthenticationService {
     // Customize credentials invalidation here
     this.credentialsService.setCredentials();
     localStorage.removeItem('token');
+    localStorage.removeItem('userInfo');
     this._snackBar.open('Token Expired.', '', { duration: 3000 });
     this.router.navigate(['/login']);
     return of(true);

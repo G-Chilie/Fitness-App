@@ -104,6 +104,7 @@ export class QuoteService {
     return this.httpClient.post(endPoints.login, credentials).pipe(
       map((res: any) => {
         if (res.accessToken) {
+          localStorage.setItem('userInfo', JSON.stringify(credentials));
           return res.accessToken;
         } else {
           console.log('error');

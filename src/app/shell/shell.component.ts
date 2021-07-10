@@ -21,7 +21,13 @@ export class ShellComponent implements OnInit {
     private _snackBar: MatSnackBar
   ) {}
 
-  ngOnInit() {}
+  userName = '';
+
+  ngOnInit() {
+    let userinfo = localStorage.getItem('userInfo');
+    const userInfo = JSON.parse(userinfo);
+    this.userName = userInfo.username;
+  }
 
   logout() {
     this.authenticationService.logout().subscribe(() => this.router.navigate(['/login'], { replaceUrl: true }));
