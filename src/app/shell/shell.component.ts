@@ -2,6 +2,7 @@ import { Title } from '@angular/platform-browser';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MediaObserver } from '@angular/flex-layout';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AuthenticationService, CredentialsService } from '@app/auth';
 
@@ -16,13 +17,15 @@ export class ShellComponent implements OnInit {
     private titleService: Title,
     private authenticationService: AuthenticationService,
     private credentialsService: CredentialsService,
-    private media: MediaObserver
+    private media: MediaObserver,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {}
 
   logout() {
     this.authenticationService.logout().subscribe(() => this.router.navigate(['/login'], { replaceUrl: true }));
+    this._snackBar.open('You have successfully logged out!', '', { duration: 3000, verticalPosition: 'top' });
   }
 
   get username(): string | null {

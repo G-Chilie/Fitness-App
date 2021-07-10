@@ -24,6 +24,26 @@ q {
   font-weight: bold;
 }
 
+.plot-card {
+  max-height: 300px;
+}
+
+.info-card {
+  min-height: 190px;
+  div {
+    display: flex;
+    justify-content: space-between;
+    span {
+      display: flex;
+      margin-left: 5px;
+    }
+  }
+}
+
+.light-blue-backdrop {
+  background-color: #5cb3fd;
+}
+
 .card-primary {
   background-color: #fff;
 }
@@ -38,7 +58,8 @@ q {
   border: 1px solid #3751ff;
 }
 
-// ::ng-deep .mat-sort-header-container {
-//   display:flex;
-//   justify-content:center;
-// }
+::ng-deep {
+  .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+  }
+}

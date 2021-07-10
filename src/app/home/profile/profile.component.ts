@@ -4,6 +4,7 @@ import { finalize } from 'rxjs/operators';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { QuoteService } from '../quote.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 export interface Profile {
   username: string;
@@ -23,9 +24,11 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private quoteService: QuoteService) {}
+  constructor(private quoteService: QuoteService, private modalService: NgbModal) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isLoading = true;
+  }
 
   ngAfterViewInit() {
     // this.dataSource.paginator = this.paginator;
@@ -42,6 +45,14 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  newProfile(content: any) {
+    this.modalService.open(content, { size: 'md' });
+  }
+
+  newEmployee(content: any) {
+    this.modalService.open(content, { size: 'md' });
   }
 
   getProfiles() {
@@ -71,11 +82,35 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     if (data !== undefined) {
       let profileTableData = data.map((profile: any) => {
         return {
-          username: profile.username,
-          status: profile.status,
+          ...profile,
         };
       });
       this.dataSource = profileTableData;
+      this.isLoading = false;
     }
+  }
+
+  deleteEmp(id: string) {
+    console.log(id);
+    this.isLoading = true;
+
+    this.quoteService
+      .deleteEmployee(id)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.status === 200) {
+            console.log('profile deleted');
+          }
+          this.isLoading = false;
+        },
+        (error) => {
+          this.isLoading = false;
+        }
+      );
   }
 }

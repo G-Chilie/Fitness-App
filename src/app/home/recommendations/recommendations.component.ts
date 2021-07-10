@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { QuoteService } from '../quote.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 export interface Recommendations {
   type: string;
@@ -22,10 +23,14 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<Recommendations>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  recommendations: string[] = ['Food', 'Cardio', 'Diet'];
+  selectedRec = 'Food';
 
-  constructor(private quoteService: QuoteService) {}
+  constructor(private quoteService: QuoteService, private modalService: NgbModal) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isLoading = true;
+  }
 
   ngAfterViewInit() {
     // this.dataSource.paginator = this.paginator;
@@ -42,6 +47,10 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  newRecommendation(content: any) {
+    this.modalService.open(content, { size: 'md' });
   }
 
   getRecommendations() {
@@ -77,6 +86,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
       });
 
       this.dataSource = recommendationTableData;
+      this.isLoading = false;
     }
   }
 }

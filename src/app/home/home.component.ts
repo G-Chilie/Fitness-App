@@ -3,8 +3,11 @@ import { finalize } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import * as dayjs from 'dayjs';
 import { QuoteService } from './quote.service';
+
+declare const Plotly: any;
 
 export interface UserData {
   name: string;
@@ -24,20 +27,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
   quote: string | undefined;
   isLoading = false;
   customerData: any;
+  supervisors: string[] = ['one', 'two', 'three'];
+  selectedSup = 'one';
+  selectedProgram = 'one';
 
   displayedColumns: string[] = ['name', 'phone', 'customerId', 'supervisor', 'program', 'timeRemaining', 'actions'];
   dataSource: MatTableDataSource<UserData>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private quoteService: QuoteService) {}
+  constructor(private quoteService: QuoteService, private modalService: NgbModal) {}
 
   ngAfterViewInit() {
-    // this.dataSource.paginator = this.paginator;
-    // this.dataSource.sort = this.sort;
     setTimeout(() => {
       this.getCustomers();
-    }, 3000);
+    }, 1000);
   }
 
   applyFilter(event: Event) {
@@ -49,7 +53,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.isLoading = true;
+  }
 
   getCustomers() {
     this.isLoading = true;
@@ -74,16 +80,74 @@ export class HomeComponent implements OnInit, AfterViewInit {
       );
   }
 
+  viewCustomerDetails(content: any, customerId: string) {
+    this.modalService.open(content, { size: 'xl' });
+    setTimeout(() => {
+      const that = this;
+      const layoutdiv = document.getElementById('plot-chart');
+      const chartConfig = { displayModeBar: false };
+      const layout = {
+        showlegend: true,
+        legend: {
+          orientation: 'h',
+          x: 0.4,
+          y: 1.4,
+        },
+        autosize: false,
+        width: 500,
+        height: 280,
+        margin: {
+          l: 50,
+          r: 50,
+          b: 100,
+          t: 100,
+          pad: 4,
+        },
+        // paper_bgcolor: '#7f7f7f',
+        // plot_bgcolor: '#c7c7c7'
+      };
+      var trace = {
+        x: [1, 2, 3, 4, 5, 6, 7, 8],
+        y: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+        type: 'scatter',
+        name: 'amount',
+      };
+
+      let data = [trace];
+      Plotly.newPlot(layoutdiv, data, layout, chartConfig);
+    }, 2000);
+  }
+
+  editProfile(content: any) {
+    this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
+  }
+
+  deleteCustomer(id: string) {
+    console.log(id);
+  }
+
+  editCustomer(id: string) {
+    console.log(id);
+  }
+
   filterCustomerData(data: any) {
     if (data !== undefined) {
       let userTableData = data.map((user: any) => {
         return {
           name: user.fullName,
+          id: user.id,
           phone: user.telegramChatId,
           customerId: user.customerId,
-          supervisor: 'helie',
-          program: 'test program',
-          timeRemaining: 1,
+          supervisor: user.supervisor,
+          telegramName: user.telegramName,
+          telegramChatId: user.telegramChatId,
+          activeProgram: user.activeProgram,
+          timeRemaining: user?.programRegistrationTimestamp
+            ? Math.max(
+                dayjs(user?.programRegistrationTimestamp).diff(dayjs(), 'days') + Number(user?.activeProgram?.duration),
+                0
+              ) || 'N/A'
+            : 'N/A',
         };
       });
       this.dataSource = userTableData;

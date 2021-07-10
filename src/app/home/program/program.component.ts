@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { QuoteService } from '../quote.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 export interface ProgramData {
   name: string;
@@ -27,9 +28,11 @@ export class ProgramComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private quoteService: QuoteService) {}
+  constructor(private quoteService: QuoteService, private modalService: NgbModal) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isLoading = true;
+  }
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -44,6 +47,10 @@ export class ProgramComponent implements OnInit, AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  newProgram(content: any) {
+    this.modalService.open(content, { size: 'md' });
   }
 
   getPrograms() {

@@ -9,9 +9,12 @@ const routes = {
 
 const authToken = sessionStorage.getItem('token');
 const serverLink = 'https://diet.bodysperfect.com';
+const Headers = new HttpHeaders({
+  'Content-Type': 'application/json',
+  Authorization: `Bearer ${authToken}`,
+});
 
 export interface RandomQuoteContext {
-  // The quote's category: 'dev', 'explicit'...
   category: string;
 }
 
@@ -19,9 +22,10 @@ const endPoints = {
   getEmployees: `${serverLink}/api/v1/employee`,
   getPrograms: `${serverLink}/api/v1/program`,
   getRecommendations: `${serverLink}/api/v1/recommendation`,
-  getCustomers: `${serverLink}/api/v1/customer`,
+  getCustomers: `${serverLink}/api/v1/customer?include=supervisor`,
   getMessages: `${serverLink}/api/v1/message`,
   login: `${serverLink}/api/v1/employee/login`,
+  deleteEmployee: `${serverLink}/api/v1/employee`,
 };
 
 @Injectable({
@@ -30,22 +34,7 @@ const endPoints = {
 export class QuoteService {
   constructor(private httpClient: HttpClient) {}
 
-  // getRandomQuote(context: RandomQuoteContext): Observable<string> {
-  //   return this.httpClient.get(routes.quote(context)).pipe(
-  //     map((body: any) => body.value),
-  //     catchError(() => of('Error, could not load joke :-('))
-  //   );
-  // }
-
-  /*
-  TODO: create a httpHeaders interceptor so that we don't have a add headers in each request 
-   */
-
   getAllCustomers(): Observable<any> {
-    const Headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${authToken}`,
-    });
     return this.httpClient
       .get(endPoints.getCustomers, {
         headers: Headers,
@@ -54,16 +43,12 @@ export class QuoteService {
       .pipe(
         map((body: any) => {
           return body;
-          catchError(() => 'Error in fetching customers.');
-        })
+        }),
+        catchError(() => 'Error in fetching customers.')
       );
   }
 
   getAllEmployees(): Observable<any> {
-    const Headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${authToken}`,
-    });
     return this.httpClient
       .get(endPoints.getEmployees, {
         headers: Headers,
@@ -72,16 +57,28 @@ export class QuoteService {
       .pipe(
         map((body: any) => {
           return body;
-          catchError(() => 'Error in fetching employees.');
-        })
+        }),
+        catchError(() => 'Error in fetching employees.')
+      );
+  }
+
+  deleteEmployee(id: string): Observable<any> {
+    const bodyObj = { status: 'DEACTIVATED' };
+    return this.httpClient
+      .put(endPoints.deleteEmployee + '/' + id, {
+        headers: Headers,
+        observe: 'response',
+        body: bodyObj,
+      })
+      .pipe(
+        map((body: any) => {
+          return body;
+        }),
+        catchError(() => 'Error in deleting the user.')
       );
   }
 
   getAllPrograms(): Observable<any> {
-    const Headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${authToken}`,
-    });
     return this.httpClient
       .get(endPoints.getPrograms, {
         headers: Headers,
@@ -90,16 +87,12 @@ export class QuoteService {
       .pipe(
         map((res: any) => {
           return res;
-          catchError(() => 'Error in fetching programs.');
-        })
+        }),
+        catchError(() => 'Error in fetching programs.')
       );
   }
 
   getAllRecommendations(): Observable<any> {
-    const Headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${authToken}`,
-    });
     return this.httpClient
       .get(endPoints.getRecommendations, {
         headers: Headers,
@@ -108,15 +101,12 @@ export class QuoteService {
       .pipe(
         map((res: any) => {
           return res;
-          catchError(() => 'Error in fetching recommendations.');
-        })
+        }),
+        catchError(() => 'Error in fetching recommendations.')
       );
   }
 
   login(credentials: any): Observable<any> {
-    const Headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
     return this.httpClient.post(endPoints.login, credentials).pipe(
       map((res: any) => {
         if (res.accessToken) {

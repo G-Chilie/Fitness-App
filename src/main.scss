@@ -68,7 +68,7 @@
   animation: spin 2s linear infinite;
   position: fixed;
   top: 50%;
-  left: 50%;
+  left: 60%;
   // transform: translate(-50%, -50%);
 }
 
@@ -90,8 +90,22 @@ simple-snack-bar {
   justify-content: center !important;
 }
 
+.cdk-global-overlay-wrapper,
+.cdk-overlay-container {
+  z-index: 99999 !important;
+}
+
 /* theme color classes */
 .mat-theme-green {
   background-color: #29cc97;
   color: #fff;
+}
+
+.button-primary {
+  background-color: #363740;
+  color: #fff;
+}
+
+.ff-14 {
+  font-size: 14px;
 }
