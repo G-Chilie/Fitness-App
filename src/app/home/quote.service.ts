@@ -65,10 +65,9 @@ export class QuoteService {
   deleteEmployee(id: string): Observable<any> {
     const bodyObj = { status: 'DEACTIVATED' };
     return this.httpClient
-      .put(endPoints.deleteEmployee + '/' + id, {
+      .put(endPoints.deleteEmployee + '/' + id, bodyObj, {
         headers: Headers,
         observe: 'response',
-        body: bodyObj,
       })
       .pipe(
         map((body: any) => {

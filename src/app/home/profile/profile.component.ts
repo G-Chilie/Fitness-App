@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { QuoteService } from '../quote.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface Profile {
   username: string;
@@ -24,7 +25,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private quoteService: QuoteService, private modalService: NgbModal) {}
+  constructor(private quoteService: QuoteService, private modalService: NgbModal, private _snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.isLoading = true;
@@ -103,8 +104,11 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       )
       .subscribe(
         (res: any) => {
-          if (res.status === 200) {
-            console.log('profile deleted');
+          if (res.status === 200 && res.body) {
+            this._snackBar.open(`User ${res.body.username} is ${res.body.status}`, '', {
+              duration: 3000,
+              verticalPosition: 'top',
+            });
           }
           this.isLoading = false;
         },
