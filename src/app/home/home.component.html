@@ -1,28 +1,40 @@
 <div class="container">
   <div class="row">
-    <div class="col-lg-3 col-12">
-      <div class="card card-primary p-3 d-flex justify-content-center align-items-center pointer">
+    <div class="col-lg-3 col-12" (click)="currentActive('all')">
+      <div
+        class="card card-primary p-3 d-flex justify-content-center align-items-center pointer"
+        [ngClass]="currentActiveTab == 'all' ? 'card-active' : 'card-primary'"
+      >
         <div class="card-text">All</div>
 
         <div class="card-number mt-3">{{ numberOfCustomers }}</div>
       </div>
     </div>
-    <div class="col-lg-3 col-12">
-      <div class="card card-active p-3 d-flex justify-content-center align-items-center pointer">
+    <div class="col-lg-3 col-12" (click)="currentActive('active')">
+      <div
+        class="card p-3 d-flex justify-content-center align-items-center pointer"
+        [ngClass]="currentActiveTab == 'active' ? 'card-active' : 'card-primary'"
+      >
         <div class="card-text">Active</div>
 
         <div class="card-number mt-3">{{ numberOfActiveCustomers }}</div>
       </div>
     </div>
-    <div class="col-lg-3 col-12">
-      <div class="card p-3 d-flex justify-content-center align-items-center pointer">
+    <div class="col-lg-3 col-12" (click)="currentActive('inactive')">
+      <div
+        class="card p-3 d-flex justify-content-center align-items-center pointer"
+        [ngClass]="currentActiveTab == 'inactive' ? 'card-active' : 'card-primary'"
+      >
         <div class="card-text">Inactive</div>
 
         <div class="card-number mt-3">1</div>
       </div>
     </div>
-    <div class="col-lg-3 col-12">
-      <div class="card p-3 d-flex justify-content-center align-items-center pointer">
+    <div class="col-lg-3 col-12" (click)="currentActive('completed')">
+      <div
+        class="card p-3 d-flex justify-content-center align-items-center pointer"
+        [ngClass]="currentActiveTab == 'completed' ? 'card-active' : 'card-primary'"
+      >
         <div class="card-text">Completed</div>
 
         <div class="card-number mt-3">1</div>

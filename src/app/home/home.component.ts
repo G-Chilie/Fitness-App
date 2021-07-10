@@ -34,6 +34,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   numberOfCustomers = '0';
   numberOfActiveCustomers = '0';
 
+  currentActiveTab = 'all';
+
   displayedColumns: string[] = ['name', 'phone', 'customerId', 'supervisor', 'program', 'timeRemaining', 'actions'];
   dataSource: MatTableDataSource<UserData>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -89,6 +91,26 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.isLoading = false;
         }
       );
+  }
+
+  currentActive(tabName: string) {
+    switch (tabName) {
+      case 'all':
+        this.currentActiveTab = 'all';
+        break;
+
+      case 'active':
+        this.currentActiveTab = 'active';
+        break;
+
+      case 'inactive':
+        this.currentActiveTab = 'inactive';
+        break;
+
+      case 'completed':
+        this.currentActiveTab = 'completed';
+        break;
+    }
   }
 
   viewCustomerDetails(content: any, customerId: string) {
