@@ -76,6 +76,19 @@ export class QuoteService {
       );
   }
 
+  deleteRecommendation(id: string): Observable<any> {
+    return this.httpClient
+      .delete(endPoints.getRecommendations + '/' + id, {
+        observe: 'response',
+      })
+      .pipe(
+        map((body: any) => {
+          return body;
+        }),
+        catchError(() => 'Error in deleting the recommendation.')
+      );
+  }
+
   getAllPrograms(): Observable<any> {
     return this.httpClient
       .get(endPoints.getPrograms, {

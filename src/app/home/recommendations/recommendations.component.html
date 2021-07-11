@@ -34,7 +34,7 @@
               <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef>Actions</th>
                 <td mat-cell *matCellDef="let row" class="text-center">
-                  <button mat-flat-button color="warn" type="button">
+                  <button mat-flat-button color="warn" type="button" (click)="deleteRecommendation(row.id)">
                     <mat-icon aria-hidden="false" aria-label="Delete icon">delete</mat-icon>
                     Delete
                   </button>

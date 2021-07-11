@@ -121,12 +121,38 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
     }
   }
 
+  deleteRecommendation(id: string) {
+    this.ngxLoader.start();
+    this.quoteService
+      .deleteRecommendation(id)
+      .pipe(
+        finalize(() => {
+          this.ngxLoader.stop();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.status === 200 && res.body) {
+            this._snackBar.open(`Recommendation deleted!`, '', {
+              duration: 3000,
+              verticalPosition: 'top',
+            });
+          }
+          this.ngxLoader.stop();
+        },
+        (error) => {
+          this.ngxLoader.stop();
+        }
+      );
+  }
+
   filterRecommendationData(data: any) {
     if (data !== undefined) {
       let recommendationTableData = data.map((rec: any) => {
         return {
           type: rec.type,
           description: rec.description,
+          id: rec.id,
         };
       });
 

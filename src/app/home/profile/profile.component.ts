@@ -144,10 +144,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   deleteEmp(id: string) {
-    console.log(id);
-
     this.ngxLoader.start();
-
     this.quoteService
       .deleteEmployee(id)
       .pipe(
@@ -163,7 +160,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
               verticalPosition: 'top',
             });
           }
-
           this.ngxLoader.stop();
         },
         (error) => {
