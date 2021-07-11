@@ -5,7 +5,7 @@ import { finalize } from 'rxjs/operators';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { QuoteService } from '../quote.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 
@@ -21,6 +21,7 @@ export interface Profile {
 })
 export class ProfileComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['username', 'status', 'actions'];
+  statuses: string[] = ['ADMIN', 'ACTIVATED', 'DEACTIVATED'];
   isLoading = false;
   profileData: any;
   dataSource: MatTableDataSource<Profile>;
@@ -45,6 +46,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         [Validators.required, Validators.minLength(4), Validators.maxLength(20), Validators.pattern('[a-zA-Z]+')],
       ],
       password: ['', [Validators.required]],
+      status: ['', [Validators.required]],
     });
   }
 
@@ -111,7 +113,11 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         .subscribe(
           (res: any) => {
             if (res.status === 200) {
-              console.log(res);
+              this._snackBar.open(`Employee had been added!`, '', {
+                duration: 3000,
+                verticalPosition: 'top',
+              });
+              this.modalService.dismissAll();
               this.newEmployeeForm.reset();
             }
 

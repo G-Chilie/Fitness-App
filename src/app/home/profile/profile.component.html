@@ -84,6 +84,16 @@
         <input matInput placeholder="Password" formControlName="password" name="password" autocomplete="off" />
         <mat-error *ngIf="newEmployeeForm.get('password')?.hasError('required')"> Password is Required! </mat-error>
       </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100 mt-2">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option *ngFor="let status of statuses" value="{{ status }}">
+            {{ status }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="newEmployeeForm.get('status')?.hasError('required')"> Status is Required! </mat-error>
+      </mat-form-field>
     </div>
     <div class="modal-footer">
       <button mat-button class="button-primary" type="submit" [disabled]="newEmployeeForm.invalid">Save</button>
