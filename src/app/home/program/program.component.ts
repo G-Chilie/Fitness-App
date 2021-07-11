@@ -26,7 +26,7 @@ export interface ProgramData {
 export class ProgramComponent implements OnInit, AfterViewInit {
   isLoading = false;
   programData: any;
-  colDef: string[] = ['name', 'productId', 'questions', 'moneyback', 'recommendations', 'duration'];
+  colDef: string[] = ['name', 'productId', 'questions', 'moneyback', 'recommendations', 'duration', 'actions'];
   dataSource: MatTableDataSource<ProgramData>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -133,17 +133,43 @@ export class ProgramComponent implements OnInit, AfterViewInit {
     }
   }
 
+  deleteProgram(id: string) {
+    this.ngxLoader.start();
+    this.quoteService
+      .deleteProgram(id)
+      .pipe(
+        finalize(() => {
+          this.ngxLoader.stop();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.status === 200 && res.body) {
+            this._snackBar.open(`Program deleted!`, '', {
+              duration: 3000,
+              verticalPosition: 'top',
+            });
+          }
+          this.ngxLoader.stop();
+        },
+        (error) => {
+          this.ngxLoader.stop();
+        }
+      );
+  }
+
   filterProgramData(data: any) {
     if (data !== undefined) {
       let programTableData = data.map((program: any) => {
+        let tempProductIds = program.productIds.map((x: any) => x).join(',');
         return {
+          id: program.id,
           name: program.name,
-          // productId: [...program.productIds],
-          productId: program.productIds[0],
+          productId: tempProductIds,
           questions: program.question,
           moneyback: program.moneyback,
           recommendations: program.foodRecommendations,
-          duration: 1,
+          duration: program.duration,
         };
       });
       this.dataSource = programTableData;

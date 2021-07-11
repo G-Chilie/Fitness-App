@@ -89,6 +89,19 @@ export class QuoteService {
       );
   }
 
+  deleteProgram(id: string): Observable<any> {
+    return this.httpClient
+      .delete(endPoints.getPrograms + '/' + id, {
+        observe: 'response',
+      })
+      .pipe(
+        map((body: any) => {
+          return body;
+        }),
+        catchError(() => 'Error in deleting the program.')
+      );
+  }
+
   getAllPrograms(): Observable<any> {
     return this.httpClient
       .get(endPoints.getPrograms, {
