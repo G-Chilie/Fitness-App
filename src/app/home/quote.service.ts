@@ -141,6 +141,19 @@ export class QuoteService {
       );
   }
 
+  addProgram(data: any) {
+    return this.httpClient
+      .post(endPoints.getPrograms, data, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in adding new program.')
+      );
+  }
+
   login(credentials: any): Observable<any> {
     return this.httpClient.post(endPoints.login, credentials).pipe(
       map((res: any) => {

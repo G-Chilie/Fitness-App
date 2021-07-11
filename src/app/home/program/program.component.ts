@@ -1,10 +1,12 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { QuoteService } from '../quote.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 export interface ProgramData {
@@ -28,15 +30,26 @@ export class ProgramComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<ProgramData>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  addProgramForm: FormGroup;
 
   constructor(
     private quoteService: QuoteService,
     private modalService: NgbModal,
-    private ngxLoader: NgxUiLoaderService
+    private ngxLoader: NgxUiLoaderService,
+    private formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     this.ngxLoader.start();
+    this.addProgramForm = this.formBuilder.group({
+      name: ['', [Validators.required]],
+      productIds: ['', [Validators.required]],
+      duration: ['', [Validators.required]],
+      moneyback: [true],
+      foodRecommendations: [true],
+      question: [true],
+    });
   }
 
   ngAfterViewInit() {
@@ -80,6 +93,44 @@ export class ProgramComponent implements OnInit, AfterViewInit {
           this.ngxLoader.stop();
         }
       );
+  }
+
+  addProgram(e: any) {
+    this.ngxLoader.start();
+    if (this.addProgramForm.valid) {
+      const productIdsArray = this.addProgramForm.value.productIds.split(',');
+      const data2Send = {
+        name: this.addProgramForm.value.name,
+        productIds: productIdsArray,
+        duration: this.addProgramForm.value.duration,
+        foodRecommendations: this.addProgramForm.value.foodRecommendations,
+        question: this.addProgramForm.value.question,
+        moneyback: this.addProgramForm.value.moneyback,
+      };
+      this.quoteService
+        .addProgram(data2Send)
+        .pipe(
+          finalize(() => {
+            this.ngxLoader.stop();
+          })
+        )
+        .subscribe(
+          (res: any) => {
+            if (res.status === 200) {
+              this._snackBar.open(`Program has been added!`, '', {
+                duration: 3000,
+                verticalPosition: 'top',
+              });
+              this.modalService.dismissAll();
+              this.addProgramForm.reset();
+            }
+            this.ngxLoader.stop();
+          },
+          (error) => {
+            this.ngxLoader.stop();
+          }
+        );
+    }
   }
 
   filterProgramData(data: any) {
