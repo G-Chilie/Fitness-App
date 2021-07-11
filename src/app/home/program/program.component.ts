@@ -36,7 +36,6 @@ export class ProgramComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    // this.isLoading = true;
     this.ngxLoader.start();
   }
 
@@ -60,13 +59,11 @@ export class ProgramComponent implements OnInit, AfterViewInit {
   }
 
   getPrograms() {
-    // this.isLoading = true;
     this.ngxLoader.start();
     this.quoteService
       .getAllPrograms()
       .pipe(
         finalize(() => {
-          // this.isLoading = false;
           this.ngxLoader.stop();
         })
       )
@@ -76,11 +73,10 @@ export class ProgramComponent implements OnInit, AfterViewInit {
             this.programData = res.body.data;
             this.filterProgramData(this.programData);
           }
-          // this.isLoading = false;
+
           this.ngxLoader.stop();
         },
         (error) => {
-          // this.isLoading = false;
           this.ngxLoader.stop();
         }
       );

@@ -34,7 +34,6 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    // this.isLoading = true;
     this.ngxLoader.start();
   }
 
@@ -60,13 +59,11 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   }
 
   getRecommendations() {
-    // this.isLoading = true;
     this.ngxLoader.start();
     this.quoteService
       .getAllRecommendations()
       .pipe(
         finalize(() => {
-          // this.isLoading = false;
           this.ngxLoader.stop();
         })
       )
@@ -76,11 +73,10 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
             this.recommendationData = res.body.data;
             this.filterRecommendationData(this.recommendationData);
           }
-          // this.isLoading = false;
+
           this.ngxLoader.stop();
         },
         (error) => {
-          // this.isLoading = false;
           this.ngxLoader.stop();
         }
       );
@@ -96,7 +92,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
       });
 
       this.dataSource = recommendationTableData;
-      // this.isLoading = false;
+
       this.ngxLoader.stop();
     }
   }

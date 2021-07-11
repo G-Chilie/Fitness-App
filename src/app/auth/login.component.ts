@@ -83,7 +83,7 @@ export class LoginComponent implements OnInit {
           }
         }
       );
-    // this.isLoading = true;
+
     // const xx = this.authenticationService.login(this.loginForm.value);
     // console.log(xx);
 

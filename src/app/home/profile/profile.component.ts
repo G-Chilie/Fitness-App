@@ -34,7 +34,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    // this.isLoading = true;
     this.ngxLoader.start();
   }
 
@@ -64,13 +63,11 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   getProfiles() {
-    // this.isLoading = true;
     this.ngxLoader.start();
     this.quoteService
       .getAllEmployees()
       .pipe(
         finalize(() => {
-          // this.isLoading = false;
           this.ngxLoader.stop();
         })
       )
@@ -80,11 +77,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
             this.profileData = res.body.data;
             this.filterProfileData(this.profileData);
           }
-          // this.isLoading = false;
+
           this.ngxLoader.stop();
         },
         (error) => {
-          // this.isLoading = false;
           this.ngxLoader.stop();
         }
       );
@@ -98,21 +94,20 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         };
       });
       this.dataSource = profileTableData;
-      // this.isLoading = false;
+
       this.ngxLoader.stop();
     }
   }
 
   deleteEmp(id: string) {
     console.log(id);
-    // this.isLoading = true;
+
     this.ngxLoader.start();
 
     this.quoteService
       .deleteEmployee(id)
       .pipe(
         finalize(() => {
-          // this.isLoading = false;
           this.ngxLoader.stop();
         })
       )
@@ -124,11 +119,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
               verticalPosition: 'top',
             });
           }
-          // this.isLoading = false;
+
           this.ngxLoader.stop();
         },
         (error) => {
-          // this.isLoading = false;
           this.ngxLoader.stop();
         }
       );

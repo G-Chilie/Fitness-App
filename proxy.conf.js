@@ -7,14 +7,6 @@ const HttpsProxyAgent = require('https-proxy-agent');
  * For more details and options, see https://angular.io/guide/build#using-corporate-proxy
  */
 const proxyConfig = [
-  // {
-  //   context: '/api',
-  //   pathRewrite: { '^/api': '' },
-  //   target: 'https://api.chucknorris.io',
-  //   changeOrigin: true,
-  //   secure: false,
-  // },
-
   {
     context: '/api',
     pathRewrite: { '^/api': '' },

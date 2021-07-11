@@ -63,7 +63,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    // this.isLoading = true;
     this.ngxLoader.start();
   }
 
@@ -84,7 +83,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
             this.numberOfCustomers = this.customerData.length;
             this.filterCustomerData(this.customerData);
           }
-          // this.isLoading = false;
+
           this.ngxLoader.stop();
         },
         (error) => {
