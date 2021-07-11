@@ -65,18 +65,16 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form [formGroup]="newEmployeeForm">
+  <form [formGroup]="newEmployeeForm" (ngSubmit)="addEmployee($event)">
     <div class="modal-body ff-14">
       <mat-form-field class="example-full-width w-100" appearance="outline">
         <mat-label>Username</mat-label>
-        <input matInput placeholder="Username" formControlName="employeeUsername" autocomplete="off" />
-        <mat-error *ngIf="newEmployeeForm.get('employeeUsername')?.hasError('required')">
-          Username is Required!
-        </mat-error>
-        <mat-error *ngIf="newEmployeeForm.get('employeeUsername')?.hasError('minlength')">
+        <input matInput placeholder="Username" formControlName="username" autocomplete="off" />
+        <mat-error *ngIf="newEmployeeForm.get('username')?.hasError('required')"> Username is Required! </mat-error>
+        <mat-error *ngIf="newEmployeeForm.get('username')?.hasError('minlength')">
           Username should be atleast 4 characters long!
         </mat-error>
-        <mat-error *ngIf="newEmployeeForm.get('employeeUsername')?.hasError('maxlength')">
+        <mat-error *ngIf="newEmployeeForm.get('username')?.hasError('maxlength')">
           Username can be atmax 20 characters long!
         </mat-error>
       </mat-form-field>
@@ -88,7 +86,7 @@
       </mat-form-field>
     </div>
     <div class="modal-footer">
-      <button mat-button class="button-primary">Save</button>
+      <button mat-button class="button-primary" type="submit" [disabled]="newEmployeeForm.invalid">Save</button>
     </div>
   </form>
 </ng-template>

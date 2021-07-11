@@ -26,7 +26,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<Profile>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  employeeUserName: any;
+  username: any;
   newEmployeeForm: FormGroup;
 
   constructor(
@@ -40,7 +40,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.ngxLoader.start();
     this.newEmployeeForm = this.formBuilder.group({
-      employeeUsername: [
+      username: [
         '',
         [Validators.required, Validators.minLength(4), Validators.maxLength(20), Validators.pattern('[a-zA-Z]+')],
       ],
@@ -95,6 +95,33 @@ export class ProfileComponent implements OnInit, AfterViewInit {
           this.ngxLoader.stop();
         }
       );
+  }
+
+  addEmployee(e: any) {
+    this.ngxLoader.start();
+    if (this.newEmployeeForm.valid) {
+      const data2Send = this.newEmployeeForm.value;
+      this.quoteService
+        .addNewEmployee(data2Send)
+        .pipe(
+          finalize(() => {
+            this.ngxLoader.stop();
+          })
+        )
+        .subscribe(
+          (res: any) => {
+            if (res.status === 200) {
+              console.log(res);
+              this.newEmployeeForm.reset();
+            }
+
+            this.ngxLoader.stop();
+          },
+          (error) => {
+            this.ngxLoader.stop();
+          }
+        );
+    }
   }
 
   filterProfileData(data: any) {
