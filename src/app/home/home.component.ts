@@ -33,6 +33,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   selectedProgram = 'one';
   numberOfCustomers = '0';
   numberOfActiveCustomers = '0';
+  numberOfInactiveCustomers = '0';
+  activeUsers: any;
+  inactiveUsers: any;
+  allUsers: any;
 
   currentActiveTab = 'all';
 
@@ -96,14 +100,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     switch (tabName) {
       case 'all':
         this.currentActiveTab = 'all';
+        this.dataSource = this.allUsers;
         break;
 
       case 'active':
         this.currentActiveTab = 'active';
+        this.dataSource = this.activeUsers;
         break;
 
       case 'inactive':
         this.currentActiveTab = 'inactive';
+        this.dataSource = this.inactiveUsers;
         break;
 
       case 'completed':
@@ -164,7 +171,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   filterCustomerData(data: any) {
     if (data !== undefined) {
-      let userTableData = data.map((user: any) => {
+      let activeUserTemp = data.map((user: any) => {
+        if (user.activeProgram !== null) {
+          return user;
+        }
+      });
+      this.activeUsers = activeUserTemp.filter((user: any) => {
+        return user !== undefined;
+      });
+      this.numberOfActiveCustomers = this.activeUsers.length;
+      let inactiveUsersTemp = data.map((user: any) => {
+        if (user.activeProgram === null) {
+          return user;
+        }
+      });
+      this.inactiveUsers = inactiveUsersTemp.filter((user: any) => {
+        return user !== undefined;
+      });
+      this.numberOfInactiveCustomers = this.inactiveUsers.length;
+      this.allUsers = data.map((user: any) => {
         return {
           name: user.fullName,
           id: user.id,
@@ -182,7 +207,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
             : 'N/A',
         };
       });
-      this.dataSource = userTableData;
+      this.dataSource = this.allUsers;
     }
   }
 }
