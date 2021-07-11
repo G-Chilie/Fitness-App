@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { finalize } from 'rxjs/operators';
 import { MatSort } from '@angular/material/sort';
@@ -25,16 +26,26 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<Profile>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  employeeUserName: any;
+  newEmployeeForm: FormGroup;
 
   constructor(
     private quoteService: QuoteService,
     private modalService: NgbModal,
     private _snackBar: MatSnackBar,
-    private ngxLoader: NgxUiLoaderService
+    private ngxLoader: NgxUiLoaderService,
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.ngxLoader.start();
+    this.newEmployeeForm = this.formBuilder.group({
+      employeeUsername: [
+        '',
+        [Validators.required, Validators.minLength(4), Validators.maxLength(20), Validators.pattern('[a-zA-Z]+')],
+      ],
+      password: ['', [Validators.required]],
+    });
   }
 
   ngAfterViewInit() {
@@ -54,9 +65,9 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     }
   }
 
-  newProfile(content: any) {
-    this.modalService.open(content, { size: 'md' });
-  }
+  // newProfile(content: any) {
+  //   this.modalService.open(content, { size: 'md' });
+  // }
 
   newEmployee(content: any) {
     this.modalService.open(content, { size: 'md' });

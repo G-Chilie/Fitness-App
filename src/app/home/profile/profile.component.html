@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col-12">
-      <button mat-button class="button-primary" type="button" (click)="newProfile(profileContent)">New Profile</button>
+      <!-- <button mat-button class="button-primary" type="button" (click)="newProfile(profileContent)">New Profile</button> -->
       <button mat-button class="button-primary" type="button" (click)="newEmployee(employeeContent)">
         New Employee
       </button>
@@ -65,35 +65,35 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body ff-14">
-    <div>
-      <mat-form-field class="example-full-width w-100" appearance="outline">
-        <mat-label>New Employee</mat-label>
-        <input matInput placeholder="New Employee" name="new_employee" />
-      </mat-form-field>
-    </div>
-
-    <div>
+  <form [formGroup]="newEmployeeForm">
+    <div class="modal-body ff-14">
       <mat-form-field class="example-full-width w-100" appearance="outline">
         <mat-label>Username</mat-label>
-        <input matInput placeholder="Username" name="username" />
+        <input matInput placeholder="Username" formControlName="employeeUsername" autocomplete="off" />
+        <mat-error *ngIf="newEmployeeForm.get('employeeUsername')?.hasError('required')">
+          Username is Required!
+        </mat-error>
+        <mat-error *ngIf="newEmployeeForm.get('employeeUsername')?.hasError('minlength')">
+          Username should be atleast 4 characters long!
+        </mat-error>
+        <mat-error *ngIf="newEmployeeForm.get('employeeUsername')?.hasError('maxlength')">
+          Username can be atmax 20 characters long!
+        </mat-error>
       </mat-form-field>
-    </div>
 
-    <div>
-      <mat-form-field class="example-full-width w-100" appearance="outline">
+      <mat-form-field class="example-full-width w-100 mt-2" appearance="outline">
         <mat-label>Password</mat-label>
-        <input matInput placeholder="Password" name="password" />
+        <input matInput placeholder="Password" formControlName="password" name="password" autocomplete="off" />
+        <mat-error *ngIf="newEmployeeForm.get('password')?.hasError('required')"> Password is Required! </mat-error>
       </mat-form-field>
     </div>
-  </div>
-  <div class="modal-footer">
-    <button mat-button class="button-primary" type="button" (click)="modal.close('Close click')">Save</button>
-    <!-- <button type="button" class="btn btn-primary" (click)="modal.close('Close click')">Submit</button> -->
-  </div>
+    <div class="modal-footer">
+      <button mat-button class="button-primary">Save</button>
+    </div>
+  </form>
 </ng-template>
 
-<ng-template #profileContent let-modal>
+<!-- <ng-template #profileContent let-modal>
   <div class="modal-header">
     <h4 class="modal-title">New Profile</h4>
     <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -117,9 +117,8 @@
   </div>
   <div class="modal-footer">
     <button mat-button class="button-primary" type="button" (click)="modal.close('Close click')">Save</button>
-    <!-- <button type="button" class="btn btn-primary" (click)="modal.close('Close click')">Submit</button> -->
   </div>
-</ng-template>
+</ng-template> -->
 
 <!-- <div class="" ></div> -->
 <ngx-ui-loader></ngx-ui-loader>

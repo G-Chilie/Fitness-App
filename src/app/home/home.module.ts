@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxUiLoaderModule, NgxUiLoaderConfig } from 'ngx-ui-loader';
 
 import { SharedModule } from '@shared';
@@ -54,6 +54,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     HomeRoutingModule,
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     FormsModule,
+    ReactiveFormsModule,
   ],
   declarations: [HomeComponent, ProfileComponent, RecommendationsComponent, ProgramComponent],
 })
