@@ -31,9 +31,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   supervisors: string[] = ['one', 'two', 'three'];
   selectedSup = 'one';
   selectedProgram = 'one';
-  numberOfCustomers = '0';
-  numberOfActiveCustomers = '0';
-  numberOfInactiveCustomers = '0';
+  numberOfCustomers = 0;
+  numberOfActiveCustomers = 0;
+  numberOfInactiveCustomers = 0;
+  numberOfCompletedCustomers = 0;
   activeUsers: any;
   inactiveUsers: any;
   allUsers: any;
@@ -171,29 +172,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   filterCustomerData(data: any) {
     if (data !== undefined) {
-      let activeUserTemp = data.map((user: any) => {
-        if (user.activeProgram !== null) {
-          return user;
-        }
-      });
-      this.activeUsers = activeUserTemp.filter((user: any) => {
-        return user !== undefined;
-      });
-      this.numberOfActiveCustomers = this.activeUsers.length;
-      let inactiveUsersTemp = data.map((user: any) => {
-        if (user.activeProgram === null) {
-          return user;
-        }
-      });
-      this.inactiveUsers = inactiveUsersTemp.filter((user: any) => {
-        return user !== undefined;
-      });
-      this.numberOfInactiveCustomers = this.inactiveUsers.length;
       this.allUsers = data.map((user: any) => {
         return {
           name: user.fullName,
           id: user.id,
-          phone: user.telegramChatId,
+          phone: user.phone,
           customerId: user.customerId,
           supervisor: user.supervisor,
           telegramName: user.telegramName,
@@ -207,6 +190,39 @@ export class HomeComponent implements OnInit, AfterViewInit {
             : 'N/A',
         };
       });
+
+      let activeUserTemp = this.allUsers.map((user: any) => {
+        if (user.activeProgram !== null) {
+          return user;
+        }
+      });
+      this.activeUsers = activeUserTemp.filter((user: any) => {
+        return user !== undefined;
+      });
+      this.numberOfActiveCustomers = this.activeUsers.length;
+      let inactiveUsersTemp = this.allUsers.map((user: any) => {
+        if (user.activeProgram === null) {
+          return user;
+        }
+      });
+      this.inactiveUsers = inactiveUsersTemp.filter((user: any) => {
+        return user !== undefined;
+
+        // if (user !== undefined) {
+        //   return {
+        //     ...user,
+        //     phone: user.telegramChatId,
+        //     timeRemaining: user?.programRegistrationTimestamp
+        //       ? Math.max(
+        //         dayjs(user?.programRegistrationTimestamp).diff(dayjs(), 'days') + Number(user?.activeProgram?.duration),
+        //         0
+        //       ) || 'N/A'
+        //       : 'N/A',
+        //   }
+        // }
+      });
+      this.numberOfInactiveCustomers = this.inactiveUsers.length;
+
       this.dataSource = this.allUsers;
     }
   }
