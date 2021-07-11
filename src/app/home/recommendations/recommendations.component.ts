@@ -1,10 +1,12 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { QuoteService } from '../quote.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 export interface Recommendations {
@@ -24,17 +26,24 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<Recommendations>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  recommendations: string[] = ['Food', 'Cardio', 'Diet'];
+  recommendations: string[] = ['FOOD', 'RECIPE'];
   selectedRec = 'Food';
+  addRecForm: FormGroup;
 
   constructor(
     private quoteService: QuoteService,
     private modalService: NgbModal,
-    private ngxLoader: NgxUiLoaderService
+    private ngxLoader: NgxUiLoaderService,
+    private formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     this.ngxLoader.start();
+    this.addRecForm = this.formBuilder.group({
+      type: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+    });
   }
 
   ngAfterViewInit() {
@@ -80,6 +89,36 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
           this.ngxLoader.stop();
         }
       );
+  }
+
+  addRecommendation(e: any) {
+    this.ngxLoader.start();
+    if (this.addRecForm.valid) {
+      const data2Send = this.addRecForm.value;
+      this.quoteService
+        .addRecommendation(data2Send)
+        .pipe(
+          finalize(() => {
+            this.ngxLoader.stop();
+          })
+        )
+        .subscribe(
+          (res: any) => {
+            if (res.status === 200) {
+              this._snackBar.open(`Recommendation had been added!`, '', {
+                duration: 3000,
+                verticalPosition: 'top',
+              });
+              this.modalService.dismissAll();
+              this.addRecForm.reset();
+            }
+            this.ngxLoader.stop();
+          },
+          (error) => {
+            this.ngxLoader.stop();
+          }
+        );
+    }
   }
 
   filterRecommendationData(data: any) {

@@ -27,6 +27,7 @@ const endPoints = {
   login: `${serverLink}/api/v1/employee/login`,
   deleteEmployee: `${serverLink}/api/v1/employee`,
   addNewEmployee: `${serverLink}/api/v1/employee`,
+  addNewRecommendation: `${serverLink}/api/v1/recommendation`,
 };
 
 @Injectable({
@@ -111,6 +112,19 @@ export class QuoteService {
           return res;
         }),
         catchError(() => 'Error in adding new employee.')
+      );
+  }
+
+  addRecommendation(data: any) {
+    return this.httpClient
+      .post(endPoints.addNewRecommendation, data, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in adding new recommendation.')
       );
   }
 
