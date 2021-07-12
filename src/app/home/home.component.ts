@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -7,6 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as dayjs from 'dayjs';
 import { QuoteService } from './quote.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 declare const Plotly: any;
 
@@ -17,6 +19,13 @@ export interface UserData {
   supervisor: string;
   program: string;
   timeRemaining: number;
+}
+
+export interface Message {
+  from: string;
+  text: string;
+  createdAt: string;
+  chatId: string;
 }
 
 @Component({
@@ -38,18 +47,32 @@ export class HomeComponent implements OnInit, AfterViewInit {
   activeUsers: any;
   inactiveUsers: any;
   allUsers: any;
+  selectedCustomer: any;
+  currentUserMessages: any;
+
+  currentMoneyback: boolean = false;
+  currentInsta: boolean = false;
+  currentQuestions: boolean = false;
+  currentSleepQuestions: boolean = false;
+  currentFood: boolean = false;
+  currentSleepDiagram: boolean = false;
 
   currentActiveTab = 'all';
 
   displayedColumns: string[] = ['name', 'phone', 'customerId', 'supervisor', 'program', 'timeRemaining', 'actions'];
+  messageDisplayedColumns: string[] = ['from', 'text', 'timestamp'];
   dataSource: MatTableDataSource<UserData>;
+  messageDataSource: MatTableDataSource<Message>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  sendMessageForm: FormGroup;
 
   constructor(
     private quoteService: QuoteService,
     private modalService: NgbModal,
-    private ngxLoader: NgxUiLoaderService
+    private ngxLoader: NgxUiLoaderService,
+    private formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngAfterViewInit() {
@@ -69,6 +92,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.ngxLoader.start();
+    this.sendMessageForm = this.formBuilder.group({
+      message: ['', [Validators.required]],
+    });
   }
 
   getCustomers() {
@@ -121,6 +147,27 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   viewCustomerDetails(content: any, customerId: string) {
+    let selectedCustomerTemp = this.customerData.map((customer: any) => {
+      if (customer.id === customerId) {
+        return customer;
+      }
+    });
+
+    let selectedCustomerTemp1 = selectedCustomerTemp.filter((user: any) => {
+      return user !== undefined;
+    });
+
+    this.selectedCustomer = selectedCustomerTemp1[0];
+
+    if (this.selectedCustomer.length !== 0) {
+      this.currentMoneyback = this.selectedCustomer.moneyback;
+      this.currentInsta = this.selectedCustomer.instagramFeed;
+      this.currentQuestions = this.selectedCustomer.questions;
+      this.currentSleepQuestions = this.selectedCustomer.sleepQuestions;
+      this.currentFood = this.selectedCustomer.foodRecommendations;
+      this.currentSleepDiagram = this.selectedCustomer.diagram;
+    }
+
     this.modalService.open(content, { size: 'xl' });
     setTimeout(() => {
       const that = this;
@@ -162,12 +209,83 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
   }
 
+  sendMessage(content: any, chatId: any) {
+    this.fetchMessages(chatId);
+    this.modalService.open(content, { size: 'lg', backdropClass: 'light-blue-backdrop' });
+  }
+
+  sendTelegramMessage(e: any, id: any) {
+    if (this.sendMessageForm.valid) {
+      const data2Send = this.sendMessageForm.value;
+      this.quoteService
+        .sendTelegramMessage(data2Send, id)
+        .pipe(
+          finalize(() => {
+            this.ngxLoader.stop();
+          })
+        )
+        .subscribe(
+          (res: any) => {
+            if (res.status === 200) {
+              this._snackBar.open(`Message sent!`, '', {
+                duration: 3000,
+                verticalPosition: 'top',
+              });
+              this.fetchMessages(this.selectedCustomer.telegramChatId);
+              this.sendMessageForm.reset();
+            }
+            this.ngxLoader.stop();
+          },
+          (error) => {
+            this.ngxLoader.stop();
+          }
+        );
+    }
+  }
+
   deleteCustomer(id: string) {
     console.log(id);
   }
 
   editCustomer(id: string) {
     console.log(id);
+  }
+
+  fetchMessages(cID: any) {
+    this.quoteService
+      .getMessages(cID)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.status === 200 && res.body) {
+            this.filterMessages(res.body.data);
+          }
+
+          this.ngxLoader.stop();
+        },
+        (error) => {
+          this.isLoading = false;
+        }
+      );
+  }
+
+  filterMessages(data: any) {
+    if (data !== undefined) {
+      this.currentUserMessages = data.map((message: any) => {
+        return {
+          from: message.from,
+          text: message.text,
+          createdAt: message.createdAt,
+          chatId: message.telegramChatId,
+        };
+      });
+
+      this.messageDataSource = this.currentUserMessages;
+    }
   }
 
   filterCustomerData(data: any) {

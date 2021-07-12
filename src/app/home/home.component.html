@@ -203,11 +203,72 @@
   </div>
 </ng-template>
 
+<ng-template #messageTemplate let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Messages</h4>
+    <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body ff-14">
+    <table mat-table [dataSource]="messageDataSource" class="w-100">
+      <ng-container matColumnDef="from">
+        <th mat-header-cell *matHeaderCellDef>From</th>
+        <td mat-cell *matCellDef="let row">{{ row.from !== null ? row.from : 'N/A' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="text">
+        <th mat-header-cell *matHeaderCellDef>Text</th>
+        <td mat-cell *matCellDef="let row">{{ row.text !== null ? row.text : 'N/A' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="timestamp">
+        <th mat-header-cell *matHeaderCellDef>timestamp</th>
+        <td mat-cell *matCellDef="let row">{{ row.createdAt !== null ? (row.createdAt | date: 'short') : 'N/A' }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="messageDisplayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: messageDisplayedColumns"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data found.</td>
+      </tr>
+    </table>
+  </div>
+  <div class="ff-14">
+    <form [formGroup]="sendMessageForm" (ngSubmit)="sendTelegramMessage($event, selectedCustomer.telegramChatId)">
+      <div class="message-form">
+        <div>
+          <mat-form-field class="example-full-width w-100 mt-2" appearance="outline">
+            <mat-label>Message</mat-label>
+            <textarea matInput placeholder="Message" formControlName="message" name="message"></textarea>
+            <mat-error *ngIf="sendMessageForm.get('message')?.hasError('required')"> Message is Required! </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="mb-3 mt-3">
+          <button mat-button class="button-primary" type="submit" [disabled]="sendMessageForm.invalid">Send</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
 <ng-template #content let-modal>
   <div class="modal-header">
     <h4 class="modal-title">
-      User Name
+      <span *ngIf="selectedCustomer.fullName; else showTeleName">{{ selectedCustomer.fullName }}</span>
+      <ng-template #showTeleName>{{ selectedCustomer.telegramName }}</ng-template>
       <button mat-button class="button-primary" type="button" (click)="editProfile(profileContent)">Edit</button>
+      <button
+        mat-button
+        class="button-primary"
+        type="button"
+        (click)="sendMessage(messageTemplate, selectedCustomer.telegramChatId)"
+      >
+        <mat-icon aria-hidden="false" aria-label="Example home icon">mail</mat-icon><span class="ml-3">Message</span>
+      </button>
     </h4>
     <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
@@ -217,17 +278,34 @@
     <div class="row">
       <div class="col-sm-4">
         <mat-card class="info-card">
-          <div>Customer ID: <span>N/A</span></div>
-          <div>Phone Number: <span>N/A</span></div>
-          <div>Email: <span>N/A</span></div>
-          <div>DOB: <span>N/A</span></div>
+          <div>
+            Customer ID:
+            <span>{{ selectedCustomer.customerId !== null ? selectedCustomer.customerId : 'N/A' }}</span>
+          </div>
+          <div>
+            Phone Number:
+            <span>{{
+              selectedCustomer.phone !== null ? selectedCustomer.phone : selectedCustomer.telegramChatId
+            }}</span>
+          </div>
+          <div>
+            Email: <span>{{ selectedCustomer.email !== null ? selectedCustomer.email : 'N/A' }}</span>
+          </div>
+          <div>
+            DOB: <span>{{ selectedCustomer.dob !== null ? selectedCustomer.dob : 'N/A' }}</span>
+          </div>
         </mat-card>
       </div>
       <div class="col-sm-4">
         <mat-card class="info-card">
           <div>Product Type: <span>N/A</span></div>
-          <div>Height: <span>N/A</span></div>
-          <div>Initial Weight: <span>N/A</span></div>
+          <div>
+            Height: <span>{{ selectedCustomer.height !== null ? selectedCustomer.height : 'N/A' }}</span>
+          </div>
+          <div>
+            Initial Weight:
+            <span>{{ selectedCustomer.initialWeight !== null ? selectedCustomer.initialWeight : 'N/A' }}</span>
+          </div>
           <div>Last/Current Weight: <span>N/A</span></div>
         </mat-card>
       </div>
@@ -236,42 +314,42 @@
           <div>
             Moneyback:
             <span>
-              <mat-slide-toggle></mat-slide-toggle>
+              <mat-slide-toggle [(ngModel)]="currentMoneyback"></mat-slide-toggle>
               <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
             </span>
           </div>
           <div>
             Instagram:
             <span>
-              <mat-slide-toggle></mat-slide-toggle>
+              <mat-slide-toggle [(ngModel)]="currentInsta"></mat-slide-toggle>
               <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
             </span>
           </div>
           <div>
             Questions:
             <span>
-              <mat-slide-toggle></mat-slide-toggle>
+              <mat-slide-toggle [(ngModel)]="currentQuestions"></mat-slide-toggle>
               <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
             </span>
           </div>
           <div>
             Sleep Questions:
             <span>
-              <mat-slide-toggle></mat-slide-toggle>
+              <mat-slide-toggle [(ngModel)]="currentSleepQuestions"></mat-slide-toggle>
               <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
             </span>
           </div>
           <div>
             Food Recommendations:
             <span>
-              <mat-slide-toggle></mat-slide-toggle>
+              <mat-slide-toggle [(ngModel)]="currentFood"></mat-slide-toggle>
               <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
             </span>
           </div>
           <div>
             Diagram:
             <span>
-              <mat-slide-toggle></mat-slide-toggle>
+              <mat-slide-toggle [(ngModel)]="currentSleepDiagram"></mat-slide-toggle>
               <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
             </span>
           </div>

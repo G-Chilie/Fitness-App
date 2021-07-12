@@ -28,6 +28,8 @@ const endPoints = {
   deleteEmployee: `${serverLink}/api/v1/employee`,
   addNewEmployee: `${serverLink}/api/v1/employee`,
   addNewRecommendation: `${serverLink}/api/v1/recommendation`,
+  telegram: `${serverLink}/api/v1/message`,
+  sendTelegramMessage: `${serverLink}/api/v1/proxy/telegram/message/`,
 };
 
 @Injectable({
@@ -115,6 +117,23 @@ export class QuoteService {
       );
   }
 
+  getMessages(id: any): Observable<any> {
+    return this.httpClient
+      .get(endPoints.telegram, {
+        params: {
+          'where[telegramChatId]': id,
+          'order[createdAt]': 'desc',
+        },
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in fetching programs.')
+      );
+  }
+
   getAllRecommendations(): Observable<any> {
     return this.httpClient
       .get(endPoints.getRecommendations, {
@@ -138,6 +157,19 @@ export class QuoteService {
           return res;
         }),
         catchError(() => 'Error in adding new employee.')
+      );
+  }
+
+  sendTelegramMessage(data: any, id: any) {
+    return this.httpClient
+      .post(endPoints.sendTelegramMessage + '/' + id, data, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error while sending message to telegram.')
       );
   }
 
