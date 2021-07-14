@@ -31,7 +31,11 @@ export class ShellComponent implements OnInit {
 
   logout() {
     this.authenticationService.logout().subscribe(() => this.router.navigate(['/login'], { replaceUrl: true }));
-    this._snackBar.open('You have successfully logged out!', '', { duration: 3000, verticalPosition: 'top' });
+    this._snackBar.open('You have successfully logged out!', '', {
+      duration: 3000,
+      verticalPosition: 'top',
+      panelClass: ['blue-snackbar'],
+    });
   }
 
   get username(): string | null {

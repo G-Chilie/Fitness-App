@@ -156,51 +156,53 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body ff-14">
-    <div>
-      <mat-form-field class="example-full-width w-100" appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput placeholder="Email" name="email" />
-      </mat-form-field>
-    </div>
+  <form [formGroup]="editCustomerForm" (ngSubmit)="editCustomer(selectedCustomer.id)">
+    <div class="modal-body ff-14">
+      <div>
+        <mat-form-field class="example-full-width w-100" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="Email" formControlName="email" name="email" />
+        </mat-form-field>
+      </div>
 
-    <div>
-      <mat-form-field class="example-full-width w-100" appearance="outline">
-        <mat-label>Initial Weight</mat-label>
-        <input matInput placeholder="Initial Weight" name="initial_weight" />
-      </mat-form-field>
-    </div>
+      <div>
+        <mat-form-field class="example-full-width w-100" appearance="outline">
+          <mat-label>Initial Weight</mat-label>
+          <input matInput placeholder="Initial Weight" formControlName="initialWeight" name="initialWeight" />
+        </mat-form-field>
+      </div>
 
-    <div>
-      <mat-form-field class="example-full-width w-100" appearance="outline">
-        <mat-label>Phone Number</mat-label>
-        <input matInput placeholder="Phone Number" name="phone" />
-      </mat-form-field>
+      <div>
+        <mat-form-field class="example-full-width w-100" appearance="outline">
+          <mat-label>Phone Number</mat-label>
+          <input matInput placeholder="Phone Number" formControlName="phone" name="phone" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Supervisor</mat-label>
+          <mat-select [(ngModel)]="selectedSup">
+            <mat-option *ngFor="let sp of supervisors" value="{{ sp }}">
+              {{ sp }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Active Program</mat-label>
+          <mat-select [(ngModel)]="selectedProgram">
+            <mat-option *ngFor="let sp of ['one', 'two', 'three']" value="{{ sp }}">
+              {{ sp }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
-    <div>
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Supervisor</mat-label>
-        <mat-select [(ngModel)]="selectedSup">
-          <mat-option *ngFor="let sp of supervisors" value="{{ sp }}">
-            {{ sp }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+    <div class="modal-footer">
+      <button mat-button class="button-primary" type="submit" [disabled]="editCustomerForm.invalid">Submit</button>
     </div>
-    <div>
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Active Program</mat-label>
-        <mat-select [(ngModel)]="selectedProgram">
-          <mat-option *ngFor="let sp of ['one', 'two', 'three']" value="{{ sp }}">
-            {{ sp }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button mat-button class="button-primary" type="button" (click)="modal.close('Close click')">Submit</button>
-  </div>
+  </form>
 </ng-template>
 
 <ng-template #messageTemplate let-modal>
@@ -361,7 +363,7 @@
       <div class="col-sm-12">
         <h5>Diagram</h5>
         <mat-card class="plot-card">
-          <div id="plot-chart"></div>
+          <!-- <div id="plot-chart"></div> -->
         </mat-card>
       </div>
     </div>

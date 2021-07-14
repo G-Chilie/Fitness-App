@@ -108,6 +108,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
               this._snackBar.open(`Recommendation had been added!`, '', {
                 duration: 3000,
                 verticalPosition: 'top',
+                panelClass: ['blue-snackbar'],
               });
               this.modalService.dismissAll();
               this.addRecForm.reset();
@@ -136,6 +137,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
             this._snackBar.open(`Recommendation deleted!`, '', {
               duration: 3000,
               verticalPosition: 'top',
+              panelClass: ['blue-snackbar'],
             });
           }
           this.ngxLoader.stop();

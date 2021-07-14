@@ -116,6 +116,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
               this._snackBar.open(`Employee had been added!`, '', {
                 duration: 3000,
                 verticalPosition: 'top',
+                panelClass: ['blue-snackbar'],
               });
               this.modalService.dismissAll();
               this.newEmployeeForm.reset();
@@ -158,6 +159,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
             this._snackBar.open(`User ${res.body.username} is ${res.body.status}`, '', {
               duration: 3000,
               verticalPosition: 'top',
+              panelClass: ['blue-snackbar'],
             });
           }
           this.ngxLoader.stop();

@@ -45,7 +45,7 @@ export class AuthenticationService {
     this.credentialsService.setCredentials();
     localStorage.removeItem('token');
     localStorage.removeItem('userInfo');
-    this._snackBar.open('Token Expired.', '', { duration: 3000 });
+    this._snackBar.open('Token Expired.', '', { duration: 3000, panelClass: ['blue-snackbar'] });
     this.router.navigate(['/login']);
     return of(true);
   }

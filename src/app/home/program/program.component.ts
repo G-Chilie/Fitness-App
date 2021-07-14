@@ -120,6 +120,7 @@ export class ProgramComponent implements OnInit, AfterViewInit {
               this._snackBar.open(`Program has been added!`, '', {
                 duration: 3000,
                 verticalPosition: 'top',
+                panelClass: ['blue-snackbar'],
               });
               this.modalService.dismissAll();
               this.addProgramForm.reset();
@@ -148,6 +149,7 @@ export class ProgramComponent implements OnInit, AfterViewInit {
             this._snackBar.open(`Program deleted!`, '', {
               duration: 3000,
               verticalPosition: 'top',
+              panelClass: ['blue-snackbar'],
             });
           }
           this.ngxLoader.stop();

@@ -66,6 +66,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   sendMessageForm: FormGroup;
+  editCustomerForm: FormGroup;
 
   constructor(
     private quoteService: QuoteService,
@@ -94,6 +95,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.ngxLoader.start();
     this.sendMessageForm = this.formBuilder.group({
       message: ['', [Validators.required]],
+    });
+
+    this.editCustomerForm = this.formBuilder.group({
+      email: ['', [Validators.required]],
+      initialWeight: ['', [Validators.required]],
+      phone: ['', [Validators.required]],
     });
   }
 
@@ -230,6 +237,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
               this._snackBar.open(`Message sent!`, '', {
                 duration: 3000,
                 verticalPosition: 'top',
+                panelClass: ['blue-snackbar'],
               });
               this.fetchMessages(this.selectedCustomer.telegramChatId);
               this.sendMessageForm.reset();
@@ -247,8 +255,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log(id);
   }
 
-  editCustomer(id: string) {
-    console.log(id);
+  editCustomer(data: any) {
+    console.log(data);
+    // debugger;
   }
 
   fetchMessages(cID: any) {
