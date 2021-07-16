@@ -12,7 +12,7 @@ const routes: Routes = [
   Shell.childRoutes([
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent, data: { title: marker('Home') } },
-    { path: 'home/profile', component: ProfileComponent, data: { title: marker('Profile') } },
+    { path: 'home/employees', component: ProfileComponent, data: { title: marker('Employees') } },
     { path: 'home/program', component: ProgramComponent, data: { title: marker('Program') } },
     { path: 'home/recommendations', component: RecommendationsComponent, data: { title: marker('Recommendations') } },
   ]),

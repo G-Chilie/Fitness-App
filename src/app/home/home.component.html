@@ -1,5 +1,11 @@
 <div class="container">
   <div class="row">
+    <!-- <div class="col-12">
+      <div class="position-absolute user-info">
+        <span>userName </span>
+        <mat-icon aria-hidden="false" aria-label="user" class="ml-5">account_circle</mat-icon>
+      </div>
+    </div> -->
     <div class="col-lg-3 col-12" (click)="currentActive('all')">
       <div
         class="card card-primary p-3 d-flex justify-content-center align-items-center pointer"
@@ -75,7 +81,7 @@
                 <th mat-header-cell *matHeaderCellDef>Supervisor</th>
                 <td mat-cell *matCellDef="let row">
                   <span *ngIf="row.supervisor; else noSupervisor">
-                    {{ row.supervisor }}
+                    {{ row.supervisor.username }}
                   </span>
                   <ng-template #noSupervisor>N/A</ng-template>
                 </td>

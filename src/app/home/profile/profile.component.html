@@ -15,7 +15,7 @@
     </div> -->
 
     <div class="col-lg-12">
-      <div class="table-wrapper mt-3">
+      <div class="table-wrapper mt-3 mb-3">
         <div class="card card-primary">
           <div class="mat-elevation-z0">
             <table mat-table [dataSource]="dataSource" class="w-100">
@@ -37,6 +37,14 @@
                   <button mat-flat-button color="warn" type="button" (click)="deleteEmp(row.id)">
                     <mat-icon aria-hidden="false" aria-label="Delete icon">delete</mat-icon>
                     Delete
+                  </button>
+                  <button
+                    mat-icon-button
+                    [matMenuTriggerFor]="menu"
+                    aria-label="Example icon-button with a menu"
+                    [matMenuTriggerData]="{ id: row.id }"
+                  >
+                    <mat-icon>more_vert</mat-icon>
                   </button>
                 </td>
               </ng-container>
@@ -100,6 +108,15 @@
     </div>
   </form>
 </ng-template>
+
+<mat-menu #menu="matMenu">
+  <ng-template matMenuContent let-id="id">
+    <button mat-menu-item type="button" (click)="editEmployee(id)">
+      <mat-icon>edit</mat-icon>
+      <span>Edit</span>
+    </button>
+  </ng-template>
+</mat-menu>
 
 <!-- <ng-template #profileContent let-modal>
   <div class="modal-header">

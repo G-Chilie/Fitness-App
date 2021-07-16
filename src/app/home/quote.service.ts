@@ -19,17 +19,17 @@ export interface RandomQuoteContext {
 }
 
 const endPoints = {
-  getEmployees: `${serverLink}/api/v1/employee`,
-  getPrograms: `${serverLink}/api/v1/program`,
-  getRecommendations: `${serverLink}/api/v1/recommendation`,
-  getCustomers: `${serverLink}/api/v1/customer?include=supervisor`,
-  getMessages: `${serverLink}/api/v1/message`,
-  login: `${serverLink}/api/v1/employee/login`,
-  deleteEmployee: `${serverLink}/api/v1/employee`,
-  addNewEmployee: `${serverLink}/api/v1/employee`,
-  addNewRecommendation: `${serverLink}/api/v1/recommendation`,
-  telegram: `${serverLink}/api/v1/message`,
-  sendTelegramMessage: `${serverLink}/api/v1/proxy/telegram/message/`,
+  getEmployees: '/api/v1/employee',
+  getPrograms: '/api/v1/program',
+  getRecommendations: '/api/v1/recommendation',
+  getCustomers: '/api/v1/customer?include=supervisor&inlclude=programHistory',
+  getMessages: '/api/v1/message',
+  login: '/api/v1/employee/login',
+  deleteEmployee: '/api/v1/employee',
+  addNewEmployee: '/api/v1/employee',
+  addNewRecommendation: '/api/v1/recommendation',
+  telegram: '/api/v1/message',
+  sendTelegramMessage: '/api/v1/proxy/telegram/message/',
 };
 
 @Injectable({

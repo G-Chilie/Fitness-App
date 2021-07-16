@@ -169,4 +169,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         }
       );
   }
+
+  editEmployee(id: string) {
+    console.log(id);
+  }
 }

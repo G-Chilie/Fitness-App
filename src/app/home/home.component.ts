@@ -257,7 +257,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   editCustomer(data: any) {
     console.log(data);
-    // debugger;
   }
 
   fetchMessages(cID: any) {

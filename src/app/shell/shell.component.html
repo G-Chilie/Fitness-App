@@ -52,9 +52,9 @@
             <span translate class="ml-5">Recommendations</span>
           </a>
           <mat-divider></mat-divider>
-          <a mat-list-item routerLink="/home/profile" routerLinkActive="active" (click)="isMobile && sidenav.close()">
-            <mat-icon aria-hidden="false" aria-label="Example home icon">settings</mat-icon>
-            <span translate class="ml-5">Profile</span>
+          <a mat-list-item routerLink="/home/employees" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+            <mat-icon aria-hidden="false" aria-label="Example home icon">people</mat-icon>
+            <span translate class="ml-5">Employees</span>
           </a>
           <mat-divider></mat-divider>
           <a mat-list-item routerLink="/about" routerLinkActive="active" (click)="logout()">
@@ -84,10 +84,10 @@
         </div>
         <!-- <span class="text-bold">{{ title }}</span> -->
       </mat-toolbar>
-      <div class="position-absolute user-info">
+      <!-- <div class="position-absolute user-info">
         <span>{{ userName }}</span>
         <mat-icon aria-hidden="false" aria-label="user" class="ml-5">account_circle</mat-icon>
-      </div>
+      </div> -->
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>

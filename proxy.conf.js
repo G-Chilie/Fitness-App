@@ -14,6 +14,14 @@ const proxyConfig = [
     changeOrigin: true,
     secure: false,
   },
+
+  {
+    context: '/api/v1/',
+    pathRewrite: { '^/api/v1/': '' },
+    target: 'https://diet.bodysperfect.com/api/v1/',
+    changeOrigin: true,
+    secure: false,
+  },
 ];
 
 /*
