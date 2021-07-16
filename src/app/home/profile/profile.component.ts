@@ -53,9 +53,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     // this.dataSource.paginator = this.paginator;
     // this.dataSource.sort = this.sort;
-    setTimeout(() => {
-      this.getProfiles();
-    }, 3000);
+    this.getProfiles();
   }
 
   applyFilter(event: Event) {

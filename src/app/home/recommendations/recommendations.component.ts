@@ -49,9 +49,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     // this.dataSource.paginator = this.paginator;
     // this.dataSource.sort = this.sort;
-    setTimeout(() => {
-      this.getRecommendations();
-    }, 3000);
+    this.getRecommendations();
   }
 
   applyFilter(event: Event) {

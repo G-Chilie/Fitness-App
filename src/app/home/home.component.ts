@@ -77,9 +77,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      this.getCustomers();
-    }, 1000);
+    this.getCustomers();
   }
 
   applyFilter(event: Event) {
@@ -117,7 +115,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         (res: any) => {
           if (res.status === 200 && res.body.data) {
             this.customerData = res.body.data;
-            console.log('xcustomerData', this.customerData);
             this.numberOfCustomers = this.customerData.length;
             this.filterCustomerData(this.customerData);
           }

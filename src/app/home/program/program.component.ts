@@ -53,9 +53,7 @@ export class ProgramComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      this.getPrograms();
-    }, 3000);
+    this.getPrograms();
   }
 
   applyFilter(event: Event) {
