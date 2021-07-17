@@ -35,7 +35,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   quote: string | undefined;
   isLoading = false;
   customerData: any;
-  supervisors: string[] = ['one', 'two', 'three'];
+  supervisors: string[] = [];
+  programs: string[] = [];
   selectedSup = 'one';
   selectedProgram = 'one';
   numberOfCustomers = 0;
@@ -90,11 +91,64 @@ export class HomeComponent implements OnInit, AfterViewInit {
       message: ['', [Validators.required]],
     });
 
+    this.getPrograms();
+    this.getSupervisors();
+
     this.editCustomerForm = this.formBuilder.group({
       email: ['', [Validators.required]],
       initialWeight: [0, [Validators.required]],
       phone: ['', [Validators.required]],
+      supervisor: [null, Validators.required],
+      selectedProgram: [null, Validators.required],
     });
+  }
+
+  getPrograms() {
+    this.ngxLoader.start();
+    this.quoteService
+      .getAllPrograms()
+      .pipe(
+        finalize(() => {
+          this.ngxLoader.stop();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.status === 200 && res.body.data) {
+            res.body.data.map((program: any) => {
+              this.programs.push(program.name);
+            });
+          }
+          this.ngxLoader.stop();
+        },
+        (error) => {
+          this.ngxLoader.stop();
+        }
+      );
+  }
+
+  getSupervisors() {
+    this.ngxLoader.start();
+    this.quoteService
+      .getAllEmployees()
+      .pipe(
+        finalize(() => {
+          this.ngxLoader.stop();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.status === 200 && res.body.data) {
+            res.body.data.map((emp: any) => {
+              this.supervisors.push(emp.username);
+            });
+          }
+          this.ngxLoader.stop();
+        },
+        (error) => {
+          this.ngxLoader.stop();
+        }
+      );
   }
 
   getCustomers() {

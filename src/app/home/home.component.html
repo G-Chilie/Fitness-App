@@ -190,6 +190,21 @@
           <input matInput placeholder="Phone Number" formControlName="phone" name="phone" />
         </mat-form-field>
       </div>
+      <div>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="supervisor" placeholder="Supervisor">
+            <mat-option [value]="supervisor" *ngFor="let supervisor of supervisors">{{ supervisor }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="selectedProgram" placeholder="Program">
+            <mat-option [value]="program" *ngFor="let program of programs">{{ program }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
       <!-- <div>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Supervisor</mat-label>
