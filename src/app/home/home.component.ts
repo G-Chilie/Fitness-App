@@ -2,15 +2,13 @@ import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as dayjs from 'dayjs';
 import { QuoteService } from './quote.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-declare const Plotly: any;
 
 export interface UserData {
   name: string;
@@ -49,6 +47,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   allUsers: any;
   selectedCustomer: any;
   currentUserMessages: any;
+  selectedCustomerID: any;
 
   currentMoneyback: boolean = false;
   currentInsta: boolean = false;
@@ -83,10 +82,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 
   ngOnInit() {
@@ -97,7 +92,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.editCustomerForm = this.formBuilder.group({
       email: ['', [Validators.required]],
-      initialWeight: ['', [Validators.required]],
+      initialWeight: [0, [Validators.required]],
       phone: ['', [Validators.required]],
     });
   }
@@ -173,43 +168,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
 
     this.modalService.open(content, { size: 'xl' });
-    setTimeout(() => {
-      const that = this;
-      const layoutdiv = document.getElementById('plot-chart');
-      const chartConfig = { displayModeBar: false };
-      const layout = {
-        showlegend: true,
-        legend: {
-          orientation: 'h',
-          x: 0.4,
-          y: 1.4,
-        },
-        autosize: false,
-        width: 500,
-        height: 280,
-        margin: {
-          l: 50,
-          r: 50,
-          b: 100,
-          t: 100,
-          pad: 4,
-        },
-        // paper_bgcolor: '#7f7f7f',
-        // plot_bgcolor: '#c7c7c7'
-      };
-      var trace = {
-        x: [1, 2, 3, 4, 5, 6, 7, 8],
-        y: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-        type: 'scatter',
-        name: 'amount',
-      };
-
-      let data = [trace];
-      Plotly.newPlot(layoutdiv, data, layout, chartConfig);
-    }, 2000);
   }
 
-  editProfile(content: any) {
+  editProfile(content: any, customerID: string) {
+    this.selectedCustomerID = customerID;
     this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
   }
 
@@ -252,8 +214,33 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log(id);
   }
 
-  editCustomer(data: any) {
-    console.log(data);
+  editCustomer(customerID: any) {
+    if (this.editCustomerForm.valid) {
+      const data2Send = this.editCustomerForm.value;
+      this.quoteService
+        .editCustomer(data2Send, customerID)
+        .pipe(
+          finalize(() => {
+            this.ngxLoader.stop();
+          })
+        )
+        .subscribe(
+          (res: any) => {
+            if (res.status === 200) {
+              this._snackBar.open(`Customer details changed!`, '', {
+                duration: 3000,
+                verticalPosition: 'top',
+                panelClass: ['blue-snackbar'],
+              });
+              this.editCustomerForm.reset();
+            }
+            this.ngxLoader.stop();
+          },
+          (error) => {
+            this.ngxLoader.stop();
+          }
+        );
+    }
   }
 
   fetchMessages(cID: any) {

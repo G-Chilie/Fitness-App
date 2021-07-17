@@ -148,7 +148,7 @@
       <mat-icon>delete</mat-icon>
       <span>Delete</span>
     </button>
-    <button mat-menu-item type="button" (click)="editCustomer(id)">
+    <button mat-menu-item type="button" (click)="editProfile(profileContent, id)">
       <mat-icon>edit</mat-icon>
       <span>Edit</span>
     </button>
@@ -162,7 +162,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form [formGroup]="editCustomerForm" (ngSubmit)="editCustomer(selectedCustomer.id)">
+  <form [formGroup]="editCustomerForm" (ngSubmit)="editCustomer(selectedCustomerID)">
     <div class="modal-body ff-14">
       <div>
         <mat-form-field class="example-full-width w-100" appearance="outline">
@@ -174,7 +174,13 @@
       <div>
         <mat-form-field class="example-full-width w-100" appearance="outline">
           <mat-label>Initial Weight</mat-label>
-          <input matInput placeholder="Initial Weight" formControlName="initialWeight" name="initialWeight" />
+          <input
+            matInput
+            placeholder="Initial Weight"
+            type="number"
+            formControlName="initialWeight"
+            name="initialWeight"
+          />
         </mat-form-field>
       </div>
 
@@ -184,7 +190,7 @@
           <input matInput placeholder="Phone Number" formControlName="phone" name="phone" />
         </mat-form-field>
       </div>
-      <div>
+      <!-- <div>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Supervisor</mat-label>
           <mat-select [(ngModel)]="selectedSup">
@@ -203,7 +209,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-      </div>
+      </div> -->
     </div>
     <div class="modal-footer">
       <button mat-button class="button-primary" type="submit" [disabled]="editCustomerForm.invalid">Submit</button>
@@ -243,6 +249,7 @@
         <td class="mat-cell" colspan="4">No data found.</td>
       </tr>
     </table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>
   <div class="ff-14">
     <form [formGroup]="sendMessageForm" (ngSubmit)="sendTelegramMessage($event, selectedCustomer.telegramChatId)">
@@ -268,14 +275,13 @@
     <h4 class="modal-title">
       <span *ngIf="selectedCustomer.fullName; else showTeleName">{{ selectedCustomer.fullName }}</span>
       <ng-template #showTeleName>{{ selectedCustomer.telegramName }}</ng-template>
-      <button mat-button class="button-primary" type="button" (click)="editProfile(profileContent)">Edit</button>
       <button
         mat-button
         class="button-primary"
         type="button"
         (click)="sendMessage(messageTemplate, selectedCustomer.telegramChatId)"
       >
-        <mat-icon aria-hidden="false" aria-label="Example home icon">mail</mat-icon><span class="ml-3">Message</span>
+        <span class="ml-3">Message</span>
       </button>
     </h4>
     <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -369,7 +375,7 @@
       <div class="col-sm-12">
         <h5>Diagram</h5>
         <mat-card class="plot-card">
-          <!-- <div id="plot-chart"></div> -->
+          <span>plot graph here.</span>
         </mat-card>
       </div>
     </div>

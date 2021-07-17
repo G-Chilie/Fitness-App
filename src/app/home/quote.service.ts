@@ -7,13 +7,6 @@ const routes = {
   quote: (c: RandomQuoteContext) => `/jokes/random?category=${c.category}`,
 };
 
-const authToken = sessionStorage.getItem('token');
-const serverLink = 'https://diet.bodysperfect.com';
-// const Headers = new HttpHeaders({
-//   'Content-Type': 'application/json',
-//   Authorization: `Bearer ${authToken}`,
-// });
-
 export interface RandomQuoteContext {
   category: string;
 }
@@ -25,11 +18,12 @@ const endPoints = {
   getCustomers: '/api/v1/customer?include=supervisor&inlclude=programHistory',
   getMessages: '/api/v1/message',
   login: '/api/v1/employee/login',
-  deleteEmployee: '/api/v1/employee',
+  deleteEmployee: '/api/v1/employee/',
   addNewEmployee: '/api/v1/employee',
   addNewRecommendation: '/api/v1/recommendation',
   telegram: '/api/v1/message',
   sendTelegramMessage: '/api/v1/proxy/telegram/message/',
+  editCustomer: '/api/v1/customer/',
 };
 
 @Injectable({
@@ -51,6 +45,19 @@ export class QuoteService {
       );
   }
 
+  editCustomer(data: any, customerID: string) {
+    return this.httpClient
+      .put(endPoints.editCustomer + customerID, data, {
+        observe: 'response',
+      })
+      .pipe(
+        map((body: any) => {
+          return body;
+        }),
+        catchError(() => 'Error in editing the customer.')
+      );
+  }
+
   getAllEmployees(): Observable<any> {
     return this.httpClient
       .get(endPoints.getEmployees, {
@@ -67,7 +74,7 @@ export class QuoteService {
   deleteEmployee(id: string): Observable<any> {
     const bodyObj = { status: 'DEACTIVATED' };
     return this.httpClient
-      .put(endPoints.deleteEmployee + '/' + id, bodyObj, {
+      .put(endPoints.deleteEmployee + id, bodyObj, {
         observe: 'response',
       })
       .pipe(
