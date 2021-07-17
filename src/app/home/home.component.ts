@@ -232,6 +232,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
                 verticalPosition: 'top',
                 panelClass: ['blue-snackbar'],
               });
+              this.getCustomers();
+              this.modalService.dismissAll();
               this.editCustomerForm.reset();
             }
             this.ngxLoader.stop();
