@@ -198,30 +198,10 @@
         </mat-form-field>
       </div>
 
-      <div>
+      <!-- <div>
         <mat-form-field appearance="outline" class="w-100">
           <mat-select formControlName="selectedProgram" placeholder="Program">
             <mat-option [value]="program" *ngFor="let program of programs">{{ program }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <!-- <div>
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Supervisor</mat-label>
-          <mat-select [(ngModel)]="selectedSup">
-            <mat-option *ngFor="let sp of supervisors" value="{{ sp }}">
-              {{ sp }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Active Program</mat-label>
-          <mat-select [(ngModel)]="selectedProgram">
-            <mat-option *ngFor="let sp of ['one', 'two', 'three']" value="{{ sp }}">
-              {{ sp }}
-            </mat-option>
           </mat-select>
         </mat-form-field>
       </div> -->
@@ -389,9 +369,9 @@
     <div class="row mt-2">
       <div class="col-sm-12">
         <h5>Diagram</h5>
-        <mat-card class="plot-card">
-          <span>plot graph here.</span>
-        </mat-card>
+        <!-- <mat-card class="plot-card"> -->
+        <app-line-chart></app-line-chart>
+        <!-- </mat-card> -->
       </div>
     </div>
   </div>

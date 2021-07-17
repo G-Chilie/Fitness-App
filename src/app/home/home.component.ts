@@ -99,7 +99,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       initialWeight: [0, [Validators.required]],
       phone: ['', [Validators.required]],
       supervisor: [null, Validators.required],
-      selectedProgram: [null, Validators.required],
+      // selectedProgram: [null],
     });
   }
 

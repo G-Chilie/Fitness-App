@@ -12,6 +12,8 @@ import { HomeComponent } from './home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RecommendationsComponent } from './recommendations/recommendations.component';
 import { ProgramComponent } from './program/program.component';
+import { LineChartComponent } from './line-chart/line-chart.component';
+import { ChartsModule } from 'ng2-charts';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: '#363740',
@@ -55,7 +57,8 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig),
     FormsModule,
     ReactiveFormsModule,
+    ChartsModule,
   ],
-  declarations: [HomeComponent, ProfileComponent, RecommendationsComponent, ProgramComponent],
+  declarations: [HomeComponent, ProfileComponent, RecommendationsComponent, ProgramComponent, LineChartComponent],
 })
 export class HomeModule {}
