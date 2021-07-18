@@ -116,7 +116,7 @@
                   <button
                     mat-icon-button
                     [matMenuTriggerFor]="menu"
-                    [matMenuTriggerData]="{ id: row.id }"
+                    [matMenuTriggerData]="{ data: row }"
                     aria-label="Example icon-button with a menu"
                   >
                     <mat-icon>more_vert</mat-icon>
@@ -143,12 +143,12 @@
 </div>
 
 <mat-menu #menu="matMenu">
-  <ng-template matMenuContent let-id="id">
-    <button mat-menu-item type="button" (click)="deleteCustomer(id)">
+  <ng-template matMenuContent let-data="data">
+    <button mat-menu-item type="button" (click)="deleteCustomer(data.id)">
       <mat-icon>delete</mat-icon>
       <span>Delete</span>
     </button>
-    <button mat-menu-item type="button" (click)="editProfile(profileContent, id)">
+    <button mat-menu-item type="button" (click)="editProfile(profileContent, data)">
       <mat-icon>edit</mat-icon>
       <span>Edit</span>
     </button>
@@ -192,8 +192,8 @@
       </div>
       <div>
         <mat-form-field appearance="outline" class="w-100">
-          <mat-select formControlName="supervisor" placeholder="Supervisor">
-            <mat-option [value]="supervisor.id" *ngFor="let supervisor of supervisors"
+          <mat-select formControlName="supervisor" placeholder="Supervisor" [compareWith]="compareSupervisor">
+            <mat-option [value]="supervisor" *ngFor="let supervisor of supervisors"
               >{{ supervisor.username }}
             </mat-option>
           </mat-select>
@@ -202,8 +202,8 @@
 
       <div>
         <mat-form-field appearance="outline" class="w-100">
-          <mat-select formControlName="activeProgram" placeholder="Program">
-            <mat-option [value]="program.id" *ngFor="let program of programs">{{ program.name }}</mat-option>
+          <mat-select formControlName="activeProgram" placeholder="Program" [compareWith]="compareProgram">
+            <mat-option [value]="program" *ngFor="let program of programs">{{ program.name }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>

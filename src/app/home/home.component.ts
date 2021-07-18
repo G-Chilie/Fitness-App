@@ -9,6 +9,7 @@ import * as dayjs from 'dayjs';
 import { QuoteService } from './quote.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { da } from 'date-fns/locale';
 
 export interface UserData {
   name: string;
@@ -95,10 +96,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.getSupervisors();
 
     this.editCustomerForm = this.formBuilder.group({
-      email: ['', [Validators.required]],
-      initialWeight: [0, [Validators.required]],
-      phone: ['', [Validators.required]],
-      supervisor: [null, Validators.required],
+      email: [''],
+      initialWeight: [0],
+      phone: [''],
+      supervisor: [null],
       activeProgram: [null],
     });
   }
@@ -224,9 +225,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.modalService.open(content, { size: 'xl' });
   }
 
-  editProfile(content: any, customerID: string) {
-    this.selectedCustomerID = customerID;
+  editProfile(content: any, data: any) {
+    this.selectedCustomerID = data.id;
+    this.editCustomerForm.patchValue({
+      email: data.email ? data.email : '',
+      initialWeight: data.initialWeight ? data.initialWeight : '',
+      phone: data.phone ? data.phone : '',
+      supervisor: data.supervisor?.id ? data.supervisor.id : '',
+      activeProgram: data.activeProgram?.id ? data.activeProgram.id : '',
+    });
     this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
+  }
+
+  compareSupervisor(sp1: any, sp2: any) {
+    return sp1 && sp2 && sp1.id === sp2;
+  }
+
+  compareProgram(p1: any, p2: any) {
+    return p1 && p2 && p1.id === p2;
   }
 
   sendMessage(content: any, chatId: any) {
@@ -341,19 +357,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.allUsers = data.map((user: any) => {
         return {
           name: user.fullName,
-          id: user.id,
-          phone: user.phone,
-          customerId: user.customerId,
-          supervisor: user.supervisor,
-          telegramName: user.telegramName,
-          telegramChatId: user.telegramChatId,
-          activeProgram: user.activeProgram,
           timeRemaining: user?.programRegistrationTimestamp
             ? Math.max(
                 dayjs(user?.programRegistrationTimestamp).diff(dayjs(), 'days') + Number(user?.activeProgram?.duration),
                 0
               ) || 'N/A'
             : 'N/A',
+          ...user,
         };
       });
 
