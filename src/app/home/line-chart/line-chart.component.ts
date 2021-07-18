@@ -9,8 +9,8 @@ import { Color, BaseChartDirective, Label } from 'ng2-charts';
 })
 export class LineChartComponent implements OnInit {
   lineChartData: ChartDataSets[] = [
-    { data: [85, 72, 78, 75, 77, 75], label: 'weight' },
-    { data: [10, 20, 33, 22, 11, 33], label: 'sleep' },
+    { data: [85, 72, 78, 75, 77, 75, 90], label: 'weight' },
+    { data: [10, 20, 33, 22, 11, 33, 50], label: 'sleep' },
   ];
 
   lineChartLabels: Label[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
