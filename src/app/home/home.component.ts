@@ -99,7 +99,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       initialWeight: [0, [Validators.required]],
       phone: ['', [Validators.required]],
       supervisor: [null, Validators.required],
-      // selectedProgram: [null],
+      activeProgram: [null],
     });
   }
 
@@ -116,7 +116,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         (res: any) => {
           if (res.status === 200 && res.body.data) {
             res.body.data.map((program: any) => {
-              this.programs.push(program.name);
+              this.programs.push(program);
             });
           }
           this.ngxLoader.stop();
@@ -140,7 +140,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         (res: any) => {
           if (res.status === 200 && res.body.data) {
             res.body.data.map((emp: any) => {
-              this.supervisors.push(emp.username);
+              this.supervisors.push(emp);
             });
           }
           this.ngxLoader.stop();
