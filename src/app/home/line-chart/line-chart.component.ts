@@ -13,7 +13,7 @@ export class LineChartComponent implements OnInit {
     { data: [10, 20, 33, 22, 11, 33], label: 'sleep' },
   ];
 
-  lineChartLabels: Label[] = ['January', 'February', 'March', 'April', 'May', 'June'];
+  lineChartLabels: Label[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   lineChartOptions = {
     responsive: true,

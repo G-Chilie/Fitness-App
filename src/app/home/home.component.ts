@@ -45,6 +45,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   numberOfInactiveCustomers = 0;
   numberOfCompletedCustomers = 0;
   activeUsers: any;
+  completedCustomers: any;
   inactiveUsers: any;
   allUsers: any;
   selectedCustomer: any;
@@ -55,6 +56,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   currentInsta: boolean = false;
   currentQuestions: boolean = false;
   currentSleepQuestions: boolean = false;
+  currentWeightQuestion: boolean = false;
   currentFood: boolean = false;
   currentSleepDiagram: boolean = false;
 
@@ -196,6 +198,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       case 'completed':
         this.currentActiveTab = 'completed';
+        this.dataSource = this.completedCustomers;
         break;
     }
   }
@@ -218,6 +221,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.currentInsta = this.selectedCustomer.instagramFeed;
       this.currentQuestions = this.selectedCustomer.questions;
       this.currentSleepQuestions = this.selectedCustomer.sleepQuestions;
+      this.currentWeightQuestion = this.selectedCustomer.weightQuestions;
       this.currentFood = this.selectedCustomer.foodRecommendations;
       this.currentSleepDiagram = this.selectedCustomer.diagram;
     }
@@ -375,6 +379,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.activeUsers = activeUserTemp.filter((user: any) => {
         return user !== undefined;
       });
+
+      let completedCustomerTemp = this.allUsers.map((user: any) => {
+        if (user.activeProgram !== null && user.programHistory.length) {
+          return user;
+        }
+      });
+
+      this.completedCustomers = completedCustomerTemp.filter((user: any) => {
+        return user !== undefined;
+      });
+      this.numberOfCompletedCustomers = this.completedCustomers.length;
       this.numberOfActiveCustomers = this.activeUsers.length;
       let inactiveUsersTemp = this.allUsers.map((user: any) => {
         if (user.activeProgram === null) {
