@@ -12,6 +12,7 @@ import { AuthenticationService, CredentialsService } from '@app/auth';
   styleUrls: ['./shell.component.scss'],
 })
 export class ShellComponent implements OnInit {
+  isAdmin: boolean;
   constructor(
     private router: Router,
     private titleService: Title,
@@ -27,6 +28,12 @@ export class ShellComponent implements OnInit {
     let userinfo = localStorage.getItem('userInfo');
     const userInfo = JSON.parse(userinfo);
     this.userName = userInfo.username;
+
+    if (localStorage.getItem('userStatus') === 'ADMIN') {
+      this.isAdmin = true;
+    } else {
+      this.isAdmin = false;
+    }
   }
 
   logout() {

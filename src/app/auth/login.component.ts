@@ -9,6 +9,7 @@ import { AuthenticationService } from './authentication.service';
 import { QuoteService } from '@app/home/quote.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 const log = new Logger('Login');
 
@@ -45,6 +46,8 @@ export class LoginComponent implements OnInit {
   ngOnInit() {}
 
   login() {
+    const helper = new JwtHelperService();
+
     // const Headers = new HttpHeaders({
     //   'Content-Type': 'application/json',
     // });
@@ -70,6 +73,8 @@ export class LoginComponent implements OnInit {
         (res: any) => {
           /* todo: if the api returns 403 unauthorized, do not let user sign in. just notify. */
           localStorage.setItem('token', res);
+          const decodedToken = helper.decodeToken(res);
+          localStorage.setItem('userStatus', decodedToken.userStatus);
           this.authenticationService.autoLogOut(this.tokenExpiry);
           this.authenticationService.login(this.loginForm.value);
           this._snackBar.open('Login Successful.', '', {

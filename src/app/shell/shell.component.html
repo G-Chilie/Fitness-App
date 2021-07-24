@@ -52,11 +52,18 @@
             <span translate class="ml-5">Recommendations</span>
           </a>
           <mat-divider></mat-divider>
-          <a mat-list-item routerLink="/home/employees" routerLinkActive="active" (click)="isMobile && sidenav.close()">
-            <mat-icon aria-hidden="false" aria-label="Example home icon">people</mat-icon>
-            <span translate class="ml-5">Employees</span>
-          </a>
-          <mat-divider></mat-divider>
+          <span *ngIf="isAdmin">
+            <a
+              mat-list-item
+              routerLink="/home/employees"
+              routerLinkActive="active"
+              (click)="isMobile && sidenav.close()"
+            >
+              <mat-icon aria-hidden="false" aria-label="Example home icon">people</mat-icon>
+              <span translate class="ml-5">Employees</span>
+            </a>
+            <mat-divider></mat-divider>
+          </span>
           <a mat-list-item routerLink="/about" routerLinkActive="active" (click)="logout()">
             <mat-icon aria-hidden="false" aria-label="Example home icon">logout</mat-icon>
             <span translate class="ml-5">Logout</span>
