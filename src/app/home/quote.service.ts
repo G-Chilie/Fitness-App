@@ -24,6 +24,7 @@ const endPoints = {
   telegram: '/api/v1/message',
   sendTelegramMessage: '/api/v1/proxy/telegram/message/',
   editCustomer: '/api/v1/customer/',
+  editEmployee: '/api/v1/employee/',
 };
 
 @Injectable({
@@ -55,6 +56,19 @@ export class QuoteService {
           return body;
         }),
         catchError(() => 'Error in editing the customer.')
+      );
+  }
+
+  editEmployee(data: any, employeeID: string) {
+    return this.httpClient
+      .put(endPoints.editEmployee + employeeID, data, {
+        observe: 'response',
+      })
+      .pipe(
+        map((body: any) => {
+          return body;
+        }),
+        catchError(() => 'Error in editing the employee.')
       );
   }
 

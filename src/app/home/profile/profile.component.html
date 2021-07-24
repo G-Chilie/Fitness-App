@@ -42,7 +42,7 @@
                     mat-icon-button
                     [matMenuTriggerFor]="menu"
                     aria-label="Example icon-button with a menu"
-                    [matMenuTriggerData]="{ id: row.id }"
+                    [matMenuTriggerData]="{ data: row }"
                   >
                     <mat-icon>more_vert</mat-icon>
                   </button>
@@ -110,40 +110,43 @@
 </ng-template>
 
 <mat-menu #menu="matMenu">
-  <ng-template matMenuContent let-id="id">
-    <button mat-menu-item type="button" (click)="editEmployee(id)">
+  <ng-template matMenuContent let-data="data">
+    <button mat-menu-item type="button" (click)="editEmployee(profileContent, data)">
       <mat-icon>edit</mat-icon>
       <span>Edit</span>
     </button>
   </ng-template>
 </mat-menu>
 
-<!-- <ng-template #profileContent let-modal>
+<ng-template #profileContent let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">New Profile</h4>
+    <h4 class="modal-title">Edit Employee</h4>
     <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body ff-14">
-    <div>
-      <mat-form-field class="example-full-width w-100" appearance="outline">
-        <mat-label>Username</mat-label>
-        <input matInput placeholder="Username" name="username" />
-      </mat-form-field>
-    </div>
+  <form [formGroup]="editEmployeeForm" (ngSubmit)="patchEmployee(selectedEmpID)">
+    <div class="modal-body ff-14">
+      <div>
+        <mat-form-field class="example-full-width w-100" appearance="outline">
+          <mat-label>Username</mat-label>
+          <input matInput placeholder="Username" formControlName="username" name="" />
+        </mat-form-field>
+      </div>
 
-    <div>
-      <mat-form-field class="example-full-width w-100" appearance="outline">
-        <mat-label>Password</mat-label>
-        <input matInput placeholder="Password" name="password" />
-      </mat-form-field>
+      <div>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-select formControlName="status" placeholder="Status" [compareWith]="compareStatus">
+            <mat-option [value]="status" *ngFor="let status of statuses">{{ status }} </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
-  </div>
-  <div class="modal-footer">
-    <button mat-button class="button-primary" type="button" (click)="modal.close('Close click')">Save</button>
-  </div>
-</ng-template> -->
+    <div class="modal-footer">
+      <button mat-button class="button-primary" type="submit" [disabled]="editEmployeeForm.invalid">Save</button>
+    </div>
+  </form>
+</ng-template>
 
 <!-- <div class="" ></div> -->
 <ngx-ui-loader></ngx-ui-loader>

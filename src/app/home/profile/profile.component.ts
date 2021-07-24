@@ -28,7 +28,9 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   username: any;
+  selectedEmpID: any;
   newEmployeeForm: FormGroup;
+  editEmployeeForm: FormGroup;
 
   constructor(
     private quoteService: QuoteService,
@@ -47,6 +49,11 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       ],
       password: ['', [Validators.required]],
       status: ['', [Validators.required]],
+    });
+
+    this.editEmployeeForm = this.formBuilder.group({
+      username: [''],
+      status: [null],
     });
   }
 
@@ -168,7 +175,49 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       );
   }
 
-  editEmployee(id: string) {
-    console.log(id);
+  editEmployee(content: any, data: any) {
+    this.selectedEmpID = data.id;
+    console.log(data);
+
+    this.editEmployeeForm.patchValue({
+      username: data.username ? data.username : '',
+      status: data.status ? data.status : null,
+    });
+    this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
+  }
+
+  patchEmployee(id: any) {
+    if (this.editEmployeeForm.valid) {
+      const data2Send = this.editEmployeeForm.value;
+      this.quoteService
+        .editEmployee(data2Send, id)
+        .pipe(
+          finalize(() => {
+            this.ngxLoader.stop();
+          })
+        )
+        .subscribe(
+          (res: any) => {
+            if (res.status === 200) {
+              this._snackBar.open(`Employee details updated!`, '', {
+                duration: 3000,
+                verticalPosition: 'top',
+                panelClass: ['blue-snackbar'],
+              });
+              this.getProfiles();
+              this.modalService.dismissAll();
+              this.editEmployeeForm.reset();
+            }
+            this.ngxLoader.stop();
+          },
+          (error) => {
+            this.ngxLoader.stop();
+          }
+        );
+    }
+  }
+
+  compareStatus(st1: any, st2: any) {
+    return st1 && st2 && st1 === st2;
   }
 }
