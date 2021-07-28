@@ -93,7 +93,13 @@
       </mat-toolbar>
       <div class="position-absolute user-info">
         <span>{{ userName }}</span>
-        <button mat-mini-fab aria-label="Example icon button with a menu icon" [matMenuTriggerFor]="menu">
+        <button
+          class="button-spacing"
+          mat-mini-fab
+          color="theme-color-one"
+          aria-label="user icon"
+          [matMenuTriggerFor]="menu"
+        >
           <mat-icon aria-hidden="false" aria-label="user">account_circle</mat-icon>
         </button>
       </div>
