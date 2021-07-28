@@ -34,6 +34,7 @@ export interface Message {
 })
 export class HomeComponent implements OnInit, AfterViewInit {
   quote: string | undefined;
+  isAdmin: boolean;
   isLoading = false;
   customerData: any;
   supervisors: string[] = [];
@@ -104,6 +105,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       supervisor: [null],
       activeProgram: [null],
     });
+
+    if (localStorage.getItem('userStatus') === 'ADMIN') {
+      this.isAdmin = true;
+    } else {
+      this.isAdmin = false;
+    }
   }
 
   getPrograms() {

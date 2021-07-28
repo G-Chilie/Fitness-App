@@ -36,6 +36,10 @@ export class ShellComponent implements OnInit {
     }
   }
 
+  changePassword() {
+    console.log('called change password');
+  }
+
   logout() {
     this.authenticationService.logout().subscribe(() => this.router.navigate(['/login'], { replaceUrl: true }));
     this._snackBar.open('You have successfully logged out!', '', {

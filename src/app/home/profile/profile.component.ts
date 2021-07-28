@@ -93,6 +93,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         (res: any) => {
           if (res.status === 200 && res.body.data) {
             this.profileData = res.body.data;
+
             this.filterProfileData(this.profileData);
           }
 

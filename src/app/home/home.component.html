@@ -320,7 +320,7 @@
           <div>Last/Current Weight: <span>N/A</span></div>
         </mat-card>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-4" *ngIf="isAdmin">
         <mat-card class="info-card">
           <div>
             Moneyback:

@@ -74,7 +74,10 @@ export class LoginComponent implements OnInit {
           /* todo: if the api returns 403 unauthorized, do not let user sign in. just notify. */
           localStorage.setItem('token', res);
           const decodedToken = helper.decodeToken(res);
+          console.log('decode token', decodedToken);
+
           localStorage.setItem('userStatus', decodedToken.userStatus);
+          localStorage.setItem('uuid', decodedToken.id);
           this.authenticationService.autoLogOut(this.tokenExpiry);
           this.authenticationService.login(this.loginForm.value);
           this._snackBar.open('Login Successful.', '', {
