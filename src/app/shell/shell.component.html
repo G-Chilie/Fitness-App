@@ -114,7 +114,7 @@
 <mat-menu #menu="matMenu">
   <ng-template matMenuContent>
     <button mat-menu-item type="button" (click)="changePassword(changePasswordContent)">
-      <!-- <mat-icon>edit</mat-icon> -->
+      <mat-icon>vpn_key</mat-icon>
       <span>Change Password</span>
     </button>
   </ng-template>
@@ -134,7 +134,7 @@
           <mat-label>New Password</mat-label>
           <input matInput placeholder="New Password" formControlName="newPassword" name="newPassword" />
           <mat-error *ngIf="changePasswordForm.get('newPassword')?.hasError('required')">
-            Username is Required!
+            Password is Required!
           </mat-error>
         </mat-form-field>
       </div>
@@ -149,7 +149,7 @@
             name="confirmNewPassword"
           />
           <mat-error *ngIf="changePasswordForm.get('confirmNewPassword')?.hasError('required')">
-            Username is Required!
+            Confirm Password is Required!
           </mat-error>
         </mat-form-field>
       </div>
