@@ -31,6 +31,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   selectedEmpID: any;
   newEmployeeForm: FormGroup;
   editEmployeeForm: FormGroup;
+  changePasswordForm: FormGroup;
 
   constructor(
     private quoteService: QuoteService,
@@ -54,6 +55,11 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.editEmployeeForm = this.formBuilder.group({
       username: [''],
       status: [null],
+    });
+
+    this.changePasswordForm = this.formBuilder.group({
+      newPassword: ['', [Validators.required]],
+      confirmNewPassword: ['', [Validators.required]],
     });
   }
 
@@ -178,13 +184,51 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
   editEmployee(content: any, data: any) {
     this.selectedEmpID = data.id;
-    console.log(data);
-
     this.editEmployeeForm.patchValue({
       username: data.username ? data.username : '',
       status: data.status ? data.status : null,
     });
     this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
+  }
+
+  changePassword(content: any, data: any) {
+    this.selectedEmpID = data.id;
+    this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
+  }
+
+  updatePassword() {
+    this.ngxLoader.start();
+    this.modalService.dismissAll();
+    if (this.changePasswordForm.valid) {
+      const data2Send = {
+        password: this.changePasswordForm.controls.newPassword.value,
+      };
+      this.quoteService
+        .changePassword(data2Send, this.selectedEmpID)
+        .pipe(
+          finalize(() => {
+            this.ngxLoader.stop();
+          })
+        )
+        .subscribe(
+          (res: any) => {
+            if (res.status === 200) {
+              this._snackBar.open(`Password Updated!`, '', {
+                duration: 3000,
+                verticalPosition: 'top',
+                panelClass: ['blue-snackbar'],
+              });
+
+              this.changePasswordForm.reset();
+            }
+
+            this.ngxLoader.stop();
+          },
+          (error) => {
+            this.ngxLoader.stop();
+          }
+        );
+    }
   }
 
   patchEmployee(id: any) {

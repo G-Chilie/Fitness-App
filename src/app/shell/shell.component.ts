@@ -37,15 +37,12 @@ export class ShellComponent implements OnInit {
   ngOnInit() {
     let userinfo = localStorage.getItem('userInfo');
     const userInfo = JSON.parse(userinfo);
-
     this.userName = userInfo.username;
-
     if (localStorage.getItem('userStatus') === 'ADMIN') {
       this.isAdmin = true;
     } else {
       this.isAdmin = false;
     }
-
     this.changePasswordForm = this.formBuilder.group({
       newPassword: ['', [Validators.required]],
       confirmNewPassword: ['', [Validators.required]],
