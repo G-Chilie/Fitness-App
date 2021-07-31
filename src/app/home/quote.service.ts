@@ -59,6 +59,19 @@ export class QuoteService {
       );
   }
 
+  changePassword(data: any, customerID: string) {
+    return this.httpClient
+      .put(endPoints.editEmployee + customerID, data, {
+        observe: 'response',
+      })
+      .pipe(
+        map((body: any) => {
+          return body;
+        }),
+        catchError(() => 'Error in updating the password.')
+      );
+  }
+
   editEmployee(data: any, employeeID: string) {
     return this.httpClient
       .put(endPoints.editEmployee + employeeID, data, {
