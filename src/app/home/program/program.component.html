@@ -1,14 +1,18 @@
 <div class="container">
   <div class="row">
     <div class="col-12">
-      <button mat-button class="button-primary" type="button" (click)="newProgram(programContent)">New Program</button>
+      <div class="mt-4">
+        <button mat-button class="button-primary" type="button" (click)="newProgram(programContent)">
+          New Program
+        </button>
+      </div>
     </div>
   </div>
   <div class="row">
     <div class="col-12">
       <div class="table-wrapper mt-3">
         <div class="card card-primary">
-          <div class="mat-elevation-z0">
+          <div class="mat-elevation-z0 table-responsive">
             <table mat-table [dataSource]="dataSource" class="w-100">
               <!-- ID Column -->
               <ng-container matColumnDef="name">
