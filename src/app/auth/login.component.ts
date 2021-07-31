@@ -25,6 +25,7 @@ const authEndPoints = {
 })
 export class LoginComponent implements OnInit {
   version: string | null = environment.version;
+  hide = true;
   error: string | undefined;
   loginForm!: FormGroup;
   isLoading = false;

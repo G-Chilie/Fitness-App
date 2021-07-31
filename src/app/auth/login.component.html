@@ -38,8 +38,10 @@
                   formControlName="password"
                   autocomplete="current-password"
                   [placeholder]="'Password' | translate"
+                  [type]="hide ? 'password' : 'text'"
                   required
                 />
+                <mat-icon matSuffix (click)="hide = !hide">{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
                 <mat-error *ngIf="loginForm.controls.password.invalid && loginForm.controls.password.touched">
                   <span translate>Password is required</span>
                 </mat-error>
