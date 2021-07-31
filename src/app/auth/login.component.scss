@@ -68,6 +68,12 @@
   }
 }
 
+@media (min-width: 320px) and (max-width: 480px) {
+  .login-col-wrapper {
+    margin-top: 50%;
+    margin-bottom: 50%;
+  }
+}
 // .login-text {
 //   position: relative;
 //   flex-basis: 425px;
