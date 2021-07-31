@@ -37,11 +37,14 @@
             <span translate class="ml-5">Home</span>
           </a>
           <mat-divider></mat-divider>
-          <a mat-list-item routerLink="/home/program" routerLinkActive="active" (click)="isMobile && sidenav.close()">
-            <mat-icon aria-hidden="false" aria-label="Example home icon">lightbulb</mat-icon>
-            <span translate class="ml-5">Program</span>
-          </a>
-          <mat-divider></mat-divider>
+          <span *ngIf="isAdmin">
+            <a mat-list-item routerLink="/home/program" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+              <mat-icon aria-hidden="false" aria-label="Example home icon">lightbulb</mat-icon>
+              <span translate class="ml-5">Program</span>
+            </a>
+            <mat-divider></mat-divider>
+          </span>
+
           <a
             mat-list-item
             routerLink="/home/recommendations"
