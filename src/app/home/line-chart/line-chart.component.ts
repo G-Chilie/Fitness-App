@@ -64,8 +64,8 @@ export class LineChartComponent implements OnInit {
     }
 
     // Set the chart data from the questions
-    const sleepData = sleepQuestions.map((q) => (typeof q.answer === 'number' ? q.answer : null));
-    const weightData = weightQuestions.map((q) => (typeof q.answer === 'number' ? q.answer : null));
+    const sleepData = sleepQuestions.map((q) => Number(q.answer) || null);
+    const weightData = weightQuestions.map((q) => Number(q.answer) || null);
 
     this.lineChartData = [
       { data: sleepData, label: 'Sleep' },
