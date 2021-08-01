@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, BaseChartDirective, Label } from 'ng2-charts';
+import { ConstraintEnum, Customer } from 'src/types/Customer';
 
 @Component({
   selector: 'app-line-chart',
@@ -8,9 +9,11 @@ import { Color, BaseChartDirective, Label } from 'ng2-charts';
   styleUrls: ['./line-chart.component.scss'],
 })
 export class LineChartComponent implements OnInit {
+  @Input() customer: Customer;
+
   lineChartData: ChartDataSets[] = [
-    { data: [85, 72, 78, 75, 77, 75, 90], label: 'weight' },
-    { data: [10, 20, 33, 22, 11, 33, 50], label: 'sleep' },
+    { data: [85, 72, 78, 75, 77, 75, 90], label: 'Weight' },
+    { data: [10, 20, 33, 22, 11, 33, 50], label: 'Sleep' },
   ];
 
   lineChartLabels: Label[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -30,7 +33,55 @@ export class LineChartComponent implements OnInit {
   lineChartPlugins: any = [];
   lineChartType = 'line';
 
+  rotateArray(arr: [], k: number) {
+    if (arr.length > k) {
+      arr.unshift(...arr.splice(-k));
+    } else {
+      let i = 0;
+      while (i < k) {
+        arr.unshift(arr.splice(-1) as never);
+        i++;
+      }
+    }
+    return arr;
+  }
+
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.customer);
+    const questions = this.customer.question;
+    let sleepQuestions = questions.filter((q) => q.constraint === ConstraintEnum.IsSleep);
+    let weightQuestions = questions.filter((q) => q.constraint === ConstraintEnum.IsWeight);
+    let firstDay = 0;
+
+    // Take only last 7 elements of each array
+    if (sleepQuestions.length > 7) {
+      sleepQuestions = sleepQuestions.slice(-7);
+    }
+    if (weightQuestions.length > 7) {
+      weightQuestions = weightQuestions.slice(-7);
+    }
+
+    // Set the chart data from the questions
+    const sleepData = sleepQuestions.map((q) => (typeof q.answer === 'number' ? q.answer : null));
+    const weightData = weightQuestions.map((q) => (typeof q.answer === 'number' ? q.answer : null));
+
+    this.lineChartData = [
+      { data: sleepData, label: 'Sleep' },
+      { data: weightData, label: 'Weight' },
+    ];
+
+    // get firstday from first question
+    if (weightQuestions.length !== 0) {
+      const createdAtDateObject = new Date(weightQuestions[0]?.createdAt);
+      firstDay = createdAtDateObject?.getDay() || 0;
+    } else if (sleepQuestions.length !== 0) {
+      const createdAtDateObject = new Date(sleepQuestions[0]?.createdAt);
+      firstDay = createdAtDateObject?.getDay() || 0;
+    }
+
+    // Rotate label array to the first day
+    this.lineChartLabels = this.rotateArray(this.lineChartLabels as [], firstDay);
+  }
 }
