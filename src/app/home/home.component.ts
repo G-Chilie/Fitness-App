@@ -35,6 +35,7 @@ export interface Message {
 export class HomeComponent implements OnInit, AfterViewInit {
   quote: string | undefined;
   isAdmin: boolean;
+  selectedCustomerName: string;
   isLoading = false;
   customerData: any;
   supervisors: string[] = [];
@@ -291,8 +292,45 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  deleteCustomer(id: string) {
-    console.log(id);
+  deleteCustomer(content: any, data: any) {
+    this.selectedCustomerID = data.id;
+    this.selectedCustomerName = data.fullName !== null ? data.fullName : data.telegramName;
+    this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
+  }
+
+  patchCustomer(id: string) {
+    this.ngxLoader.start();
+    this.quoteService
+      .deleteCustomer(id)
+      .pipe(
+        finalize(() => {
+          this.ngxLoader.stop();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.status === 200 && res.body) {
+            this._snackBar.open(`Customer Deleted Successfully!`, '', {
+              duration: 3000,
+              verticalPosition: 'top',
+              panelClass: ['blue-snackbar'],
+            });
+          }
+
+          if (res === 'e') {
+            this.modalService.dismissAll();
+            this._snackBar.open(`Error in deleting the customer`, '', {
+              duration: 3000,
+              verticalPosition: 'top',
+              panelClass: ['blue-snackbar'],
+            });
+          }
+          this.ngxLoader.stop();
+        },
+        (error) => {
+          this.ngxLoader.stop();
+        }
+      );
   }
 
   editCustomer(customerID: any) {

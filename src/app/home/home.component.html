@@ -115,6 +115,7 @@
                   </button>
                   <button
                     mat-icon-button
+                    *ngIf="isAdmin"
                     [matMenuTriggerFor]="menu"
                     [matMenuTriggerData]="{ data: row }"
                     aria-label="Example icon-button with a menu"
@@ -144,7 +145,7 @@
 
 <mat-menu #menu="matMenu">
   <ng-template matMenuContent let-data="data">
-    <button mat-menu-item type="button" (click)="deleteCustomer(data.id)">
+    <button mat-menu-item type="button" (click)="deleteCustomer(deleteCustomerContent, data)">
       <mat-icon>delete</mat-icon>
       <span>Delete</span>
     </button>
@@ -212,6 +213,30 @@
       <button mat-button class="button-primary" type="submit" [disabled]="editCustomerForm.invalid">Submit</button>
     </div>
   </form>
+</ng-template>
+
+<ng-template #deleteCustomerContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title d-flex align-items-center">
+      <mat-icon aria-hidden="false" aria-label="warning icon">warning</mat-icon
+      ><span class="margin-left-5">Confirmation</span>
+    </h4>
+    <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body ff-14">
+    <span
+      >Are you sure you want to delete <span class="text-bold">{{ selectedCustomerName }}</span
+      >?</span
+    >
+  </div>
+  <div class="modal-footer">
+    <button mat-button class="button-primary margin-right-10" (click)="modal.dismiss('Cross click')" type="button">
+      Cancel
+    </button>
+    <button mat-button class="delete-btn" type="button" (click)="patchCustomer(selectedCustomerID)">Delete</button>
+  </div>
 </ng-template>
 
 <ng-template #messageTemplate let-modal>

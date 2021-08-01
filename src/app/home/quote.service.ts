@@ -138,6 +138,19 @@ export class QuoteService {
       );
   }
 
+  deleteCustomer(id: string): Observable<any> {
+    return this.httpClient
+      .delete(endPoints.editCustomer + id, {
+        observe: 'response',
+      })
+      .pipe(
+        map((body: any) => {
+          return body;
+        }),
+        catchError(() => 'e')
+      );
+  }
+
   getAllPrograms(): Observable<any> {
     return this.httpClient
       .get(endPoints.getPrograms, {
