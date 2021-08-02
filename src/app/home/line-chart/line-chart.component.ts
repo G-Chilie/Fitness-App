@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import { Color, BaseChartDirective, Label } from 'ng2-charts';
+import { ChartDataSets, ChartOptions } from 'chart.js';
+import { Color, Label } from 'ng2-charts';
 import { ConstraintEnum, Customer } from 'src/types/Customer';
 
 @Component({
@@ -11,15 +11,16 @@ import { ConstraintEnum, Customer } from 'src/types/Customer';
 export class LineChartComponent implements OnInit {
   @Input() customer: Customer;
 
-  lineChartData: ChartDataSets[] = [
-    { data: [85, 72, 78, 75, 77, 75, 90], label: 'Weight' },
-    { data: [10, 20, 33, 22, 11, 33, 50], label: 'Sleep' },
-  ];
+  lineChartData: ChartDataSets[] = [];
 
   lineChartLabels: Label[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-  lineChartOptions = {
+  lineChartOptions: ChartOptions = {
     responsive: true,
+    scales: {
+      yAxes: [{ id: 'y', ticks: { beginAtZero: true } }],
+    },
+    spanGaps: true,
   };
 
   lineChartColors: Color[] = [
