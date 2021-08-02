@@ -255,7 +255,9 @@
 
       <ng-container matColumnDef="text">
         <th mat-header-cell *matHeaderCellDef>Text</th>
-        <td mat-cell *matCellDef="let row">{{ row.text !== null ? row.text : 'N/A' }}</td>
+        <td mat-cell *matCellDef="let row">
+          {{ row.text !== null ? row.text : 'N/A' }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="timestamp">
@@ -350,49 +352,55 @@
           <div>
             Moneyback:
             <span>
-              <mat-slide-toggle [(ngModel)]="currentMoneyback"></mat-slide-toggle>
+              <mat-slide-toggle [(ngModel)]="currentMoneyback" (change)="userPreference('moneyback')">
+              </mat-slide-toggle>
               <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
             </span>
           </div>
           <div>
             Instagram:
             <span>
-              <mat-slide-toggle [(ngModel)]="currentInsta"></mat-slide-toggle>
+              <mat-slide-toggle [(ngModel)]="currentInsta" (change)="userPreference('insta')"></mat-slide-toggle>
               <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
             </span>
           </div>
           <div>
             Questions:
             <span>
-              <mat-slide-toggle [(ngModel)]="currentQuestions"></mat-slide-toggle>
+              <mat-slide-toggle [(ngModel)]="currentQuestions" (change)="userPreference('questions')">
+              </mat-slide-toggle>
               <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
             </span>
           </div>
           <div>
             Sleep Questions:
             <span>
-              <mat-slide-toggle [(ngModel)]="currentSleepQuestions"></mat-slide-toggle>
+              <mat-slide-toggle [(ngModel)]="currentSleepQuestions" (change)="userPreference('sleepQuestions')">
+              </mat-slide-toggle>
               <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
             </span>
           </div>
           <div>
             Weight Questions:
             <span>
-              <mat-slide-toggle [(ngModel)]="currentSleepQuestions"></mat-slide-toggle>
+              <mat-slide-toggle [(ngModel)]="currentSleepQuestions" (change)="userPreference('weightQuestions')">
+              </mat-slide-toggle>
               <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
             </span>
           </div>
           <div>
             Food Recommendations:
             <span>
-              <mat-slide-toggle [(ngModel)]="currentFood"></mat-slide-toggle>
+              <mat-slide-toggle [(ngModel)]="currentFood" (change)="userPreference('foodRecommendations')">
+              </mat-slide-toggle>
               <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
             </span>
           </div>
           <div>
             Diagram:
             <span>
-              <mat-slide-toggle [(ngModel)]="currentSleepDiagram"></mat-slide-toggle>
+              <mat-slide-toggle [(ngModel)]="currentSleepDiagram" (change)="userPreference('diagram')">
+              </mat-slide-toggle>
               <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
             </span>
           </div>

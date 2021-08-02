@@ -15,7 +15,8 @@ const endPoints = {
   getEmployees: '/api/v1/employee',
   getPrograms: '/api/v1/program',
   getRecommendations: '/api/v1/recommendation',
-  getCustomers: '/api/v1/customer?include=supervisor&inlclude=programHistory&include=question&include=programHistory',
+  getCustomers:
+    '/api/v1/customer?include=supervisor&inlclude=programHistory&include=question&include=programHistory&limit=50',
   getMessages: '/api/v1/message',
   login: '/api/v1/employee/login',
   deleteEmployee: '/api/v1/employee/',

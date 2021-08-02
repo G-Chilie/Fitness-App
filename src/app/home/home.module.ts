@@ -14,6 +14,7 @@ import { RecommendationsComponent } from './recommendations/recommendations.comp
 import { ProgramComponent } from './program/program.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { ChartsModule } from 'ng2-charts';
+import { TextEllipsisComponent } from './text-ellipsis/text-ellipsis.component';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: '#363740',
@@ -59,6 +60,13 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     ReactiveFormsModule,
     ChartsModule,
   ],
-  declarations: [HomeComponent, ProfileComponent, RecommendationsComponent, ProgramComponent, LineChartComponent],
+  declarations: [
+    HomeComponent,
+    ProfileComponent,
+    RecommendationsComponent,
+    ProgramComponent,
+    LineChartComponent,
+    TextEllipsisComponent,
+  ],
 })
 export class HomeModule {}

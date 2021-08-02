@@ -138,6 +138,65 @@ export class HomeComponent implements OnInit, AfterViewInit {
       );
   }
 
+  userPreference(preferenceName: string) {
+    let data2Send = {};
+    switch (preferenceName) {
+      case 'moneyback':
+        data2Send['moneyback'] = this.currentMoneyback;
+        break;
+
+      case 'insta':
+        data2Send['instagramFeed'] = this.currentInsta;
+        break;
+
+      case 'questions':
+        data2Send['questions'] = this.currentQuestions;
+        break;
+
+      case 'sleepQuestions':
+        data2Send['sleepQuestions'] = this.currentSleepQuestions;
+        break;
+
+      case 'weightQuestions':
+        data2Send['weightQuestions'] = this.currentWeightQuestion;
+        break;
+
+      case 'foodRecommendations':
+        data2Send['foodRecommendations'] = this.currentFood;
+        break;
+
+      case 'diagram':
+        data2Send['diagram'] = this.currentSleepDiagram;
+        break;
+    }
+
+    /* API call to change the user preference */
+    this.quoteService
+      .editCustomer(data2Send, this.selectedCustomerID)
+      .pipe(
+        finalize(() => {
+          this.ngxLoader.stop();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.status === 200) {
+            this._snackBar.open(`Customer preferences changed!`, '', {
+              duration: 3000,
+              verticalPosition: 'top',
+              panelClass: ['blue-snackbar'],
+            });
+            this.getCustomers();
+            this.modalService.dismissAll();
+          }
+          this.ngxLoader.stop();
+        },
+        (error) => {
+          this.ngxLoader.stop();
+        }
+      );
+  }
+
   getSupervisors() {
     this.ngxLoader.start();
     this.quoteService
@@ -212,6 +271,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   viewCustomerDetails(content: any, customerId: string) {
+    this.selectedCustomerID = customerId;
+
     let selectedCustomerTemp = this.customerData.map((customer: any) => {
       if (customer.id === customerId) {
         return customer;
