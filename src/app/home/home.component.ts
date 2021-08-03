@@ -37,6 +37,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   isAdmin: boolean;
   selectedCustomerName: string;
   isLoading = false;
+  hidePaginator = false;
   customerData: any;
   supervisors: string[] = [];
   programs: string[] = [];
@@ -250,22 +251,27 @@ export class HomeComponent implements OnInit, AfterViewInit {
     switch (tabName) {
       case 'all':
         this.currentActiveTab = 'all';
-        this.dataSource = this.allUsers;
+        this.dataSource = new MatTableDataSource(this.allUsers);
+        setTimeout(() => (this.dataSource.paginator = this.paginator));
+        this.hidePaginator = false;
         break;
 
       case 'active':
         this.currentActiveTab = 'active';
-        this.dataSource = this.activeUsers;
+        this.dataSource = new MatTableDataSource(this.activeUsers);
+        setTimeout(() => (this.dataSource.paginator = this.paginator));
         break;
 
       case 'inactive':
         this.currentActiveTab = 'inactive';
-        this.dataSource = this.inactiveUsers;
+        this.dataSource = new MatTableDataSource(this.inactiveUsers);
+        setTimeout(() => (this.dataSource.paginator = this.paginator));
         break;
 
       case 'completed':
         this.currentActiveTab = 'completed';
-        this.dataSource = this.completedCustomers;
+        this.dataSource = new MatTableDataSource(this.completedCustomers);
+        setTimeout(() => (this.dataSource.paginator = this.paginator));
         break;
     }
   }
@@ -520,7 +526,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       });
       this.numberOfInactiveCustomers = this.inactiveUsers.length;
 
-      this.dataSource = this.allUsers;
+      this.dataSource = new MatTableDataSource(this.allUsers);
+      setTimeout(() => (this.dataSource.paginator = this.paginator));
     }
   }
 }
