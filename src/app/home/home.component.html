@@ -133,7 +133,7 @@
                 <td class="mat-cell" colspan="4">No data found.</td>
               </tr>
             </table>
-            <mat-paginator #paginator [pageSizeOptions]="[10]" showFirstLastButtons="false" hidePageSize="true">
+            <mat-paginator #paginatorMessages [pageSizeOptions]="[10]" showFirstLastButtons="false" hidePageSize="true">
             </mat-paginator>
           </div>
         </div>
@@ -153,6 +153,13 @@
       <mat-icon>edit</mat-icon>
       <span>Edit</span>
     </button>
+
+    <!-- <button mat-menu-item type="button" (click)="openDialog()">
+      <mat-icon>edit</mat-icon>
+      <span>message</span>
+    </button> -->
+
+    <!-- <button mat-button (click)="openDialog()">Message</button> -->
   </ng-template>
 </mat-menu>
 
@@ -273,7 +280,8 @@
         <td class="mat-cell" colspan="4">No data found.</td>
       </tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    <mat-paginator #paginator [pageSizeOptions]="[10]" showFirstLastButtons="false" hidePageSize="true">
+    </mat-paginator>
   </div>
   <div class="ff-14">
     <form [formGroup]="sendMessageForm" (ngSubmit)="sendTelegramMessage($event, selectedCustomer.telegramChatId)">
@@ -307,6 +315,7 @@
       >
         <span class="ml-3">Message</span>
       </button>
+      <!-- <button mat-button (click)="openDialog()">Message</button> -->
     </h4>
     <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>

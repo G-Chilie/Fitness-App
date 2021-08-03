@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatDialog } from '@angular/material/dialog';
 import * as dayjs from 'dayjs';
 import { QuoteService } from './quote.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
@@ -70,6 +71,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<UserData>;
   messageDataSource: MatTableDataSource<Message>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginatorMessages: MatPaginator;
+  // @ViewChild('categoryPaginator') categoryPaginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   sendMessageForm: FormGroup;
   editCustomerForm: FormGroup;
@@ -79,7 +82,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private modalService: NgbModal,
     private ngxLoader: NgxUiLoaderService,
     private formBuilder: FormBuilder,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) {}
 
   ngAfterViewInit() {
@@ -114,6 +118,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.isAdmin = false;
     }
   }
+
+  // openDialog() {
+  //   const dialogRef = this.dialog.open(DialogContentExampleDialog);
+
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     console.log(`Dialog result: ${result}`);
+  //   });
+  // }
 
   getPrograms() {
     this.ngxLoader.start();
@@ -464,7 +476,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         };
       });
 
-      this.messageDataSource = this.currentUserMessages;
+      // this.messageDataSource = this.currentUserMessages;
+      this.messageDataSource = new MatTableDataSource(this.currentUserMessages);
+      setTimeout(() => (this.messageDataSource.paginator = this.paginatorMessages));
     }
   }
 
@@ -531,3 +545,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 }
+
+// @Component({
+//   selector: 'dialog-content-example-dialog',
+//   templateUrl: 'dialog-content-example-dialog.html',
+// })
+// export class DialogContentExampleDialog {}
