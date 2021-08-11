@@ -26,6 +26,7 @@ const endPoints = {
   sendTelegramMessage: '/api/v1/proxy/telegram/message/',
   editCustomer: '/api/v1/customer/',
   editEmployee: '/api/v1/employee/',
+  getSupervisors: '/api/v1/employee?where[status]=ACTIVATED&limit=999',
 };
 
 @Injectable({
@@ -96,6 +97,19 @@ export class QuoteService {
           return body;
         }),
         catchError(() => 'Error in fetching employees.')
+      );
+  }
+
+  getSupervisors(): Observable<any> {
+    return this.httpClient
+      .get(endPoints.getSupervisors, {
+        observe: 'response',
+      })
+      .pipe(
+        map((body: any) => {
+          return body;
+        }),
+        catchError(() => 'Error in fetching supervisors.')
       );
   }
 

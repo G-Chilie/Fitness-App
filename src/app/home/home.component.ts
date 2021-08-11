@@ -213,7 +213,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   getSupervisors() {
     this.ngxLoader.start();
     this.quoteService
-      .getAllEmployees()
+      .getSupervisors()
       .pipe(
         finalize(() => {
           this.ngxLoader.stop();
@@ -321,7 +321,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.editCustomerForm.patchValue({
       email: data.email ? data.email : '',
       initialWeight: data.initialWeight ? data.initialWeight : '',
-      phone: data.phone ? data.phone : '',
+      phone: data.phone ? data.phone : null,
       supervisor: data.supervisor?.id ? data.supervisor.id : '',
       activeProgram: data.activeProgram?.id ? data.activeProgram.id : '',
     });
