@@ -318,11 +318,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   editProfile(content: any, data: any) {
     this.selectedCustomerID = data.id;
     this.editCustomerForm.patchValue({
-      email: data.email ? data.email : '',
-      initialWeight: data.initialWeight ? data.initialWeight : '',
+      email: data.email ? data.email : null,
+      initialWeight: data.initialWeight ? data.initialWeight : null,
       phone: data.phone ? data.phone : null,
-      supervisor: data.supervisor?.id ? data.supervisor.id : '',
-      activeProgram: data.activeProgram?.id ? data.activeProgram.id : '',
+      supervisor: data.supervisor?.id ? data.supervisor.id : null,
+      activeProgram: data.activeProgram?.id ? data.activeProgram.id : null,
     });
     this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
   }
