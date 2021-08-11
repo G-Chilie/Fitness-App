@@ -374,9 +374,9 @@
             </span>
           </div>
           <div>
-            Questions:
+            Food Questions:
             <span>
-              <mat-slide-toggle [(ngModel)]="currentQuestions" (change)="userPreference('questions')">
+              <mat-slide-toggle [(ngModel)]="currentFoodQuestions" (change)="userPreference('foodQuestions')">
               </mat-slide-toggle>
               <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
             </span>
@@ -392,7 +392,7 @@
           <div>
             Weight Questions:
             <span>
-              <mat-slide-toggle [(ngModel)]="currentSleepQuestions" (change)="userPreference('weightQuestions')">
+              <mat-slide-toggle [(ngModel)]="currentWeightQuestions" (change)="userPreference('weightQuestions')">
               </mat-slide-toggle>
               <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
             </span>

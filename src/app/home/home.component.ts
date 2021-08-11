@@ -57,10 +57,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   selectedCustomerID: any;
 
   currentMoneyback: boolean = false;
+  currentFoodQuestions: boolean = false;
   currentInsta: boolean = false;
-  currentQuestions: boolean = false;
   currentSleepQuestions: boolean = false;
-  currentWeightQuestion: boolean = false;
+  currentWeightQuestions: boolean = false;
   currentFood: boolean = false;
   currentSleepDiagram: boolean = false;
 
@@ -162,16 +162,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
         data2Send['instagramFeed'] = this.currentInsta;
         break;
 
-      case 'questions':
-        data2Send['questions'] = this.currentQuestions;
+      case 'foodQuestions':
+        data2Send['foodQuestions'] = this.currentFoodQuestions;
         break;
-
       case 'sleepQuestions':
         data2Send['sleepQuestions'] = this.currentSleepQuestions;
         break;
 
       case 'weightQuestions':
-        data2Send['weightQuestions'] = this.currentWeightQuestion;
+        data2Send['weightQuestions'] = this.currentWeightQuestions;
         break;
 
       case 'foodRecommendations':
@@ -306,9 +305,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (this.selectedCustomer.length !== 0) {
       this.currentMoneyback = this.selectedCustomer.moneyback;
       this.currentInsta = this.selectedCustomer.instagramFeed;
-      this.currentQuestions = this.selectedCustomer.questions;
+      this.currentFoodQuestions = this.selectedCustomer.foodQuestions;
       this.currentSleepQuestions = this.selectedCustomer.sleepQuestions;
-      this.currentWeightQuestion = this.selectedCustomer.weightQuestions;
+      this.currentWeightQuestions = this.selectedCustomer.weightQuestions;
       this.currentFood = this.selectedCustomer.foodRecommendations;
       this.currentSleepDiagram = this.selectedCustomer.diagram;
     }
