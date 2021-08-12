@@ -273,4 +273,18 @@ export class QuoteService {
       })
     );
   }
+
+  registerEmployee(data: any) {
+    console.log('inservice', data);
+    return this.httpClient
+      .post(endPoints.addNewEmployee, data, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in registration process.')
+      );
+  }
 }

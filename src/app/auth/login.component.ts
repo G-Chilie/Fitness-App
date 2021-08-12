@@ -10,6 +10,7 @@ import { QuoteService } from '@app/home/quote.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { trigger, transition, style, animate, group, state } from '@angular/animations';
 
 const log = new Logger('Login');
 
@@ -22,15 +23,24 @@ const authEndPoints = {
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [style({ opacity: 0 }), animate('.7s ease-out', style({ opacity: '1' }))]),
+      transition(':leave', [style({ opacity: 1 }), animate('.7s ease-out', style({ opacity: '0' }))]),
+    ]),
+  ],
 })
 export class LoginComponent implements OnInit {
   version: string | null = environment.version;
   hide = true;
   error: string | undefined;
   loginForm!: FormGroup;
+  registerForm: FormGroup;
   isLoading = false;
   durationInSeconds = 5;
   tokenExpiry = 3600000;
+  registerSession = false;
+  loginSession = true;
 
   constructor(
     private router: Router,
@@ -42,6 +52,7 @@ export class LoginComponent implements OnInit {
     private _snackBar: MatSnackBar
   ) {
     this.createForm();
+    this.createRegisterForm();
   }
 
   ngOnInit() {}
@@ -124,11 +135,57 @@ export class LoginComponent implements OnInit {
     //   );
   }
 
+  register() {
+    this.quoteService
+      .registerEmployee(this.registerForm.value)
+      .pipe(
+        finalize(() => {
+          this.registerForm.markAsPristine();
+          this.isLoading = false;
+        }),
+        untilDestroyed(this)
+      )
+      .subscribe(
+        (res: any) => {
+          console.log(res);
+
+          this._snackBar.open(
+            'Registration Successful! Your account is being verified and it will be activated soon.',
+            '',
+            {
+              duration: 10000,
+              verticalPosition: 'top',
+              panelClass: ['blue-snackbar'],
+            }
+          );
+          this.loginSession = !this.loginSession;
+          this.registerSession = !this.registerSession;
+        },
+        (error: any) => {
+          this.isLoading = false;
+          if (error.status === 404 || error.status === 401) {
+            this._snackBar.open('Registration failed.', '', {
+              duration: 3000,
+              panelClass: ['blue-snackbar'],
+            });
+          }
+        }
+      );
+  }
+
   private createForm() {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
       // remember: true,
+    });
+  }
+
+  private createRegisterForm() {
+    this.registerForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      email: ['', Validators.required],
+      password: ['', Validators.required],
     });
   }
 }
