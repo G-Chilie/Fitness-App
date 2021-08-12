@@ -64,7 +64,6 @@ export class FormsComponent implements OnInit, AfterViewInit {
   selectedFormID: any;
   addFormsForm: FormGroup;
   editFormsForm: FormGroup;
-  activeAnswer: 'TestAnswer1';
   answers: string[] = ['TestAnswer1', 'TestAnswer2'];
   containers: number[] = [1];
 
@@ -183,6 +182,7 @@ export class FormsComponent implements OnInit, AfterViewInit {
     //     );
     // }
     this.modalService.dismissAll();
+    this.addFormsForm.reset();
     this.ngxLoader.stop();
   }
 
