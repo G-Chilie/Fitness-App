@@ -27,7 +27,7 @@ export class FormsComponent implements OnInit, AfterViewInit {
   isLoading = false;
   formsData: any;
   isAdmin: boolean;
-  colDef: string[] = ['name', 'questions', 'answers', 'formowner', 'createdAt', 'actions'];
+  colDef: string[] = ['name', 'formowner', 'createdAt', 'actions'];
   dataSource: MatTableDataSource<FormsData>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -65,24 +65,18 @@ export class FormsComponent implements OnInit, AfterViewInit {
       {
         id: 1,
         name: 'testname1',
-        questions: 'testquestions1',
-        answers: 'testanswers1',
         formowner: 'formowner',
         createdAt: '2021-08-12',
       },
       {
         id: 2,
         name: 'testname2',
-        questions: 'testquestions2',
-        answers: 'testanswers2',
         formowner: 'formowner',
         createdAt: '2021-08-12',
       },
       {
         id: 3,
         name: 'testname3',
-        questions: 'testquestions3',
-        answers: 'testanswers3',
         formowner: 'formowner',
         createdAt: '2021-08-12',
       },
