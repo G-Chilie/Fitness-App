@@ -8,6 +8,35 @@ import { QuoteService } from '../quote.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+// declare var jQuery: any;
+
+// function addQuestion() {
+//   var html = '';
+//   html =  '<div fxLayout="row" fxLayoutAlign="start center" >' +
+//   '<mat-form-field class="example-full-width w-100 mt-2 cus-padding" appearance="outline">' +
+//     '<mat-label>Questions</mat-label>' +
+//     '<input matInput placeholder="questions" formControlName="questions" name="questions" autocomplete="off" class="width-80"/>' +
+//     '<mat-error *ngIf="addFormsForm.get(\'questions\')?.hasError(\'required\')"> Questions is Required! </mat-error>' +
+//   '</mat-form-field>' +
+//   '<button type="button" (click)="addQuestion()" class="btn btn-light cus-button">' +
+//     '<mat-icon>add_circle_outline</mat-icon>' +
+//   '</button>'+
+// '</div>'+
+// '<div fxLayout="row" fxLayoutAlign="start center">' +
+//   '<mat-label class="custom-label">Answers :</mat-label>'+
+//   '<mat-form-field appearance="outline" class="w-90 mt-2">'+
+//     '<mat-select formControlName="answer">'+
+//       '<mat-option *ngFor="let answer of answers" value={{ answer }}>'+
+//         '{{ answer }}'+
+//       '</mat-option>'+
+//     '</mat-select>'+
+//     '<mat-error *ngIf="addFormsForm.get(\'answer\')?.hasError(\'required\')"> Answers is Required! </mat-error>'+
+//   '</mat-form-field>'+
+// '</div>';
+//   (function ($) {
+//     $(".add-quesitons").after(html);
+//   })(jQuery);
+// }
 
 export interface FormsData {
   id: string;
@@ -16,6 +45,7 @@ export interface FormsData {
   answers: string;
   createdAt: string;
   formowner: string;
+  status: string;
 }
 
 @Component({
@@ -27,7 +57,7 @@ export class FormsComponent implements OnInit, AfterViewInit {
   isLoading = false;
   formsData: any;
   isAdmin: boolean;
-  colDef: string[] = ['name', 'formowner', 'createdAt', 'actions'];
+  colDef: string[] = ['name', 'formowner', 'status', 'createdAt', 'actions'];
   dataSource: MatTableDataSource<FormsData>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -35,7 +65,8 @@ export class FormsComponent implements OnInit, AfterViewInit {
   addFormsForm: FormGroup;
   editFormsForm: FormGroup;
   activeAnswer: 'TestAnswer1';
-  answers: string[] = ['TestAnswer1', 'TestAnswer2', 'TestAnswer3'];
+  answers: string[] = ['TestAnswer1', 'TestAnswer2'];
+  containers: number[] = [1];
 
   constructor(
     private quoteService: QuoteService,
@@ -57,6 +88,7 @@ export class FormsComponent implements OnInit, AfterViewInit {
     } else {
       this.isAdmin = false;
     }
+    // this.containers.push(1);
   }
 
   ngAfterViewInit() {
@@ -65,18 +97,21 @@ export class FormsComponent implements OnInit, AfterViewInit {
       {
         id: 1,
         name: 'testname1',
+        status: 'on_reg',
         formowner: 'formowner',
         createdAt: '2021-08-12',
       },
       {
         id: 2,
         name: 'testname2',
+        status: 'active',
         formowner: 'formowner',
         createdAt: '2021-08-12',
       },
       {
         id: 3,
         name: 'testname3',
+        status: 'inactive',
         formowner: 'formowner',
         createdAt: '2021-08-12',
       },
@@ -116,37 +151,38 @@ export class FormsComponent implements OnInit, AfterViewInit {
 
   addForm(e: any) {
     this.ngxLoader.start();
-    if (this.addFormsForm.valid) {
-      const data2Send = {
-        name: this.addFormsForm.value.name,
-        questions: this.addFormsForm.value.questions,
-        answers: this.addFormsForm.value.answers,
-      };
-      this.quoteService
-        .addForm(data2Send)
-        .pipe(
-          finalize(() => {
-            this.ngxLoader.stop();
-          })
-        )
-        .subscribe(
-          (res: any) => {
-            if (res.status === 200) {
-              this._snackBar.open(`Program has been added!`, '', {
-                duration: 3000,
-                verticalPosition: 'top',
-                panelClass: ['blue-snackbar'],
-              });
-              this.modalService.dismissAll();
-              this.addFormsForm.reset();
-            }
-            this.ngxLoader.stop();
-          },
-          (error) => {
-            this.ngxLoader.stop();
-          }
-        );
-    }
+    // if (this.addFormsForm.valid) {
+    //   const data2Send = {
+    //     name: this.addFormsForm.value.name,
+    //     questions: this.addFormsForm.value.questions,
+    //     answers: this.addFormsForm.value.answers,
+    //   };
+    //   this.quoteService
+    //     .addForm(data2Send)
+    //     .pipe(
+    //       finalize(() => {
+    //         this.ngxLoader.stop();
+    //       })
+    //     )
+    //     .subscribe(
+    //       (res: any) => {
+    //         if (res.status === 200) {
+    //           this._snackBar.open(`Program has been added!`, '', {
+    //             duration: 3000,
+    //             verticalPosition: 'top',
+    //             panelClass: ['blue-snackbar'],
+    //           });
+    //           this.modalService.dismissAll();
+    //           this.addFormsForm.reset();
+    //         }
+    //         this.ngxLoader.stop();
+    //       },
+    //       (error) => {
+    //         this.ngxLoader.stop();
+    //       }
+    //     );
+    // }
+    this.ngxLoader.stop();
   }
 
   deleteForm(id: string) {
@@ -185,7 +221,9 @@ export class FormsComponent implements OnInit, AfterViewInit {
     this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
   }
 
-  addQuestion() {}
+  addQuestion() {
+    this.containers.push(this.containers.length);
+  }
 
   patchForm(id: any) {
     if (this.editFormsForm.valid) {
@@ -230,6 +268,8 @@ export class FormsComponent implements OnInit, AfterViewInit {
           name: form.name,
           questions: form.questions,
           answers: form.answers,
+          formowner: form.formowner,
+          status: form.status,
           createdAt: form.createdAt,
         };
       });
