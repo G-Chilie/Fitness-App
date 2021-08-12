@@ -182,6 +182,7 @@ export class FormsComponent implements OnInit, AfterViewInit {
     //       }
     //     );
     // }
+    this.modalService.dismissAll();
     this.ngxLoader.stop();
   }
 
