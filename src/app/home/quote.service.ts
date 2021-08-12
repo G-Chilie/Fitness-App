@@ -14,6 +14,7 @@ export interface RandomQuoteContext {
 const endPoints = {
   getEmployees: '/api/v1/employee',
   getPrograms: '/api/v1/program',
+  getForms: '/api/v1/form',
   getRecommendations: '/api/v1/recommendation',
   getCustomers:
     '/api/v1/customer?include=supervisor&inlclude=programHistory&include=question&include=programHistory&limit=100',
@@ -26,6 +27,7 @@ const endPoints = {
   sendTelegramMessage: '/api/v1/proxy/telegram/message/',
   editCustomer: '/api/v1/customer/',
   editEmployee: '/api/v1/employee/',
+  editForm: '/api/v1/form',
   getSupervisors: '/api/v1/employee?where[status]=ACTIVATED&limit=999',
 };
 
@@ -84,6 +86,19 @@ export class QuoteService {
           return body;
         }),
         catchError(() => 'Error in editing the employee.')
+      );
+  }
+
+  editForm(data: any, formID: string) {
+    return this.httpClient
+      .put(endPoints.editForm + formID, data, {
+        observe: 'response',
+      })
+      .pipe(
+        map((body: any) => {
+          return body;
+        }),
+        catchError(() => 'Error in editing the form.')
       );
   }
 
@@ -153,6 +168,19 @@ export class QuoteService {
       );
   }
 
+  deleteForm(id: string): Observable<any> {
+    return this.httpClient
+      .delete(endPoints.getForms + '/' + id, {
+        observe: 'response',
+      })
+      .pipe(
+        map((body: any) => {
+          return body;
+        }),
+        catchError(() => 'Error in deleting the form.')
+      );
+  }
+
   deleteCustomer(id: string): Observable<any> {
     return this.httpClient
       .delete(endPoints.editCustomer + id, {
@@ -176,6 +204,19 @@ export class QuoteService {
           return res;
         }),
         catchError(() => 'Error in fetching programs.')
+      );
+  }
+
+  getAllForms(): Observable<any> {
+    return this.httpClient
+      .get(endPoints.getForms, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in fetching forms.')
       );
   }
 
@@ -258,6 +299,19 @@ export class QuoteService {
           return res;
         }),
         catchError(() => 'Error in adding new program.')
+      );
+  }
+
+  addForm(data: any) {
+    return this.httpClient
+      .post(endPoints.getForms, data, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in adding new form.')
       );
   }
 
