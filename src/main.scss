@@ -41,6 +41,19 @@
   color: #fff;
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+router-outlet + * {
+  position: absolute;
+  display: block;
+  height: 100vh;
+  width: 100vw;
+}
+
 /* utilities */
 .ml-5 {
   margin-left: 10px;
@@ -137,4 +150,7 @@ simple-snack-bar {
 }
 .pr-0 {
   padding-right: 0 !important;
+}
+.cursor-pointer {
+  cursor: pointer !important;
 }
