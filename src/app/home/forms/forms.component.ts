@@ -64,7 +64,7 @@ export class FormsComponent implements OnInit, AfterViewInit {
   selectedFormID: any;
   addFormsForm: FormGroup;
   editFormsForm: FormGroup;
-  answers: string[] = ['TestAnswer1', 'TestAnswer2'];
+  answers: string[] = ['Button', 'Input'];
   containers: number[] = [1];
 
   constructor(
