@@ -12,6 +12,7 @@ import { HomeComponent } from './home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RecommendationsComponent } from './recommendations/recommendations.component';
 import { ProgramComponent } from './program/program.component';
+import { FormsComponent } from './forms/forms.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { ChartsModule } from 'ng2-charts';
 import { TextEllipsisComponent } from './text-ellipsis/text-ellipsis.component';
@@ -65,6 +66,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     ProfileComponent,
     RecommendationsComponent,
     ProgramComponent,
+    FormsComponent,
     LineChartComponent,
     TextEllipsisComponent,
   ],
