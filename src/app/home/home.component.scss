@@ -97,3 +97,25 @@ q {
   justify-content: space-between;
   flex-direction: column;
 }
+
+.dpWeekDay {
+  font-weight: 800;
+  font-size: 140%;
+  padding-left: 16px;
+  padding-right: 15px;
+}
+
+.diet-plan {
+  margin-bottom: 5px;
+}
+
+.plan-input {
+  width: 400px;
+  margin-left: 20px;
+}
+
+.dp-info-submit {
+  text-align: right;
+  margin-left: 16px;
+  margin-top: 10px;
+}

@@ -315,6 +315,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.modalService.open(content, { size: 'xl' });
   }
 
+  viewProgramHistory(content: any) {
+    this.modalService.open(content, { size: 'xl' });
+  }
+  viewDietPlan(content: any) {
+    this.modalService.open(content, { size: 'md' });
+  }
+
   editProfile(content: any, data: any) {
     this.selectedCustomerID = data.id;
     this.editCustomerForm.patchValue({

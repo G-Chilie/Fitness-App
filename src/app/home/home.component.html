@@ -315,6 +315,12 @@
       >
         <span class="ml-3">Message</span>
       </button>
+      <button mat-button class="button-primary" type="button" (click)="viewProgramHistory(programHistoryContent)">
+        <span class="ml-3">Program History</span>
+      </button>
+      <button mat-button class="button-primary" type="button" (click)="viewDietPlan(dietPlanContent)">
+        <span class="ml-3">Diet Plan</span>
+      </button>
       <!-- <button mat-button (click)="openDialog()">Message</button> -->
     </h4>
     <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -429,5 +435,98 @@
   <!-- <div class="modal-footer">
     <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
   </div> -->
+</ng-template>
+
+<ng-template #programHistoryContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Program History</h4>
+    <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body ff-14">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Program</th>
+          <th scope="col">Id</th>
+          <th scope="col">created at</th>
+          <th scope="col">updated at</th>
+          <th scope="col">money back</th>
+          <th scope="col">question</th>
+          <th scope="col">food recommendations</th>
+          <th scope="col">duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let programOuter of selectedCustomer.programHistory">
+          <th scope="row">{{ programOuter.program.name }}</th>
+          <td>{{ programOuter.program.id }}</td>
+          <td>{{ programOuter.program.createdAt }}</td>
+          <td>{{ programOuter.program.updatedAt }}</td>
+
+          <td>
+            <mat-icon aria-hidden="false" aria-label="True icon">{{
+              programOuter.program.moneyback === true ? 'done' : 'warning_amber'
+            }}</mat-icon>
+          </td>
+          <td>
+            <mat-icon aria-hidden="false" aria-label="True icon">{{
+              programOuter.program.question === true ? 'done' : 'warning_amber'
+            }}</mat-icon>
+          </td>
+          <td>
+            <mat-icon aria-hidden="false" aria-label="True icon">{{
+              programOuter.program.foodRecommendations === true ? 'done' : 'warning_amber'
+            }}</mat-icon>
+          </td>
+          <td>{{ programOuter.program.duration }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-template>
+
+<ng-template #dietPlanContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Diet Plan</h4>
+    <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="diet-plan">
+    <form>
+      <div>
+        <span class="dpWeekDay">Sunday</span>
+        <input class="form-control plan-input" id="sundayInput" />
+      </div>
+      <div>
+        <span class="dpWeekDay">Monday</span>
+        <input class="form-control plan-input" id="mondayInput" />
+      </div>
+      <div>
+        <span class="dpWeekDay">Tuesday</span>
+        <input class="form-control plan-input" id="tuesdayInput" />
+      </div>
+      <div>
+        <span class="dpWeekDay">Wednesday</span>
+        <input class="form-control plan-input" id="wednesdayInput" />
+      </div>
+      <div>
+        <span class="dpWeekDay">Thursday</span>
+        <input class="form-control plan-input" id="thursdayInput" />
+      </div>
+      <div>
+        <span class="dpWeekDay">Friday</span>
+        <input class="form-control plan-input" id="fridayInput" />
+      </div>
+      <div>
+        <span class="dpWeekDay">Saturday</span>
+        <input class="form-control plan-input" id="saturdayInput" />
+      </div>
+      <button type="submit" class="btn btn-primary dp-info-submit">Save</button>
+    </form>
+  </div>
 </ng-template>
 <ngx-ui-loader></ngx-ui-loader>
