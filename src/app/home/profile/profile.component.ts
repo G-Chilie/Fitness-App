@@ -150,7 +150,8 @@ export class ProfileComponent implements OnInit, AfterViewInit {
           ...profile,
         };
       });
-      this.dataSource = profileTableData;
+      this.dataSource = new MatTableDataSource(profileTableData);
+      setTimeout(() => (this.dataSource.paginator = this.paginator));
 
       this.ngxLoader.stop();
     }

@@ -12,7 +12,7 @@ export interface RandomQuoteContext {
 }
 
 const endPoints = {
-  getEmployees: '/api/v1/employee',
+  getEmployees: '/api/v1/employee?&limit=999',
   getPrograms: '/api/v1/program',
   getForms: '/api/v1/form',
   getRecommendations: '/api/v1/recommendation',
