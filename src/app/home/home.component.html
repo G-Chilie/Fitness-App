@@ -359,7 +359,10 @@
             Initial Weight:
             <span>{{ selectedCustomer.initialWeight !== null ? selectedCustomer.initialWeight : 'N/A' }}</span>
           </div>
-          <div>Last/Current Weight: <span>N/A</span></div>
+          <div>
+            Last/Current Weight:
+            <span>{{ selectedCustomer.currentWeight !== null ? selectedCustomer.currentWeight : 'N/A' }}</span>
+          </div>
         </mat-card>
       </div>
       <div class="col-sm-4" *ngIf="isAdmin">
