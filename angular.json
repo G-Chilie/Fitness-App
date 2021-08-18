@@ -133,5 +133,8 @@
       }
     }
   },
-  "defaultProject": "bodys-perfect-diet"
+  "defaultProject": "bodys-perfect-diet",
+  "cli": {
+    "analytics": "adea0ca4-e8f5-446d-8266-589f5cf9af4e"
+  }
 }
