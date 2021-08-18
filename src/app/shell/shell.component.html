@@ -108,7 +108,7 @@
           mat-mini-fab
           color="theme-color-one"
           aria-label="user icon"
-          [matMenuTriggerFor]="menu"
+          (click)="employeeProfile(employeeProfileContent)"
         >
           <mat-icon aria-hidden="false" aria-label="user">account_circle</mat-icon>
         </button>
@@ -118,14 +118,14 @@
   </mat-sidenav-container>
 </div>
 
-<mat-menu #menu="matMenu">
+<!-- <mat-menu #menu="matMenu">
   <ng-template matMenuContent>
     <button mat-menu-item type="button" (click)="changePassword(changePasswordContent)">
       <mat-icon>vpn_key</mat-icon>
       <span>Change Password</span>
     </button>
   </ng-template>
-</mat-menu>
+</mat-menu> -->
 
 <ng-template #changePasswordContent let-modal>
   <div class="modal-header">
@@ -139,7 +139,7 @@
       <div>
         <mat-form-field class="example-full-width w-100" appearance="outline">
           <mat-label>New Password</mat-label>
-          <input matInput placeholder="New Password" formControlName="newPassword" name="newPassword" />
+          <input matInput placeholder="New Password" formControlName="newPassword" type="password" name="newPassword" />
           <mat-error *ngIf="changePasswordForm.get('newPassword')?.hasError('required')">
             Password is Required!
           </mat-error>
@@ -152,6 +152,7 @@
           <input
             matInput
             placeholder="Confirm New Password"
+            type="password"
             formControlName="confirmNewPassword"
             name="confirmNewPassword"
           />
@@ -167,4 +168,59 @@
       </button>
     </div>
   </form>
+</ng-template>
+
+<ng-template #employeeProfileContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Employee Profile</h4>
+    <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body ff-14">
+    <div class="row">
+      <div class="col-2">
+        <span class="text-bold"> Username: </span>
+      </div>
+
+      <div class="col-10">
+        {{ employeeData.username ? employeeData.username : 'not available' }}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-2">
+        <span class="text-bold"> Email: </span>
+      </div>
+
+      <div class="col-10">
+        {{ employeeData.email ? employeeData.email : 'not available' }}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-2">
+        <span class="text-bold">Status:</span>
+      </div>
+
+      <div class="col-10">
+        {{ employeeData.status ? employeeData.status : 'not available' }}
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button mat-button class="button-primary" type="button">Edit Email</button>
+
+    <button mat-button class="button-primary margin-left-5" type="button">Billing</button>
+
+    <button mat-button class="button-primary margin-left-5" type="button">Charge Coupon</button>
+    <button
+      mat-button
+      class="button-primary margin-left-5"
+      type="button"
+      (click)="changePassword(changePasswordContent)"
+    >
+      Change Password
+    </button>
+  </div>
 </ng-template>

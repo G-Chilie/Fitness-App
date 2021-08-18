@@ -50,13 +50,17 @@
 
   <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
 
-  <div class="">
-    <form class="customer-search-form">
-      <mat-form-field class="full-width-in" appearance="outline">
-        <!-- <mat-label>Enter customer name to search</mat-label> -->
-        <input (keyup)="filterCustomer($event)" matInput placeholder="Enter customer name to search" value="" />
-      </mat-form-field>
-    </form>
+  <div class="row">
+    <div class="col-12">
+      <div class="search-field">
+        <form class="search-form">
+          <mat-form-field class="full-width-in" appearance="outline">
+            <!-- <mat-label>Enter customer name to search</mat-label> -->
+            <input (keyup)="filterCustomer($event)" matInput placeholder="Enter customer name to search" value="" />
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
   </div>
 
   <!-- --------------------------------------------------------------------------------------------------------------------------------- -->

@@ -76,9 +76,15 @@
             <div class="login-fields" fxLayout="column">
               <mat-form-field [hideRequiredMarker]="true" appearance="outline" class="w-100">
                 <mat-label>Name</mat-label>
-                <input type="text" matInput formControlName="name" [placeholder]="'Name' | translate" required />
-                <mat-error *ngIf="registerForm.controls.name.invalid && registerForm.controls.name.touched">
-                  <span translate>Name is required</span>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="username"
+                  [placeholder]="'Username' | translate"
+                  required
+                />
+                <mat-error *ngIf="registerForm.controls.username.invalid && registerForm.controls.username.touched">
+                  <span translate>Username is required</span>
                 </mat-error>
               </mat-form-field>
 

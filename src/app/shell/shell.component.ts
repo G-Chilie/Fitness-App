@@ -33,6 +33,9 @@ export class ShellComponent implements OnInit {
   ) {}
 
   userName = '';
+  isLoading: boolean;
+  employeeData: any;
+  employeeId: string;
 
   ngOnInit() {
     let userinfo = localStorage.getItem('userInfo');
@@ -47,11 +50,39 @@ export class ShellComponent implements OnInit {
       newPassword: ['', [Validators.required]],
       confirmNewPassword: ['', [Validators.required]],
     });
+
+    this.employeeId = localStorage.getItem('uuid');
+    this.getEmployeeDetails();
   }
 
   changePassword(content: any) {
-    console.log('called change password');
     this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
+  }
+
+  getEmployeeDetails() {
+    this.isLoading = true;
+    this.quoteService
+      .getEmployee(this.employeeId)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.status === 200 && res.body) {
+            this.employeeData = res.body;
+          }
+          this.ngxLoader.stop();
+        },
+        (error) => {
+          this.isLoading = false;
+        }
+      );
+  }
+
+  employeeProfile(content: any) {
+    this.modalService.open(content, { size: 'lg', backdropClass: 'light-blue-backdrop' });
   }
 
   updatePassword() {
