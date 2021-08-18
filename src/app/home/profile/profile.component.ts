@@ -292,6 +292,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         break;
       case 'hideEmp':
         this.hideEmployee(data);
+        break;
     }
   }
 }
