@@ -19,6 +19,7 @@
           <div class="card-body">
             <app-profile-list-table
               [users]="profileData | filter: $any('status'):['ACTIVATED', 'ADMIN']:false"
+              [allowedActions]="['deleteEmp']"
               [limit]="5"
               (actions)="onActions($event, { editEmp: profileContent, changePassword: changePasswordContent })"
             ></app-profile-list-table>
@@ -31,6 +32,20 @@
           <div class="card-body">
             <app-profile-list-table
               [users]="profileData | filter: $any('status'):['DEACTIVATED']"
+              [displayedColumns]="['username', 'status', 'email', 'discountCode']"
+              [limit]="5"
+              (actions)="onActions($event, { editEmp: profileContent, changePassword: changePasswordContent })"
+            ></app-profile-list-table>
+          </div>
+        </div>
+        <div class="card card-primary">
+          <div class="card-header">
+            <h4 class="card-title">Pending Users</h4>
+          </div>
+          <div class="card-body">
+            <app-profile-list-table
+              [users]="profileData | filter: $any('status'):['PENDING']"
+              [allowedActions]="['hideEmp']"
               [limit]="5"
               (actions)="onActions($event, { editEmp: profileContent, changePassword: changePasswordContent })"
             ></app-profile-list-table>

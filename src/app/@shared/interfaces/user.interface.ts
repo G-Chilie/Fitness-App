@@ -41,4 +41,8 @@ export enum AccountStatus {
    * Admin.
    */
   Admin = 'ADMIN',
+  /**
+   * Pending.
+   */
+  Pending = 'PENDING',
 }

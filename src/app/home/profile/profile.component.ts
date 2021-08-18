@@ -18,7 +18,12 @@ import { AccountStatus, IUserRest } from '@shared/interfaces/user.interface';
 })
 export class ProfileComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['username', 'status', 'email', 'discountCode', 'actions'];
-  statuses: AccountStatus[] = [AccountStatus.Admin, AccountStatus.Activated, AccountStatus.Deactivated];
+  statuses: AccountStatus[] = [
+    AccountStatus.Admin,
+    AccountStatus.Activated,
+    AccountStatus.Deactivated,
+    AccountStatus.Pending,
+  ];
   isLoading = false;
   profileData: IUserRest[];
   dataSource: MatTableDataSource<IUserRest>;
@@ -267,9 +272,12 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   compareStatus(st1: any, st2: any) {
     return st1 && st2 && st1 === st2;
   }
+  hideEmployee(data: IUserRest): void {
+    this.profileData = this.profileData.filter(({ id }) => id !== data.id);
+  }
 
   onActions(
-    { action, data }: { action: 'deleteEmp' | 'editEmp' | 'changePassword'; data: IUserRest },
+    { action, data }: { action: 'deleteEmp' | 'editEmp' | 'changePassword' | 'hideEmp'; data: IUserRest },
     ref: Record<'editEmp' | 'changePassword', TemplateRef<any>>
   ): void {
     switch (action) {
@@ -281,6 +289,9 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         break;
       case 'changePassword':
         this.changePassword(ref.changePassword, data);
+        break;
+      case 'hideEmp':
+        this.hideEmployee(data);
     }
   }
 }

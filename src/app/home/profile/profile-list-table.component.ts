@@ -4,7 +4,6 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  OnInit,
   Output,
   SimpleChanges,
   ViewChild,
@@ -19,7 +18,7 @@ import { MatPaginator } from '@angular/material/paginator';
 @Component({
   selector: 'app-profile-list-table',
   templateUrl: './profile-list-table.component.html',
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileListTableComponent implements OnChanges {
   /**
@@ -31,23 +30,28 @@ export class ProfileListTableComponent implements OnChanges {
    */
   @Input() limit: number;
   /**
+   * Displayed Columns.
+   */
+  @Input() displayedColumns: string[];
+  /**
+   * Allowed actions.
+   */
+  @Input() allowedActions: string[];
+  /**
    * On Actions.
    */
-  @Output() actions: EventEmitter<{ action: 'deleteEmp' | 'editEmp' | 'changePassword'; data: IUserRest }>;
+  @Output() actions: EventEmitter<{ action: 'deleteEmp' | 'editEmp' | 'changePassword' | 'hideEmp'; data: IUserRest }>;
   /**
    * Data Source.
    */
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  /**
-   * Displayed Columns.
-   */
-  displayedColumns: string[];
   /**
    * Data Source.
    */
   public dataSource!: MatTableDataSource<IUserRest>;
 
   constructor() {
+    this.allowedActions = [];
     this.users = [];
     this.actions = new EventEmitter();
     this.displayedColumns = ['username', 'status', 'email', 'discountCode', 'actions'];
