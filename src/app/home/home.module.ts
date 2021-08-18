@@ -16,6 +16,7 @@ import { FormsComponent } from './forms/forms.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { ChartsModule } from 'ng2-charts';
 import { TextEllipsisComponent } from './text-ellipsis/text-ellipsis.component';
+import { ProfileModule } from '@app/home/profile/profile.module';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: '#363740',
@@ -60,10 +61,10 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     FormsModule,
     ReactiveFormsModule,
     ChartsModule,
+    ProfileModule,
   ],
   declarations: [
     HomeComponent,
-    ProfileComponent,
     RecommendationsComponent,
     ProgramComponent,
     FormsComponent,
