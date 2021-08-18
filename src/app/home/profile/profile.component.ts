@@ -34,6 +34,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   newEmployeeForm: FormGroup;
   editEmployeeForm: FormGroup;
   changePasswordForm: FormGroup;
+  searchForm: Record<AccountStatus, string>;
 
   constructor(
     private quoteService: QuoteService,
@@ -66,6 +67,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       newPassword: ['', [Validators.required]],
       confirmNewPassword: ['', [Validators.required]],
     });
+    this.searchForm = this.statuses.reduce((acc, curr) => {
+      acc[curr] = '';
+      return acc;
+    }, {} as Record<AccountStatus, string>);
   }
 
   ngAfterViewInit() {

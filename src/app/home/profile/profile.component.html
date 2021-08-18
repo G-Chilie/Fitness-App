@@ -15,10 +15,18 @@
         <div class="card card-primary">
           <div class="card-header">
             <h4 class="card-title">Active Users</h4>
+            <mat-form-field [appearance]="'outline'">
+              <mat-label>Search Active Users</mat-label>
+              <input type="text" matInput [(ngModel)]="searchForm.ACTIVATED" />
+            </mat-form-field>
           </div>
           <div class="card-body">
             <app-profile-list-table
-              [users]="profileData | filter: $any('status'):['ACTIVATED', 'ADMIN']:false"
+              [users]="
+                profileData
+                  | filter: $any('status'):['ACTIVATED', 'ADMIN']:false
+                  | filter: 'username':[searchForm.ACTIVATED]
+              "
               [allowedActions]="['deleteEmp']"
               [limit]="5"
               (actions)="onActions($event, { editEmp: profileContent, changePassword: changePasswordContent })"
@@ -28,10 +36,16 @@
         <div class="card card-primary">
           <div class="card-header">
             <h4 class="card-title">Disabled Users</h4>
+            <mat-form-field [appearance]="'outline'">
+              <mat-label>Search Disabled Users</mat-label>
+              <input type="text" matInput [(ngModel)]="searchForm.DEACTIVATED" />
+            </mat-form-field>
           </div>
           <div class="card-body">
             <app-profile-list-table
-              [users]="profileData | filter: $any('status'):['DEACTIVATED']"
+              [users]="
+                profileData | filter: $any('status'):['DEACTIVATED'] | filter: 'username':[searchForm.DEACTIVATED]
+              "
               [displayedColumns]="['username', 'status', 'email', 'discountCode', 'actions']"
               [allowedActions]="['hideEmp']"
               [limit]="5"
@@ -42,10 +56,14 @@
         <div class="card card-primary">
           <div class="card-header">
             <h4 class="card-title">Pending Users</h4>
+            <mat-form-field [appearance]="'outline'">
+              <mat-label>Search Pending Users</mat-label>
+              <input type="text" matInput [(ngModel)]="searchForm.PENDING" />
+            </mat-form-field>
           </div>
           <div class="card-body">
             <app-profile-list-table
-              [users]="profileData | filter: $any('status'):['PENDING']"
+              [users]="profileData | filter: $any('status'):['PENDING'] | filter: 'username':[searchForm.PENDING]"
               [limit]="5"
               (actions)="onActions($event, { editEmp: profileContent, changePassword: changePasswordContent })"
             ></app-profile-list-table>

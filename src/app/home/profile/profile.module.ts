@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { ProfileComponent } from '@app/home/profile/profile.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -33,6 +33,7 @@ import { SharedModule } from '@shared';
     MatPaginatorModule,
     MatInputModule,
     SharedModule,
+    FormsModule,
   ],
 })
 export class ProfileModule {}
