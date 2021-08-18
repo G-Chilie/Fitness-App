@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { IUserRest } from '@shared/interfaces/user.interface';
+import { environment } from '@env/environment';
+import { CusSearchResObject, Datum } from './home';
 
 const routes = {
   quote: (c: RandomQuoteContext) => `/jokes/random?category=${c.category}`,
@@ -115,6 +117,26 @@ export class QuoteService {
         catchError(() => 'Error in fetching employees.')
       );
   }
+  // -----------------------------------------------------------------START-CUSTOMER-SEARCH-FORM-------------------------------------------------
+
+  getCustomerBySearch(): Observable<any> {
+    const PATH = `${environment.serverUrl}/api/v1/customer`;
+    const headerDict = {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      Authorization:
+        'Bearer' +
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY2YWM2ZWZiLTg2YzgtNDU2My1iZTIyLWMyMjU0OTQyNDlkZCIsInVzZXJuYW1lIjoibGFsb28iLCJ1c2VyU3RhdHVzIjoiQURNSU4iLCJpYXQiOjE2MjkxMzQ5NzUsImV4cCI6MTYyOTEzODU3NX0.4D1Np-PSPmdLIgVrghvPBrEV9W9PF3KejwVjD8GK5JI',
+    };
+    const requestOptions = {
+      headers: new HttpHeaders(headerDict),
+    };
+
+    return this.httpClient.get<CusSearchResObject>(PATH, requestOptions);
+  }
+
+  // -----------------------------------------------------------------END-CUSTOMER-SEARCH-FORM-------------------------------------------------
 
   getSupervisors(): Observable<any> {
     return this.httpClient

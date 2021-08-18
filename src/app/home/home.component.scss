@@ -84,6 +84,22 @@ q {
   }
   border: 1px solid #3751ff;
 }
+// ------------------------------------------------------ start-customer-searchform------------------------------------------------------------------
+.customer-search-form {
+  // min-width: 150px;
+  // max-width: 500px;
+  // width: 100%;
+  position: relative;
+  left: 993px;
+  top: 8px;
+}
+
+.full-width-in {
+  // width: 100%;
+  display: flex;
+}
+
+// ------------------------------------------------------ end-customer-searchform------------------------------------------------------------------
 
 ::ng-deep {
   .mat-form-field-wrapper {

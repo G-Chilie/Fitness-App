@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
-import { finalize } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -34,6 +34,7 @@ export interface Message {
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, AfterViewInit {
+  searchTerm: string;
   quote: string | undefined;
   isAdmin: boolean;
   selectedCustomerName: string;
@@ -95,6 +96,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  // --------------------------------------------------Start Customer Search Form---------------------------------------------
+
+  filterCustomer(evt: Event) {
+    const filteredValue = (evt.target as HTMLInputElement).value;
+    this.dataSource.filter = filteredValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  // -----------------------------------------------------End Customer search Form-------------------------------------------------------
   ngOnInit() {
     this.ngxLoader.start();
     this.sendMessageForm = this.formBuilder.group({
@@ -263,26 +275,38 @@ export class HomeComponent implements OnInit, AfterViewInit {
       case 'all':
         this.currentActiveTab = 'all';
         this.dataSource = new MatTableDataSource(this.allUsers);
-        setTimeout(() => (this.dataSource.paginator = this.paginator));
+        setTimeout(() => {
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        });
         this.hidePaginator = false;
         break;
 
       case 'active':
         this.currentActiveTab = 'active';
         this.dataSource = new MatTableDataSource(this.activeUsers);
-        setTimeout(() => (this.dataSource.paginator = this.paginator));
+        setTimeout(() => {
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        });
         break;
 
       case 'inactive':
         this.currentActiveTab = 'inactive';
         this.dataSource = new MatTableDataSource(this.inactiveUsers);
-        setTimeout(() => (this.dataSource.paginator = this.paginator));
+        setTimeout(() => {
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        });
         break;
 
       case 'completed':
         this.currentActiveTab = 'completed';
         this.dataSource = new MatTableDataSource(this.completedCustomers);
-        setTimeout(() => (this.dataSource.paginator = this.paginator));
+        setTimeout(() => {
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        });
         break;
     }
   }
