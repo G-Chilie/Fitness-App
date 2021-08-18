@@ -23,6 +23,7 @@ export interface Customer {
   supervisor: Supervisor;
   question: QuestionElement[];
   programHistory: ProgramHistory[];
+  currentWeight: number;
 }
 
 export interface Program {

@@ -12,27 +12,27 @@ Chart.register(zoomPlugin);
   styleUrls: ['./line-chart.component.scss'],
 })
 export class LineChartComponent implements OnInit {
-  @Input() customer: Customer;
+  @Input() public customer: Customer;
 
   lineChartData: ChartDataset[] = [
     {
       data: [],
       label: 'Weight',
-      backgroundColor: 'rgba(255,255,0,0.25)',
+      yAxisID: 'weight',
+      backgroundColor: 'rgba(173,255,47,0.5)',
       segment: {
-        borderColor: (ctx) => this.colorSegmentFunction(ctx, 0, 'gray', 'transparent'),
-        borderDash: (ctx) => this.borderDashSegmentFunction(ctx, 0, [6, 6]),
-        backgroundColor: (ctx) => this.colorSegmentFunction(ctx, 0, undefined, 'transparent'),
+        borderColor: (ctx) => this.colorSegmentFunction(ctx, 'gray'),
+        borderDash: (ctx) => this.borderDashSegmentFunction(ctx, [6, 6]),
       },
     },
     {
       data: [],
       label: 'Sleep',
-      backgroundColor: 'rgba(0, 255, 200, 0.25)',
+      yAxisID: 'sleep',
+      backgroundColor: 'rgba(0,191,255, 0.5)',
       segment: {
-        borderColor: (ctx) => this.colorSegmentFunction(ctx, 1, 'gray', 'transparent'),
-        borderDash: (ctx) => this.borderDashSegmentFunction(ctx, 1, [6, 6]),
-        backgroundColor: (ctx) => this.colorSegmentFunction(ctx, 1, undefined, 'transparent'),
+        borderColor: (ctx) => this.colorSegmentFunction(ctx, 'gray'),
+        borderDash: (ctx) => this.borderDashSegmentFunction(ctx, [6, 6]),
       },
     },
   ];
@@ -42,14 +42,28 @@ export class LineChartComponent implements OnInit {
   lineChartOptions: ChartOptions<'line'> = {
     responsive: true,
     scales: {
-      y: { beginAtZero: true },
+      weight: {
+        type: 'linear',
+        position: 'left',
+        beginAtZero: true,
+        min: 0,
+        suggestedMax: 100,
+        bounds: 'data',
+        grace: 20,
+      },
+      sleep: {
+        type: 'linear',
+        position: 'right',
+        beginAtZero: true,
+        grid: { display: false },
+        suggestedMax: 16,
+        suggestedMin: 0,
+      },
     },
+    elements: { line: { borderColor: 'black', borderWidth: 3, fill: true } },
     spanGaps: true,
     interaction: {
       intersect: false,
-    },
-    elements: {
-      line: { fill: true, borderColor: 'black' },
     },
 
     plugins: {
@@ -71,28 +85,11 @@ export class LineChartComponent implements OnInit {
   lineChartPlugins: any[] = [zoomPlugin];
   lineChartType = 'line';
 
-  borderDashSegmentFunction(ctx: ScriptableLineSegmentContext, index: number, dashValue: number[]) {
-    const value1 = this.lineChartData[index].data[ctx.p0DataIndex];
-    const value2 = this.lineChartData[index].data[ctx.p1DataIndex];
-    return value1 === null || value2 === null ? dashValue : undefined;
-  }
+  borderDashSegmentFunction = (ctx: ScriptableLineSegmentContext, value: number[]) =>
+    ctx.p0.skip || ctx.p1.skip ? value : undefined;
 
-  // If question was asked then value is null, if it wasn't asked on that day then it is undefined
-  colorSegmentFunction(
-    ctx: ScriptableLineSegmentContext,
-    index: number,
-    nullValueColor: string | undefined,
-    undefinedValueColor: string | undefined
-  ) {
-    const value1 = this.lineChartData[index].data[ctx.p0DataIndex];
-    const value2 = this.lineChartData[index].data[ctx.p1DataIndex];
-    if (value1 === undefined || value2 === undefined) {
-      return undefinedValueColor;
-    }
-    if (value1 === null || value2 === null) {
-      return nullValueColor;
-    }
-    return undefined;
+  colorSegmentFunction(ctx: ScriptableLineSegmentContext, color: string) {
+    return ctx.p0.skip || ctx.p1.skip ? color : undefined;
   }
 
   getDatesArray(start: Date, end: Date) {
@@ -109,6 +106,7 @@ export class LineChartComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+    console.log(Math.max(...(this.lineChartData[0].data as number[])));
     const questions = this.customer.question;
     let sleepQuestions = questions.filter((q) => q.constraint === ConstraintEnum.IsSleep);
     let weightQuestions = questions.filter((q) => q.constraint === ConstraintEnum.IsWeight);
