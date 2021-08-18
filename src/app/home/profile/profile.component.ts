@@ -54,6 +54,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.editEmployeeForm = this.formBuilder.group({
       username: [''],
       status: [null],
+      email: ['', [Validators.email, Validators.required]],
     });
 
     this.changePasswordForm = this.formBuilder.group({
@@ -187,6 +188,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     this.editEmployeeForm.patchValue({
       username: data.username ? data.username : '',
       status: data.status ? data.status : null,
+      email: data.email ? data.email : '',
     });
     this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
   }

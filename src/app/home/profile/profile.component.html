@@ -84,8 +84,8 @@
         <input matInput type="email" placeholder="Email" formControlName="email" name="email" />
         <mat-error *ngIf="newEmployeeForm.get('password')?.hasError('required')"> Email is Required!</mat-error>
         <mat-error *ngIf="newEmployeeForm.get('password')?.hasError('email')">
-          Please enter an valid email address</mat-error
-        >
+          Please enter an valid email address
+        </mat-error>
       </mat-form-field>
       <!--Discount Code-->
       <mat-form-field appearance="outline" class="w-100 mt-2">
@@ -111,7 +111,7 @@
       <div>
         <mat-form-field class="example-full-width w-100" appearance="outline">
           <mat-label>Username</mat-label>
-          <input matInput placeholder="Username" formControlName="username" name="" />
+          <input matInput placeholder="Username" formControlName="username" name="username" />
         </mat-form-field>
       </div>
 
@@ -120,6 +120,13 @@
           <mat-select formControlName="status" placeholder="Status" [compareWith]="compareStatus">
             <mat-option [value]="status" *ngFor="let status of statuses">{{ status }} </mat-option>
           </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="example-full-width w-100" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="Email" formControlName="email" name="email" />
         </mat-form-field>
       </div>
     </div>
