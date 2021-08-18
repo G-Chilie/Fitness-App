@@ -34,6 +34,18 @@
             "scripts": []
           },
           "configurations": {
+            "development": {
+              "optimization": false,
+              "sourceMap": {
+                "scripts": true,
+                "styles": false,
+                "vendor": false
+              },
+              "buildOptimizer": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "namedChunks": true
+            },
             "production": {
               "optimization": true,
               "outputHashing": "all",
@@ -70,7 +82,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "bodys-perfect-diet:build"
+            "browserTarget": "bodys-perfect-diet:build:development"
           },
           "configurations": {
             "production": {
@@ -133,5 +145,8 @@
       }
     }
   },
-  "defaultProject": "bodys-perfect-diet"
+  "defaultProject": "bodys-perfect-diet",
+  "cli": {
+    "analytics": false
+  }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { IUserRest } from '@shared/interfaces/user.interface';
 
 const routes = {
   quote: (c: RandomQuoteContext) => `/jokes/random?category=${c.category}`,
@@ -102,7 +103,7 @@ export class QuoteService {
       );
   }
 
-  getAllEmployees(): Observable<any> {
+  getAllEmployees(): Observable<IUserRest[]> {
     return this.httpClient
       .get(endPoints.getEmployees, {
         observe: 'response',
