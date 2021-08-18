@@ -275,9 +275,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       case 'all':
         this.currentActiveTab = 'all';
         this.dataSource = new MatTableDataSource(this.allUsers);
+        this.dataSource.sort = this.sort;
         setTimeout(() => {
           this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
         });
         this.hidePaginator = false;
         break;
