@@ -11,7 +11,7 @@ import {
 import { MatTableDataSource } from '@angular/material/table';
 import { IUserRest } from '@shared/interfaces/user.interface';
 import { MatPaginator } from '@angular/material/paginator';
-
+export type TEmpActions = 'deleteEmp' | 'editEmp' | 'changePassword' | 'hideEmp' | 'acceptEmp' | 'declineEmp';
 /**
  * Profile List table component.
  */
@@ -40,7 +40,7 @@ export class ProfileListTableComponent implements OnChanges {
   /**
    * On Actions.
    */
-  @Output() actions: EventEmitter<{ action: 'deleteEmp' | 'editEmp' | 'changePassword' | 'hideEmp'; data: IUserRest }>;
+  @Output() actions: EventEmitter<{ action: TEmpActions; data: IUserRest }>;
   /**
    * Data Source.
    */

@@ -64,6 +64,7 @@
           <div class="card-body">
             <app-profile-list-table
               [users]="profileData | filter: $any('status'):['PENDING'] | filter: 'username':[searchForm.PENDING]"
+              [allowedActions]="['acceptEmp', 'declineEmp']"
               [limit]="5"
               (actions)="onActions($event, { editEmp: profileContent, changePassword: changePasswordContent })"
             ></app-profile-list-table>
