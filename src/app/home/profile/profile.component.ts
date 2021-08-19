@@ -10,7 +10,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { AccountStatus, IUserRest } from '@shared/interfaces/user.interface';
 import { TEmpActions } from '@app/home/profile/profile-list-table.component';
-
+/**
+ *  Profile component
+ */
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
