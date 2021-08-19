@@ -16,6 +16,7 @@ export interface RandomQuoteContext {
 
 const endPoints = {
   getEmployees: '/api/v1/employee?&limit=999',
+  getEmployee: '/api/v1/employee/',
   getPrograms: '/api/v1/program',
   getForms: '/api/v1/form',
   getRecommendations: '/api/v1/recommendation',
@@ -115,6 +116,19 @@ export class QuoteService {
           return body;
         }),
         catchError(() => 'Error in fetching employees.')
+      );
+  }
+
+  getEmployee(empId: string) {
+    return this.httpClient
+      .get(endPoints.getEmployee + empId, {
+        observe: 'response',
+      })
+      .pipe(
+        map((body: any) => {
+          return body;
+        }),
+        catchError(() => 'Error in fetching employee.')
       );
   }
   // -----------------------------------------------------------------START-CUSTOMER-SEARCH-FORM-------------------------------------------------
