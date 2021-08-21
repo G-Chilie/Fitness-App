@@ -14,6 +14,8 @@ Chart.register(zoomPlugin);
 export class LineChartComponent implements OnInit {
   @Input() public customer: Customer;
 
+  currentColorMode: any;
+
   lineChartData: ChartDataset[] = [
     {
       data: [],
@@ -144,5 +146,18 @@ export class LineChartComponent implements OnInit {
 
     this.lineChartData.find((dataObject) => dataObject.label.toLowerCase() === 'weight').data = weightData;
     this.lineChartData.find((dataObject) => dataObject.label.toLowerCase() === 'sleep').data = sleepData;
+  }
+
+  userPreference(preferenceName: string) {
+    let data2Send = {};
+    switch (preferenceName) {
+      case 'greyScale':
+        data2Send['greyScale'] = this.currentColorMode;
+        break;
+
+      case 'yellowBlue':
+        data2Send['yellowBlue'] = this.currentColorMode;
+        break;
+    }
   }
 }
