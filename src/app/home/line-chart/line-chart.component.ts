@@ -14,12 +14,18 @@ Chart.register(zoomPlugin);
 export class LineChartComponent implements OnInit {
   @Input() public customer: Customer;
 
+  chartIsColored = true;
+
+  setColor() {
+    this.chartIsColored = !this.chartIsColored;
+  }
+
   lineChartData: ChartDataset[] = [
     {
       data: [],
-      label: 'Weight',
-      yAxisID: 'weight',
-      backgroundColor: 'rgba(173,255,47,0.5)',
+      label: 'Sleep',
+      yAxisID: 'sleep',
+      backgroundColor: this.chartIsColored ? 'rgba(0, 255, 255, 0.75)' : 'rgba(119,136,153, 0.5)',
       segment: {
         borderColor: (ctx) => this.colorSegmentFunction(ctx, 'gray'),
         borderDash: (ctx) => this.borderDashSegmentFunction(ctx, [6, 6]),
@@ -27,9 +33,9 @@ export class LineChartComponent implements OnInit {
     },
     {
       data: [],
-      label: 'Sleep',
-      yAxisID: 'sleep',
-      backgroundColor: 'rgba(0,191,255, 0.5)',
+      label: 'Weight',
+      yAxisID: 'weight',
+      backgroundColor: this.chartIsColored ? 'rgba(255, 255, 0, 0.5)' : 'rgba(220,220,220, 0.5)',
       segment: {
         borderColor: (ctx) => this.colorSegmentFunction(ctx, 'gray'),
         borderDash: (ctx) => this.borderDashSegmentFunction(ctx, [6, 6]),
@@ -109,7 +115,6 @@ export class LineChartComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    console.log(Math.max(...(this.lineChartData[0].data as number[])));
     const questions = this.customer.question;
     let sleepQuestions = questions.filter((q) => q.constraint === ConstraintEnum.IsSleep);
     let weightQuestions = questions.filter((q) => q.constraint === ConstraintEnum.IsWeight);
