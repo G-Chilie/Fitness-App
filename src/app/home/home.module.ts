@@ -17,6 +17,7 @@ import { LineChartComponent } from './line-chart/line-chart.component';
 import { ChartsModule } from 'ng2-charts';
 import { TextEllipsisComponent } from './text-ellipsis/text-ellipsis.component';
 import { ProfileModule } from '@app/home/profile/profile.module';
+import { FoodListComponent } from './recommendations/food-list/food-list.component';
 import { MatTableModule } from '@angular/material/table';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
@@ -72,6 +73,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     FormsComponent,
     LineChartComponent,
     TextEllipsisComponent,
+    FoodListComponent,
     MessageModalComponent,
   ],
 })

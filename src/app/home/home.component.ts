@@ -83,7 +83,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   dietPlanForm: FormGroup;
 
-
   constructor(
     private quoteService: QuoteService,
     private modalService: NgbModal,
