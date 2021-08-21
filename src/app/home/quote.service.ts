@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { IUserRest } from '@shared/interfaces/user.interface';
 import { environment } from '@env/environment';
@@ -204,6 +204,21 @@ export class QuoteService {
           return body;
         }),
         catchError(() => 'Error in deleting the recommendation.')
+      );
+  }
+  deleteFood(id: string): Observable<any> {
+    return this.httpClient
+      .delete(endPoints.addNewRecommendation + '/' + id, {
+        observe: 'response',
+      })
+      .pipe(
+        map((body: any) => {
+          return body;
+        }),
+        catchError(() => {
+          console.error('Error in deleting the recommendation.');
+          return EMPTY;
+        })
       );
   }
 
