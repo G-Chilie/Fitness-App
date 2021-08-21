@@ -26,11 +26,6 @@
         <div class="card card-primary">
           <div class="mat-elevation-z0">
             <table mat-table [dataSource]="dataSource" class="w-100">
-              <ng-container matColumnDef="image">
-                <th mat-header-cell *matHeaderCellDef>Image</th>
-                <td mat-cell *matCellDef="let row" class="text-center"><img class="recImg" src="{{ row.image }}" /></td>
-              </ng-container>
-
               <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef>Name</th>
                 <td mat-cell *matCellDef="let row" class="text-center">{{ row.name }}</td>
@@ -42,30 +37,32 @@
                 <td mat-cell *matCellDef="let row" class="text-center">{{ row.description }}</td>
               </ng-container>
 
-              <!-- Actions Column -->
-
-              <ng-container matColumnDef="editAction">
-                <th mat-header-cell *matHeaderCellDef>Actions</th>
-                <td mat-cell *matCellDef="let row" class="text-center">
-                  <button
-                    mat-flat-button
-                    color="primary"
-                    type="button"
-                    (click)="editRecommendation(editRecommendationContent, row)"
-                  >
-                    <mat-icon aria-hidden="false" aria-label="Edit icon">edit</mat-icon>
-                    Edit
-                  </button>
-                </td>
+              <!-- Creator Column -->
+              <ng-container matColumnDef="creator">
+                <th mat-header-cell *matHeaderCellDef>Creator</th>
+                <td mat-cell *matCellDef="let row" class="text-center">{{ row?.employee?.username }}</td>
               </ng-container>
+
+              <!-- Actions Column -->
 
               <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef>Actions</th>
                 <td mat-cell *matCellDef="let row" class="text-center">
-                  <button mat-flat-button color="warn" type="button" (click)="deleteRecommendation(row.id)">
-                    <mat-icon aria-hidden="false" aria-label="Delete icon">delete</mat-icon>
-                    Delete
-                  </button>
+                  <div fxLayout="row" fxFlex fxLayoutGap="5px">
+                    <button
+                      mat-flat-button
+                      color="primary"
+                      type="button"
+                      (click)="editRecommendation(editRecommendationContent, row)"
+                    >
+                      <mat-icon aria-hidden="false" aria-label="Edit icon">edit</mat-icon>
+                      Edit
+                    </button>
+                    <button mat-flat-button color="warn" type="button" (click)="deleteRecommendation(row.id)">
+                      <mat-icon aria-hidden="false" aria-label="Delete icon">delete</mat-icon>
+                      Delete
+                    </button>
+                  </div>
                   <!-- <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
                     <mat-icon>more_vert</mat-icon>
                   </button> -->
@@ -189,10 +186,10 @@
           />
         </mat-chip-list>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-          <mat-option *ngFor="let selectedRec of selectedRecommendation" [value]="selectedRec">
+          <mat-option *ngFor="let food of allFoods" [value]="food">
             <div>
-              <img class="recImg" [src]="selectedRec.image" [alt]="selectedRec.name" />
-              {{ selectedRec.name }} ({{ selectedRec.type }})
+              <img class="recImg" [src]="food.image" [alt]="food.name" />
+              {{ food.name }} ({{ food.type }})
             </div>
           </mat-option>
         </mat-autocomplete>
@@ -304,10 +301,10 @@
           />
         </mat-chip-list>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedEditRecom($event)">
-          <mat-option *ngFor="let selectedRec of selectedRecommendation" [value]="selectedRec">
+          <mat-option *ngFor="let food of allFoods" [value]="food">
             <div>
-              <img class="recImg" [src]="selectedRec.image" [alt]="selectedRec.name" />
-              {{ selectedRec.name }} ({{ selectedRec.type }})
+              <img class="recImg" [src]="food.image" [alt]="food.name" />
+              {{ food.name }} ({{ food.type }})
             </div>
           </mat-option>
         </mat-autocomplete>

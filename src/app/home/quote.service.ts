@@ -31,23 +31,21 @@ const endPoints = {
   getEmployees: '/api/v1/employee?&limit=999',
   getEmployee: '/api/v1/employee/',
   getPrograms: '/api/v1/program',
-  getForms: '/api/v1/form',
-  getRecommendations: '/api/v1/recommendationlist/',
+
+  getForms: '/api/v1/questionnaire',
+
   getCustomers:
     '/api/v1/customer?include=supervisor&inlclude=programHistory&include=question&include=programHistory&limit=100',
   getMessages: '/api/v1/message',
   login: '/api/v1/employee/login',
   deleteEmployee: '/api/v1/employee/',
   addNewEmployee: '/api/v1/employee',
-  addNewRecommendation: '/api/v1/recommendation',
   telegram: '/api/v1/message',
   sendTelegramMessage: '/api/v1/proxy/telegram/message/',
   editCustomer: '/api/v1/customer/',
   editEmployee: '/api/v1/employee/',
   editForm: '/api/v1/form',
   getSupervisors: '/api/v1/employee?where[status]=ACTIVATED&limit=999',
-  addNewFood: '/api/v1/food',
-  recommendationsList: '/api/v1/recommendationlist?include=recommendations&limit=999',
 };
 
 @Injectable({
@@ -194,34 +192,6 @@ export class QuoteService {
       );
   }
 
-  deleteRecommendation(id: string): Observable<any> {
-    return this.httpClient
-      .delete(endPoints.getRecommendations + '/' + id, {
-        observe: 'response',
-      })
-      .pipe(
-        map((body: any) => {
-          return body;
-        }),
-        catchError(() => 'Error in deleting the recommendation.')
-      );
-  }
-  deleteFood(id: string): Observable<any> {
-    return this.httpClient
-      .delete(endPoints.addNewRecommendation + '/' + id, {
-        observe: 'response',
-      })
-      .pipe(
-        map((body: any) => {
-          return body;
-        }),
-        catchError(() => {
-          console.error('Error in deleting the recommendation.');
-          return EMPTY;
-        })
-      );
-  }
-
   deleteProgram(id: string): Observable<any> {
     return this.httpClient
       .delete(endPoints.getPrograms + '/' + id, {
@@ -305,20 +275,6 @@ export class QuoteService {
         catchError(() => 'Error in fetching programs.')
       );
   }
-
-  getAllRecommendations(): Observable<any> {
-    return this.httpClient
-      .get(endPoints.getRecommendations, {
-        observe: 'response',
-      })
-      .pipe(
-        map((res: any) => {
-          return res;
-        }),
-        catchError(() => 'Error in fetching recommendations.')
-      );
-  }
-
   addNewEmployee(data: any) {
     return this.httpClient
       .post(endPoints.addNewEmployee, data, {
@@ -344,32 +300,6 @@ export class QuoteService {
         catchError(() => 'Error while sending message to telegram.')
       );
   }
-
-  addRecommendation(data: any) {
-    return this.httpClient
-      .post(endPoints.addNewRecommendation, data, {
-        observe: 'response',
-      })
-      .pipe(
-        map((res: any) => {
-          return res;
-        }),
-        catchError(() => 'Error in adding new recommendation.')
-      );
-  }
-
-  // addFood(data: any) {
-  //   return this.httpClient
-  //     .post(endPoints.addNewFood, data, {
-  //       observe: 'response',
-  //     })
-  //     .pipe(
-  //       map((res: any) => {
-  //         return res;
-  //       }),
-  //       catchError(() => 'Error in adding new recommendation.')
-  //     );
-  // }
 
   addProgram(data: any) {
     return this.httpClient
@@ -421,73 +351,6 @@ export class QuoteService {
           return res;
         }),
         catchError(() => 'Error in registration process.')
-      );
-  }
-
-  // Recommendations
-
-  addFood(data: any) {
-    return this.httpClient
-      .post(endPoints.addNewRecommendation, data, {
-        observe: 'response',
-      })
-      .pipe(
-        map((res: any) => {
-          return res;
-        }),
-        catchError(() => 'Error in adding new form.')
-      );
-  }
-
-  getRecommendation(): Observable<any> {
-    return this.httpClient
-      .get(endPoints.addNewRecommendation, {
-        observe: 'response',
-      })
-      .pipe(
-        map((res: any) => {
-          return res;
-        }),
-        catchError(() => 'Error in fetching programs.')
-      );
-  }
-
-  getAllRecommendationList(): Observable<any> {
-    return this.httpClient
-      .get(endPoints.recommendationsList, {
-        observe: 'response',
-      })
-      .pipe(
-        map((res: any) => {
-          return res;
-        }),
-        catchError(() => 'Error in fetching programs.')
-      );
-  }
-
-  saveRecommendations(data: any) {
-    return this.httpClient
-      .post(endPoints.getRecommendations, data, {
-        observe: 'response',
-      })
-      .pipe(
-        map((res: any) => {
-          return res;
-        }),
-        catchError(() => 'Error in adding new form.')
-      );
-  }
-
-  editRecommendation(data: any, id: string) {
-    return this.httpClient
-      .put(endPoints.getRecommendations + id, data, {
-        observe: 'response',
-      })
-      .pipe(
-        map((res: any) => {
-          return res;
-        }),
-        catchError(() => 'Error in adding new form.')
       );
   }
 }
