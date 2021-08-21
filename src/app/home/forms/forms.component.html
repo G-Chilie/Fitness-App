@@ -89,19 +89,21 @@
         </mat-error>
       </mat-form-field>
 
-      <div *ngFor="let constain of containers">
+      <div *ngFor="let constain of containers; let i = index">
         <div fxLayout="row" fxLayoutAlign="start center">
           <mat-form-field class="example-full-width w-100 mt-2 cus-padding" appearance="outline">
             <mat-label>Questions</mat-label>
             <input
               matInput
               placeholder="questions"
-              formControlName="questions"
-              name="questions"
+              formControlName="{{ 'questions' + i }}"
+              name="{{ 'questions' + i }}"
               autocomplete="off"
               class="width-80"
             />
-            <mat-error *ngIf="addFormsForm.get('questions')?.hasError('required')"> Questions is Required! </mat-error>
+            <mat-error *ngIf="addFormsForm.get('questions' + i)?.hasError('required')">
+              Questions is Required!
+            </mat-error>
           </mat-form-field>
           <button type="button" (click)="addQuestion()" class="btn btn-light cus-button">
             <mat-icon>add_circle_outline</mat-icon>
@@ -111,13 +113,49 @@
         <div fxLayout="row" fxLayoutAlign="start center">
           <mat-label class="custom-label">Answers :</mat-label>
           <mat-form-field appearance="outline" class="w-90 mt-2">
-            <mat-select formControlName="answer">
+            <mat-select formControlName="{{ 'answers' + i }}">
               <mat-option *ngFor="let answer of answers" value="{{ answer }}">
                 {{ answer }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="addFormsForm.get('answer')?.hasError('required')"> Answers is Required! </mat-error>
+            <mat-error *ngIf="addFormsForm.get('answers' + i)?.hasError('required')"> Answers is Required! </mat-error>
           </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <mat-label class="custom-label">Constraint :</mat-label>
+          <mat-form-field appearance="outline" class="w-90 mt-2">
+            <mat-select formControlName="{{ 'constraints' + i }}">
+              <mat-option *ngFor="let constraint of constraints" value="{{ constraint }}">
+                {{ constraint }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="addFormsForm.get('constraints' + i)?.hasError('required')">
+              Constraints is Required!
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div *ngFor="let c of containers[i]; let j = index">
+          <div *ngIf="addFormsForm.get('answers' + i)?.value === 'Button'" fxLayout="row" fxLayoutAlign="start center">
+            <div formGroupName="{{ 'buttonGroup' + i }}">
+              <mat-form-field class="example-full-width w-100 mt-2 cus-padding" appearance="outline">
+                <mat-label>{{ 'Button ' + i }}</mat-label>
+                <input
+                  matInput
+                  placeholder="buttons"
+                  formControlName="{{ 'button' + j }}"
+                  name="{{ 'button' + j }}"
+                  autocomplete="off"
+                  class="width-80"
+                />
+                <mat-error *ngIf="addFormsForm.controls['buttonGroup' + i]?.get('button' + j)?.hasError('required')">
+                  Button Answer is Required!
+                </mat-error>
+              </mat-form-field>
+              <button type="button" (click)="addButton(i)" class="btn btn-light cus-button">
+                <mat-icon>add_circle_outline</mat-icon>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
