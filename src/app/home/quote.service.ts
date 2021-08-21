@@ -14,6 +14,19 @@ export interface RandomQuoteContext {
   category: string;
 }
 
+export interface Message {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  text: string;
+  telegramChatId: number;
+  telegramMessageId: number;
+  isQuestion: boolean;
+  from: string;
+  mimeType: null;
+  fileIds: null;
+}
+
 const endPoints = {
   getEmployees: '/api/v1/employee?&limit=999',
   getEmployee: '/api/v1/employee/',
@@ -259,12 +272,14 @@ export class QuoteService {
       );
   }
 
-  getMessages(id: any): Observable<any> {
+  getMessages(id: any, page: any = 1): Observable<any> {
     return this.httpClient
       .get(endPoints.telegram, {
         params: {
           'where[telegramChatId]': id,
           'order[createdAt]': 'desc',
+          limit: '100',
+          page: page,
         },
         observe: 'response',
       })

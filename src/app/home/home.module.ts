@@ -8,7 +8,7 @@ import { NgxUiLoaderModule, NgxUiLoaderConfig } from 'ngx-ui-loader';
 import { SharedModule } from '@shared';
 import { MaterialModule } from '@app/material.module';
 import { HomeRoutingModule } from './home-routing.module';
-import { HomeComponent } from './home.component';
+import { HomeComponent, MessageModalComponent } from './home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RecommendationsComponent } from './recommendations/recommendations.component';
 import { ProgramComponent } from './program/program.component';
@@ -17,6 +17,7 @@ import { LineChartComponent } from './line-chart/line-chart.component';
 import { ChartsModule } from 'ng2-charts';
 import { TextEllipsisComponent } from './text-ellipsis/text-ellipsis.component';
 import { ProfileModule } from '@app/home/profile/profile.module';
+import { MatTableModule } from '@angular/material/table';
 
 const ngxUiLoaderConfig: NgxUiLoaderConfig = {
   bgsColor: '#363740',
@@ -62,6 +63,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     ReactiveFormsModule,
     ChartsModule,
     ProfileModule,
+    MatTableModule,
   ],
   declarations: [
     HomeComponent,
@@ -70,6 +72,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     FormsComponent,
     LineChartComponent,
     TextEllipsisComponent,
+    MessageModalComponent,
   ],
 })
 export class HomeModule {}
