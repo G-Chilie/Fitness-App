@@ -88,7 +88,17 @@
           Formname can be atmax 20 characters long!
         </mat-error>
       </mat-form-field>
-
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <mat-label class="custom-label">Status :</mat-label>
+        <mat-form-field appearance="outline" class="w-90 mt-2">
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let s of status" value="{{ s }}">
+              {{ s }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="addFormsForm.get('status')?.hasError('required')"> Status is Required! </mat-error>
+        </mat-form-field>
+      </div>
       <div *ngFor="let constain of containers; let i = index">
         <div fxLayout="row" fxLayoutAlign="start center">
           <mat-form-field class="example-full-width w-100 mt-2 cus-padding" appearance="outline">
@@ -121,18 +131,20 @@
             <mat-error *ngIf="addFormsForm.get('answers' + i)?.hasError('required')"> Answers is Required! </mat-error>
           </mat-form-field>
         </div>
-        <div fxLayout="row" fxLayoutAlign="start center">
-          <mat-label class="custom-label">Constraint :</mat-label>
-          <mat-form-field appearance="outline" class="w-90 mt-2">
-            <mat-select formControlName="{{ 'constraints' + i }}">
-              <mat-option *ngFor="let constraint of constraints" value="{{ constraint }}">
-                {{ constraint }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="addFormsForm.get('constraints' + i)?.hasError('required')">
-              Constraints is Required!
-            </mat-error>
-          </mat-form-field>
+        <div *ngIf="addFormsForm.get('answers' + i)?.value === 'Input'" fxLayout="row" fxLayoutAlign="start center">
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <mat-label class="custom-label">Constraint :</mat-label>
+            <mat-form-field appearance="outline" class="w-90 mt-2">
+              <mat-select formControlName="{{ 'constraints' + i }}">
+                <mat-option *ngFor="let constraint of constraints" value="{{ constraint }}">
+                  {{ constraint }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="addFormsForm.get('constraints' + i)?.hasError('required')">
+                Constraints is Required!
+              </mat-error>
+            </mat-form-field>
+          </div>
         </div>
         <div *ngFor="let c of containers[i]; let j = index">
           <div *ngIf="addFormsForm.get('answers' + i)?.value === 'Button'" fxLayout="row" fxLayoutAlign="start center">
