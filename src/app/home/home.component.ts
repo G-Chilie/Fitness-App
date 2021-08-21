@@ -39,6 +39,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   isAdmin: boolean;
   selectedCustomerName: string;
   isLoading = false;
+  show = false;
+  isShow = false;
+  showInstagram: false;
+  showMoneyBack: false;
   hidePaginator = false;
   customerData: any;
   supervisors: string[] = [];
@@ -64,6 +68,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   currentWeightQuestions: boolean = false;
   currentFood: boolean = false;
   currentSleepDiagram: boolean = false;
+  currentQuestionnaires: boolean = false;
 
   currentActiveTab = 'all';
 
@@ -192,7 +197,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       case 'diagram':
         data2Send['diagram'] = this.currentSleepDiagram;
         break;
+
+      case 'questionnaires':
+        data2Send['questionnaires'] = this.currentQuestionnaires;
+        break;
     }
+
+    console.log(data2Send);
 
     /* API call to change the user preference */
     this.quoteService
@@ -205,6 +216,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       .subscribe(
         (res: any) => {
           if (res.status === 200) {
+            console.log(res);
             this._snackBar.open(`Customer preferences changed!`, '', {
               duration: 3000,
               verticalPosition: 'top',
@@ -313,7 +325,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   viewCustomerDetails(content: any, customerId: string) {
     this.selectedCustomerID = customerId;
-
+    console.log(this.selectedCustomerID);
     let selectedCustomerTemp = this.customerData.map((customer: any) => {
       if (customer.id === customerId) {
         return customer;
