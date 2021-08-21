@@ -29,7 +29,7 @@ export class FoodService {
   }
   editFood(data: any, id: string) {
     return this.httpClient
-      .put(endpoints.food + id, data, {
+      .put(endpoints.food + `/` + id, data, {
         observe: 'response',
       })
       .pipe(
