@@ -154,7 +154,7 @@
       </mat-form-field>
 
       <mat-form-field class="example-full-width w-100" appearance="fill">
-        <mat-label>Recommendations</mat-label>
+        <mat-label>Foods</mat-label>
         <mat-chip-list #chipList aria-label="Recommendation selection">
           <mat-chip
             *ngFor="let rec of listToPopulate"
@@ -166,7 +166,7 @@
             <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
           </mat-chip>
           <input
-            placeholder="New Recommendation..."
+            placeholder="Add Foods..."
             [formControl]="addRecForm.controls.recommendationCtrl"
             [matAutocomplete]="auto"
             [matChipInputFor]="chipList"
@@ -175,7 +175,10 @@
         </mat-chip-list>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
           <mat-option *ngFor="let selectedRec of selectedRecommendation" [value]="selectedRec">
-            {{ selectedRec.name }}
+            <div>
+              <img class="recImg" [src]="selectedRec.image" [alt]="selectedRec.name" />
+              {{ selectedRec.name }} ({{ selectedRec.type }})
+            </div>
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>

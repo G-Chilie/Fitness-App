@@ -2,6 +2,8 @@ import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges, View
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ShowAllFoods } from '@app/home/recommendations/recommendations.component';
+import { QuoteService } from '@app/home/quote.service';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-food-list',
@@ -11,12 +13,25 @@ import { ShowAllFoods } from '@app/home/recommendations/recommendations.componen
 export class FoodListComponent implements OnChanges {
   @ViewChild('paginatorFood') showAllPaginator: MatPaginator;
   @Input() showAllFoodsDataSource: MatTableDataSource<ShowAllFoods>;
-  showFoodsColumns: string[] = ['image', 'name', 'type'];
-  constructor() {}
+  showFoodsColumns: string[] = ['image', 'name', 'type', 'actions'];
+  constructor(private quoteService: QuoteService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.showAllFoodsDataSource) {
       this.showAllFoodsDataSource.paginator = this.showAllPaginator;
     }
+  }
+  deleteFood(id: string): void {
+    this.quoteService
+      .deleteFood(id)
+      .pipe(
+        switchMap(() => {
+          console.log('what?');
+          return this.quoteService.getRecommendation();
+        })
+      )
+      .subscribe((res) => {
+        this.showAllFoodsDataSource.data = res.body.data;
+      });
   }
 }
