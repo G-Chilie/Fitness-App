@@ -514,36 +514,35 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-
   <div class="diet-plan">
-    <form>
+    <form [formGroup]="dietPlanForm" (ngSubmit)="submitDietPlan(selectedCustomerID)">
       <div>
         <span class="dpWeekDay">Sunday</span>
-        <input class="form-control plan-input" id="sundayInput" />
+        <input formControlName="sunday" class="form-control plan-input" id="sunday" />
       </div>
       <div>
         <span class="dpWeekDay">Monday</span>
-        <input class="form-control plan-input" id="mondayInput" />
+        <input formControlName="monday" class="form-control plan-input" id="monday" />
       </div>
       <div>
         <span class="dpWeekDay">Tuesday</span>
-        <input class="form-control plan-input" id="tuesdayInput" />
+        <input formControlName="tuesday" class="form-control plan-input" id="tuesday" />
       </div>
       <div>
         <span class="dpWeekDay">Wednesday</span>
-        <input class="form-control plan-input" id="wednesdayInput" />
+        <input formControlName="wednesday" class="form-control plan-input" id="wednesday" />
       </div>
       <div>
         <span class="dpWeekDay">Thursday</span>
-        <input class="form-control plan-input" id="thursdayInput" />
+        <input formControlName="thursday" class="form-control plan-input" id="thursday" />
       </div>
       <div>
         <span class="dpWeekDay">Friday</span>
-        <input class="form-control plan-input" id="fridayInput" />
+        <input formControlName="friday" class="form-control plan-input" id="friday" />
       </div>
       <div>
         <span class="dpWeekDay">Saturday</span>
-        <input class="form-control plan-input" id="saturdayInput" />
+        <input formControlName="saturday" class="form-control plan-input" id="saturday" />
       </div>
       <button type="submit" class="btn btn-primary dp-info-submit">Save</button>
     </form>

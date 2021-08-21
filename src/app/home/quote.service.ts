@@ -33,6 +33,7 @@ const endPoints = {
   editEmployee: '/api/v1/employee/',
   editForm: '/api/v1/form',
   getSupervisors: '/api/v1/employee?where[status]=ACTIVATED&limit=999',
+  addNewFood: '/api/v1/food',
 };
 
 @Injectable({
@@ -316,6 +317,19 @@ export class QuoteService {
   addRecommendation(data: any) {
     return this.httpClient
       .post(endPoints.addNewRecommendation, data, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in adding new recommendation.')
+      );
+  }
+
+  addFood(data: any) {
+    return this.httpClient
+      .post(endPoints.addNewFood, data, {
         observe: 'response',
       })
       .pipe(

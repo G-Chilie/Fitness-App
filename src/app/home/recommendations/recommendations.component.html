@@ -5,6 +5,12 @@
         <button mat-button class="button-primary" type="button" (click)="newRecommendation(recommendationContent)">
           New Recommendation
         </button>
+        <button mat-button class="button-primary" type="button" (click)="newRecommendation(newFoodContent)">
+          New Food
+        </button>
+        <button mat-button class="button-primary" type="button" (click)="newRecommendation(recommendationContent)">
+          Show All Foods
+        </button>
       </div>
     </div>
   </div>
@@ -83,10 +89,37 @@
   </div>
   <form [formGroup]="addRecForm" (ngSubmit)="addRecommendation($event)">
     <div class="modal-body ff-14">
+      <mat-form-field class="example-full-width w-100 mt-2" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Name" formControlName="namr" name="namr" />
+        <mat-error *ngIf="addRecForm.get('name')?.hasError('required')"> Name is Required! </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width w-100 mt-2" appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput placeholder="Description" formControlName="description" name="description"></textarea>
+        <mat-error *ngIf="addRecForm.get('description')?.hasError('required')"> Description is Required! </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="modal-footer">
+      <button mat-button class="button-primary" type="submit" [disabled]="addRecForm.invalid">Save</button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #newFoodContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">New Food</h4>
+    <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="addFoodForm" (ngSubmit)="addFood($event)">
+    <div class="modal-body ff-14">
       <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Recommendation Type</mat-label>
+        <mat-label>Food Type</mat-label>
         <mat-select formControlName="type">
-          <mat-option *ngFor="let rec of recommendations" value="{{ rec }}">
+          <mat-option *ngFor="let rec of foodType" value="{{ rec }}">
             {{ rec }}
           </mat-option>
         </mat-select>

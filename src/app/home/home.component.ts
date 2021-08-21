@@ -77,6 +77,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   sendMessageForm: FormGroup;
   editCustomerForm: FormGroup;
+  dietPlanForm: FormGroup;
 
   constructor(
     private quoteService: QuoteService,
@@ -122,6 +123,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
       phone: [''],
       supervisor: [null],
       activeProgram: [null],
+    });
+
+    this.dietPlanForm = this.formBuilder.group({
+      sunday: [''],
+      monday: [''],
+      tuesday: [''],
+      wednesday: [''],
+      thursday: [''],
+      friday: [''],
+      saturday: [''],
     });
 
     if (localStorage.getItem('userStatus') === 'ADMIN') {
@@ -445,6 +456,39 @@ export class HomeComponent implements OnInit, AfterViewInit {
   editCustomer(customerID: any) {
     if (this.editCustomerForm.valid) {
       const data2Send = this.editCustomerForm.value;
+      this.quoteService
+        .editCustomer(data2Send, customerID)
+        .pipe(
+          finalize(() => {
+            this.ngxLoader.stop();
+          })
+        )
+        .subscribe(
+          (res: any) => {
+            if (res.status === 200) {
+              this._snackBar.open(`Customer details changed!`, '', {
+                duration: 3000,
+                verticalPosition: 'top',
+                panelClass: ['blue-snackbar'],
+              });
+              this.getCustomers();
+              this.modalService.dismissAll();
+              this.editCustomerForm.reset();
+            }
+            this.ngxLoader.stop();
+          },
+          (error) => {
+            this.ngxLoader.stop();
+          }
+        );
+    }
+  }
+
+  submitDietPlan(customerID: any) {
+    if (this.dietPlanForm.valid) {
+      const data2Send = {
+        dietPlan: this.dietPlanForm.value,
+      };
       this.quoteService
         .editCustomer(data2Send, customerID)
         .pipe(

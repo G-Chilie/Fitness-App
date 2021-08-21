@@ -26,9 +26,10 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<Recommendations>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  recommendations: string[] = ['FOOD', 'RECIPE'];
-  selectedRec = 'Food';
+  foodType: string[] = ['VEGAN', 'VEGETARIAN', 'MEAT', 'DESSERT', 'SNACK'];
+  selectedType = 'Vegan';
   addRecForm: FormGroup;
+  addFoodForm: FormGroup;
 
   constructor(
     private quoteService: QuoteService,
@@ -104,6 +105,37 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
           (res: any) => {
             if (res.status === 200) {
               this._snackBar.open(`Recommendation had been added!`, '', {
+                duration: 3000,
+                verticalPosition: 'top',
+                panelClass: ['blue-snackbar'],
+              });
+              this.modalService.dismissAll();
+              this.addRecForm.reset();
+            }
+            this.ngxLoader.stop();
+          },
+          (error) => {
+            this.ngxLoader.stop();
+          }
+        );
+    }
+  }
+
+  addFood(e: any) {
+    this.ngxLoader.start();
+    if (this.addFoodForm.valid) {
+      const data2Send = this.addFoodForm.value;
+      this.quoteService
+        .addFood(data2Send)
+        .pipe(
+          finalize(() => {
+            this.ngxLoader.stop();
+          })
+        )
+        .subscribe(
+          (res: any) => {
+            if (res.status === 200) {
+              this._snackBar.open(`Food has been added!`, '', {
                 duration: 3000,
                 verticalPosition: 'top',
                 panelClass: ['blue-snackbar'],
