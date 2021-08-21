@@ -15,14 +15,14 @@ Chart.register(zoomPlugin);
 export class LineChartComponent implements OnInit {
   @Input() public customer: Customer;
 
-  chartIsColored = true;
+  grayScaleMode = false;
 
   lineChartData: ChartDataset[] = [
     {
       data: [],
       label: 'Sleep',
       yAxisID: 'sleep',
-      backgroundColor: this.chartIsColored ? 'rgba(0, 255, 255, 0.75)' : 'rgba(119,136,153, 0.5)',
+      backgroundColor: this.grayScaleMode ? 'rgba(119,136,153, 0.5)' : 'rgba(0, 255, 255, 0.75)',
       segment: {
         borderColor: (ctx) => this.colorSegmentFunction(ctx, 'gray'),
         borderDash: (ctx) => this.borderDashSegmentFunction(ctx, [6, 6]),
@@ -32,7 +32,7 @@ export class LineChartComponent implements OnInit {
       data: [],
       label: 'Weight',
       yAxisID: 'weight',
-      backgroundColor: this.chartIsColored ? 'rgba(255, 255, 0, 0.5)' : 'rgba(220,220,220, 0.5)',
+      backgroundColor: this.grayScaleMode ? 'rgba(220,220,220, 0.5)' : 'rgba(255, 255, 0, 0.5)',
       segment: {
         borderColor: (ctx) => this.colorSegmentFunction(ctx, 'gray'),
         borderDash: (ctx) => this.borderDashSegmentFunction(ctx, [6, 6]),
@@ -154,15 +154,15 @@ export class LineChartComponent implements OnInit {
     let data2Send = {};
     switch (preferenceName) {
       case 'greyScale':
-        data2Send['greyScale'] = this.chartIsColored;
+        data2Send['greyScale'] = this.grayScaleMode;
         break;
 
       case 'yellowBlue':
-        data2Send['yellowBlue'] = this.chartIsColored;
+        data2Send['yellowBlue'] = this.grayScaleMode;
         break;
     }
-    this.lineChartData[0].backgroundColor = this.chartIsColored ? 'rgba(0, 255, 255, 0.75)' : 'rgba(119,136,153, 0.5)';
-    this.lineChartData[1].backgroundColor = this.chartIsColored ? 'rgba(255, 255, 0, 0.5)' : 'rgba(220,220,220, 0.5)';
+    this.lineChartData[0].backgroundColor = this.grayScaleMode ? 'rgba(119,136,153, 0.5)' : 'rgba(0, 255, 255, 0.75)';
+    this.lineChartData[1].backgroundColor = this.grayScaleMode ? 'rgba(220,220,220, 0.5)' : 'rgba(255, 255, 0, 0.5)';
     this.chart.update();
   }
 }
