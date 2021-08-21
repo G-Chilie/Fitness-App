@@ -87,6 +87,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   messageModal: NgbModalRef;
 
   dietPlanForm: FormGroup;
+  notesForm: FormGroup;
 
   constructor(
     private quoteService: QuoteService,
@@ -142,6 +143,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       thursday: [''],
       friday: [''],
       saturday: [''],
+    });
+
+    this.notesForm = this.formBuilder.group({
+      notes: ['', Validators.required],
     });
 
     if (localStorage.getItem('userStatus') === 'ADMIN') {
@@ -374,6 +379,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.modalService.open(content, { size: 'md' });
   }
 
+  viewNotes(content: any) {
+    this.modalService.open(content, { size: 'md' });
+  }
+
   editProfile(content: any, data: any) {
     this.selectedCustomerID = data.id;
     this.editCustomerForm.patchValue({
@@ -536,6 +545,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
             this.ngxLoader.stop();
           }
         );
+    }
+  }
+
+  submitNote(customerID: any) {
+    if (!this.notesForm.valid) {
+      return;
+    } else {
+      // CODE HERE
     }
   }
 

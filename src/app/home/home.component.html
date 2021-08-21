@@ -277,6 +277,9 @@
       <button mat-button class="button-primary" type="button" (click)="viewDietPlan(dietPlanContent)">
         <span class="ml-3">Diet Plan</span>
       </button>
+      <button mat-button class="button-primary" type="button" (click)="viewNotes(notesContent)">
+        <span class="ml-3">Add Note</span>
+      </button>
       <!-- <button mat-button (click)="openDialog()">Message</button> -->
     </h4>
     <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -509,6 +512,25 @@
         <textarea formControlName="saturday" class="form-control plan-input" id="saturday" rows="3"></textarea>
       </div>
       <button type="submit" class="btn btn-primary dp-info-submit">Save</button>
+    </form>
+  </div>
+</ng-template>
+<ng-template #notesContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Add Notes</h4>
+    <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="diet-plan">
+    <form [formGroup]="notesForm" (ngSubmit)="submitNote(selectedCustomerID)">
+      <div>
+        <span class="notes">Body</span>
+        <!-- <input formControlName="sunday" class="form-control plan-input" id="sunday" /> -->
+        <textarea formControlName="notes" class="form-control plan-input" rows="3"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary dp-info-submit" [disabled]="!notesForm.valid">Save</button>
     </form>
   </div>
 </ng-template>
