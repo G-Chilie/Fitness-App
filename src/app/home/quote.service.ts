@@ -19,7 +19,7 @@ const endPoints = {
   getEmployee: '/api/v1/employee/',
   getPrograms: '/api/v1/program',
   getForms: '/api/v1/form',
-  getRecommendations: '/api/v1/recommendation',
+  getRecommendations: '/api/v1/recommendationlist',
   getCustomers:
     '/api/v1/customer?include=supervisor&inlclude=programHistory&include=question&include=programHistory&limit=100',
   getMessages: '/api/v1/message',
@@ -327,18 +327,18 @@ export class QuoteService {
       );
   }
 
-  addFood(data: any) {
-    return this.httpClient
-      .post(endPoints.addNewFood, data, {
-        observe: 'response',
-      })
-      .pipe(
-        map((res: any) => {
-          return res;
-        }),
-        catchError(() => 'Error in adding new recommendation.')
-      );
-  }
+  // addFood(data: any) {
+  //   return this.httpClient
+  //     .post(endPoints.addNewFood, data, {
+  //       observe: 'response',
+  //     })
+  //     .pipe(
+  //       map((res: any) => {
+  //         return res;
+  //       }),
+  //       catchError(() => 'Error in adding new recommendation.')
+  //     );
+  // }
 
   addProgram(data: any) {
     return this.httpClient
@@ -390,6 +390,47 @@ export class QuoteService {
           return res;
         }),
         catchError(() => 'Error in registration process.')
+      );
+  }
+
+  // Recommendations
+
+  addFood(data: any) {
+    return this.httpClient
+      .post(endPoints.addNewRecommendation, data, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in adding new form.')
+      );
+  }
+
+  getRecommendation(): Observable<any> {
+    return this.httpClient
+      .get(endPoints.addNewRecommendation, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in fetching programs.')
+      );
+  }
+
+  saveRecommendations(data: any) {
+    return this.httpClient
+      .post(endPoints.getRecommendations, data, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in adding new form.')
       );
   }
 }
