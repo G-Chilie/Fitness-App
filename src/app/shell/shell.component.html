@@ -170,6 +170,45 @@
   </form>
 </ng-template>
 
+<ng-template #changeEmailContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Change Email</h4>
+    <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="changeEmailForm" (ngSubmit)="updateEmail()">
+    <div class="modal-body ff-14">
+      <div>
+        <mat-form-field class="example-full-width w-100" appearance="outline">
+          <mat-label>New Email</mat-label>
+          <input matInput placeholder="New Email" formControlName="newEmail" type="email" name="newEmail" />
+          <mat-error *ngIf="changeEmailForm.get('newEmail')?.hasError('required')"> Email is Required! </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="example-full-width w-100 mt-2" appearance="outline">
+          <mat-label>Confirm New Email</mat-label>
+          <input
+            matInput
+            placeholder="Confirm New Email"
+            type="email"
+            formControlName="confirmNewEmail"
+            name="confirmNewEmail"
+          />
+          <mat-error *ngIf="changeEmailForm.get('confirmNewEmail')?.hasError('required')">
+            Confirm Email is Required!
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button mat-button class="button-primary" type="submit" [disabled]="changeEmailForm.invalid">Update Email</button>
+    </div>
+  </form>
+</ng-template>
+
 <ng-template #employeeProfileContent let-modal>
   <div class="modal-header">
     <h4 class="modal-title">Employee Profile</h4>
@@ -209,7 +248,9 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button mat-button class="button-primary" type="button">Edit Email</button>
+    <button mat-button class="button-primary margin-left-5" type="button" (click)="openEditModal(changeEmailContent)">
+      Change Email
+    </button>
 
     <button mat-button class="button-primary margin-left-5" type="button">Billing</button>
 
@@ -218,7 +259,7 @@
       mat-button
       class="button-primary margin-left-5"
       type="button"
-      (click)="changePassword(changePasswordContent)"
+      (click)="openEditModal(changePasswordContent)"
     >
       Change Password
     </button>

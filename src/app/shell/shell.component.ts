@@ -19,6 +19,7 @@ import { AuthenticationService, CredentialsService } from '@app/auth';
 export class ShellComponent implements OnInit {
   isAdmin: boolean;
   changePasswordForm: FormGroup;
+  changeEmailForm: FormGroup;
   constructor(
     private router: Router,
     private quoteService: QuoteService,
@@ -51,11 +52,16 @@ export class ShellComponent implements OnInit {
       confirmNewPassword: ['', [Validators.required]],
     });
 
+    this.changeEmailForm = this.formBuilder.group({
+      newEmail: ['', [Validators.required]],
+      confirmNewEmail: ['', [Validators.required]],
+    });
+
     this.employeeId = localStorage.getItem('uuid');
     this.getEmployeeDetails();
   }
 
-  changePassword(content: any) {
+  openEditModal(content: any) {
     this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
   }
 
@@ -110,6 +116,42 @@ export class ShellComponent implements OnInit {
               });
 
               this.changePasswordForm.reset();
+            }
+
+            this.ngxLoader.stop();
+          },
+          (error) => {
+            this.ngxLoader.stop();
+          }
+        );
+    }
+  }
+
+  updateEmail() {
+    const userId = localStorage.getItem('uuid');
+    this.ngxLoader.start();
+    this.modalService.dismissAll();
+    if (this.changeEmailForm.valid) {
+      const data2Send = {
+        email: this.changeEmailForm.controls.newEmail.value,
+      };
+      this.quoteService
+        .changePassword(data2Send, userId)
+        .pipe(
+          finalize(() => {
+            this.ngxLoader.stop();
+          })
+        )
+        .subscribe(
+          (res: any) => {
+            if (res.status === 200) {
+              this._snackBar.open(`Password Updated!`, '', {
+                duration: 3000,
+                verticalPosition: 'top',
+                panelClass: ['blue-snackbar'],
+              });
+
+              this.changeEmailForm.reset();
             }
 
             this.ngxLoader.stop();
