@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 import { ChartDataset, ChartOptions, ScriptableLineSegmentContext } from 'chart.js';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import 'hammerjs';
 import * as _ from 'lodash';
+import { BaseChartDirective } from 'ng2-charts';
 import { ConstraintEnum, Customer } from 'src/types/Customer';
 Chart.register(zoomPlugin);
 @Component({
@@ -14,14 +15,14 @@ Chart.register(zoomPlugin);
 export class LineChartComponent implements OnInit {
   @Input() public customer: Customer;
 
-  currentColorMode: any;
+  grayScaleMode = false;
 
   lineChartData: ChartDataset[] = [
     {
       data: [],
-      label: 'Weight',
-      yAxisID: 'weight',
-      backgroundColor: 'rgba(173,255,47,0.5)',
+      label: 'Sleep',
+      yAxisID: 'sleep',
+      backgroundColor: this.grayScaleMode ? 'rgba(119,136,153, 0.5)' : 'rgba(0, 255, 255, 0.75)',
       segment: {
         borderColor: (ctx) => this.colorSegmentFunction(ctx, 'gray'),
         borderDash: (ctx) => this.borderDashSegmentFunction(ctx, [6, 6]),
@@ -29,9 +30,9 @@ export class LineChartComponent implements OnInit {
     },
     {
       data: [],
-      label: 'Sleep',
-      yAxisID: 'sleep',
-      backgroundColor: 'rgba(0,191,255, 0.5)',
+      label: 'Weight',
+      yAxisID: 'weight',
+      backgroundColor: this.grayScaleMode ? 'rgba(220,220,220, 0.5)' : 'rgba(255, 255, 0, 0.5)',
       segment: {
         borderColor: (ctx) => this.colorSegmentFunction(ctx, 'gray'),
         borderDash: (ctx) => this.borderDashSegmentFunction(ctx, [6, 6]),
@@ -108,10 +109,11 @@ export class LineChartComponent implements OnInit {
     return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
   }
 
+  @ViewChild(BaseChartDirective) chart: BaseChartDirective;
+
   constructor() {}
 
   ngOnInit(): void {
-    console.log(Math.max(...(this.lineChartData[0].data as number[])));
     const questions = this.customer.question;
     let sleepQuestions = questions.filter((q) => q.constraint === ConstraintEnum.IsSleep);
     let weightQuestions = questions.filter((q) => q.constraint === ConstraintEnum.IsWeight);
@@ -152,12 +154,15 @@ export class LineChartComponent implements OnInit {
     let data2Send = {};
     switch (preferenceName) {
       case 'greyScale':
-        data2Send['greyScale'] = this.currentColorMode;
+        data2Send['greyScale'] = this.grayScaleMode;
         break;
 
       case 'yellowBlue':
-        data2Send['yellowBlue'] = this.currentColorMode;
+        data2Send['yellowBlue'] = this.grayScaleMode;
         break;
     }
+    this.lineChartData[0].backgroundColor = this.grayScaleMode ? 'rgba(119,136,153, 0.5)' : 'rgba(0, 255, 255, 0.75)';
+    this.lineChartData[1].backgroundColor = this.grayScaleMode ? 'rgba(220,220,220, 0.5)' : 'rgba(255, 255, 0, 0.5)';
+    this.chart.update();
   }
 }

@@ -14,7 +14,7 @@ export interface ProgramData {
   productId: string;
   questions: boolean;
   moneyback: boolean;
-  forms: boolean;
+  questionnaire: boolean;
   recommendations: boolean;
   duration: string;
 }
@@ -27,7 +27,16 @@ export interface ProgramData {
 export class ProgramComponent implements OnInit, AfterViewInit {
   isLoading = false;
   programData: any;
-  colDef: string[] = ['name', 'productId', 'questions', 'forms', 'moneyback', 'recommendations', 'duration', 'actions'];
+  colDef: string[] = [
+    'name',
+    'productId',
+    'questions',
+    'questionnaire',
+    'moneyback',
+    'recommendations',
+    'duration',
+    'actions',
+  ];
   dataSource: MatTableDataSource<ProgramData>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -50,7 +59,7 @@ export class ProgramComponent implements OnInit, AfterViewInit {
       moneyback: [true],
       foodRecommendations: [true],
       question: [true],
-      forms: [true],
+      questionnaire: [true],
     });
   }
 
@@ -106,7 +115,7 @@ export class ProgramComponent implements OnInit, AfterViewInit {
         foodRecommendations: this.addProgramForm.value.foodRecommendations,
         question: this.addProgramForm.value.question,
         moneyback: this.addProgramForm.value.moneyback,
-        forms: this.addProgramForm.value.forms,
+        questionnaire: this.addProgramForm.value.questionnaire,
       };
       this.quoteService
         .addProgram(data2Send)
@@ -171,7 +180,7 @@ export class ProgramComponent implements OnInit, AfterViewInit {
           productId: tempProductIds,
           questions: program.question,
           moneyback: program.moneyback,
-          formms: program.forms,
+          formms: program.questionnaire,
           recommendations: program.foodRecommendations,
           duration: program.duration,
         };

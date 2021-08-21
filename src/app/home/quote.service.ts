@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { IUserRest } from '@shared/interfaces/user.interface';
 import { environment } from '@env/environment';
@@ -31,8 +31,10 @@ const endPoints = {
   getEmployees: '/api/v1/employee?&limit=999',
   getEmployee: '/api/v1/employee/',
   getPrograms: '/api/v1/program',
+
   getForms: '/api/v1/questionnaire',
-  getRecommendations: '/api/v1/recommendationlist',
+  getRecommendations: '/api/v1/food',
+
   getCustomers:
     '/api/v1/customer?include=supervisor&inlclude=programHistory&include=question&include=programHistory&limit=100',
   getMessages: '/api/v1/message',
@@ -47,7 +49,7 @@ const endPoints = {
   editForm: '/api/v1/form',
   getSupervisors: '/api/v1/employee?where[status]=ACTIVATED&limit=999',
   addNewFood: '/api/v1/food',
-  recommendationsList: '/api/v1/recommendationlist?include=recommendations&limit=999',
+  recommendationsList: '/api/v1/recommendation?include=foods&limit=999',
 };
 
 @Injectable({
@@ -204,6 +206,21 @@ export class QuoteService {
           return body;
         }),
         catchError(() => 'Error in deleting the recommendation.')
+      );
+  }
+  deleteFood(id: string): Observable<any> {
+    return this.httpClient
+      .delete(endPoints.addNewRecommendation + '/' + id, {
+        observe: 'response',
+      })
+      .pipe(
+        map((body: any) => {
+          return body;
+        }),
+        catchError(() => {
+          console.error('Error in deleting the recommendation.');
+          return EMPTY;
+        })
       );
   }
 
@@ -453,6 +470,19 @@ export class QuoteService {
   saveRecommendations(data: any) {
     return this.httpClient
       .post(endPoints.getRecommendations, data, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in adding new form.')
+      );
+  }
+
+  editRecommendation(data: any, id: string) {
+    return this.httpClient
+      .put(endPoints.getRecommendations + id, data, {
         observe: 'response',
       })
       .pipe(

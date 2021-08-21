@@ -150,7 +150,7 @@
                 <td class="mat-cell" colspan="4">No data found.</td>
               </tr>
             </table>
-            <mat-paginator #paginatorMessages [pageSizeOptions]="[10]" showFirstLastButtons="false" hidePageSize="true">
+            <mat-paginator #paginator [pageSizeOptions]="[10]" showFirstLastButtons="false" hidePageSize="true">
             </mat-paginator>
           </div>
         </div>
@@ -328,55 +328,79 @@
             <span>
               <mat-slide-toggle [(ngModel)]="currentMoneyback" (change)="userPreference('moneyback')">
               </mat-slide-toggle>
-              <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
-            </span>
+              <mat-icon aria-hidden="false" aria-label="lock icon">{{
+                currentMoneyback ? 'lock_open' : 'lock'
+              }}</mat-icon></span
+            >
           </div>
           <div>
             Instagram:
             <span>
               <mat-slide-toggle [(ngModel)]="currentInsta" (change)="userPreference('insta')"></mat-slide-toggle>
-              <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
-            </span>
+              <mat-icon aria-hidden="false" aria-label="lock icon">{{
+                currentInsta ? 'lock_open' : 'lock'
+              }}</mat-icon></span
+            >
           </div>
           <div>
             Food Questions:
             <span>
               <mat-slide-toggle [(ngModel)]="currentFoodQuestions" (change)="userPreference('foodQuestions')">
               </mat-slide-toggle>
-              <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
-            </span>
+              <mat-icon aria-hidden="false" aria-label="lock icon">{{
+                currentFoodQuestions ? 'lock_open' : 'lock'
+              }}</mat-icon></span
+            >
           </div>
           <div>
             Sleep Questions:
             <span>
               <mat-slide-toggle [(ngModel)]="currentSleepQuestions" (change)="userPreference('sleepQuestions')">
               </mat-slide-toggle>
-              <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
-            </span>
+              <mat-icon aria-hidden="false" aria-label="lock icon">{{
+                currentSleepQuestions ? 'lock_open' : 'lock'
+              }}</mat-icon></span
+            >
           </div>
           <div>
             Weight Questions:
             <span>
               <mat-slide-toggle [(ngModel)]="currentWeightQuestions" (change)="userPreference('weightQuestions')">
               </mat-slide-toggle>
-              <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
-            </span>
+              <mat-icon aria-hidden="false" aria-label="lock icon">{{
+                currentWeightQuestions ? 'lock_open' : 'lock'
+              }}</mat-icon></span
+            >
           </div>
           <div>
             Food Recommendations:
             <span>
               <mat-slide-toggle [(ngModel)]="currentFood" (change)="userPreference('foodRecommendations')">
               </mat-slide-toggle>
-              <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
-            </span>
+              <mat-icon aria-hidden="false" aria-label="lock icon">{{
+                currentFood ? 'lock_open' : 'lock'
+              }}</mat-icon></span
+            >
           </div>
           <div>
             Diagram:
             <span>
               <mat-slide-toggle [(ngModel)]="currentSleepDiagram" (change)="userPreference('diagram')">
               </mat-slide-toggle>
-              <mat-icon aria-hidden="false" aria-label="lock icon">lock</mat-icon>
-            </span>
+              <mat-icon aria-hidden="false" aria-label="lock icon">{{
+                currentSleepDiagram ? 'lock_open' : 'lock'
+              }}</mat-icon></span
+            >
+          </div>
+          <div>
+            Questionnaires:
+            <span>
+              <mat-slide-toggle [(ngModel)]="currentSleepDiagram" (change)="userPreference('questionnaires')">
+              </mat-slide-toggle>
+              <mat-icon aria-hidden="false" aria-label="lock icon">{{
+                currentQuestionnaires ? 'lock_open' : 'lock'
+              }}</mat-icon></span
+            >
           </div>
         </mat-card>
       </div>
