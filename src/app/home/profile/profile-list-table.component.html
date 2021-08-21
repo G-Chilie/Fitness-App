@@ -48,6 +48,26 @@
           Hide
         </button>
         <button
+          *ngIf="allowedActions.includes('acceptEmp')"
+          mat-flat-button
+          color="primary"
+          type="button"
+          (click)="actions.emit({ action: 'acceptEmp', data: row })"
+        >
+          <mat-icon aria-hidden="false" aria-label="Delete icon">check</mat-icon>
+          Accept
+        </button>
+        <button
+          *ngIf="allowedActions.includes('declineEmp')"
+          mat-flat-button
+          color="warn"
+          type="button"
+          (click)="actions.emit({ action: 'declineEmp', data: row })"
+        >
+          <mat-icon aria-hidden="false" aria-label="Delete icon">cancel</mat-icon>
+          Decline
+        </button>
+        <button
           mat-icon-button
           [matMenuTriggerFor]="menu"
           aria-label="Example icon-button with a menu"
