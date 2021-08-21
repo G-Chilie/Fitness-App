@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 import { ChartDataset, ChartOptions, ScriptableLineSegmentContext } from 'chart.js';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import 'hammerjs';
 import * as _ from 'lodash';
+import { BaseChartDirective } from 'ng2-charts';
 import { ConstraintEnum, Customer } from 'src/types/Customer';
 Chart.register(zoomPlugin);
 @Component({
@@ -15,10 +16,6 @@ export class LineChartComponent implements OnInit {
   @Input() public customer: Customer;
 
   chartIsColored = true;
-
-  setColor() {
-    this.chartIsColored = !this.chartIsColored;
-  }
 
   lineChartData: ChartDataset[] = [
     {
@@ -112,6 +109,8 @@ export class LineChartComponent implements OnInit {
     return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
   }
 
+  @ViewChild(BaseChartDirective) chart: BaseChartDirective;
+
   constructor() {}
 
   ngOnInit(): void {
@@ -149,5 +148,21 @@ export class LineChartComponent implements OnInit {
 
     this.lineChartData.find((dataObject) => dataObject.label.toLowerCase() === 'weight').data = weightData;
     this.lineChartData.find((dataObject) => dataObject.label.toLowerCase() === 'sleep').data = sleepData;
+  }
+
+  userPreference(preferenceName: string) {
+    let data2Send = {};
+    switch (preferenceName) {
+      case 'greyScale':
+        data2Send['greyScale'] = this.chartIsColored;
+        break;
+
+      case 'yellowBlue':
+        data2Send['yellowBlue'] = this.chartIsColored;
+        break;
+    }
+    this.lineChartData[0].backgroundColor = this.chartIsColored ? 'rgba(0, 255, 255, 0.75)' : 'rgba(119,136,153, 0.5)';
+    this.lineChartData[1].backgroundColor = this.chartIsColored ? 'rgba(255, 255, 0, 0.5)' : 'rgba(220,220,220, 0.5)';
+    this.chart.update();
   }
 }
