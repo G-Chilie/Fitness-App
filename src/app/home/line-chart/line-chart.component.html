@@ -1,4 +1,11 @@
 <div class="inner-chart-wrapper">
+  <div>
+    GreyScale Mode
+    <span>
+      <mat-slide-toggle [(ngModel)]="currentColorMode" (change)="userPreference('colorMode')"> </mat-slide-toggle>
+    </span>
+  </div>
+
   <canvas
     baseChart
     [datasets]="lineChartData"
