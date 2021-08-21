@@ -49,7 +49,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   listToPopulate: any = [];
   selectedRec = 'Food';
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  selectedRecommendation: any = [];
+  allFoods: any = [];
   selectable = true;
   removable = true;
   recommendations: any = [];
@@ -109,11 +109,15 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
 
   newRecommendation(content: any) {
     this.modalService.open(content, { size: 'md' });
+    this.fetchAllFoods();
   }
 
   showAllFoods(content: any) {
     this.modalService.open(content, { size: 'md' });
     this.ngxLoader.start();
+    this.fetchAllFoods();
+  }
+  fetchAllFoods() {
     this.foodService
       .getFoods()
       .pipe(
@@ -125,6 +129,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
         (res: any) => {
           if (res.status === 200 && res.body.data) {
             this.showAllFoodsDataSource = new MatTableDataSource<ShowAllFoods>(res.body.data);
+            this.allFoods = res.body.data;
           }
 
           this.ngxLoader.stop();
@@ -148,7 +153,6 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
         (res: any) => {
           if (res.status === 200 && res.body.data) {
             this.recommendationData = res.body.data;
-            this.selectedRecommendation = [...this.recommendationData];
             this.filterRecommendationData(this.recommendationData);
           }
 
@@ -265,6 +269,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
       description: data.description ? data.description : '',
     });
     this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
+    this.fetchAllFoods();
   }
 
   editRecommendationSubmit(e: any) {

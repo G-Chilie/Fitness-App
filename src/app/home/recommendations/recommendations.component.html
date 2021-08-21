@@ -186,10 +186,10 @@
           />
         </mat-chip-list>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-          <mat-option *ngFor="let selectedRec of selectedRecommendation" [value]="selectedRec">
+          <mat-option *ngFor="let food of allFoods" [value]="food">
             <div>
-              <img class="recImg" [src]="selectedRec.image" [alt]="selectedRec.name" />
-              {{ selectedRec.name }} ({{ selectedRec.type }})
+              <img class="recImg" [src]="food.image" [alt]="food.name" />
+              {{ food.name }} ({{ food.type }})
             </div>
           </mat-option>
         </mat-autocomplete>
@@ -301,10 +301,10 @@
           />
         </mat-chip-list>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedEditRecom($event)">
-          <mat-option *ngFor="let selectedRec of selectedRecommendation" [value]="selectedRec">
+          <mat-option *ngFor="let food of allFoods" [value]="food">
             <div>
-              <img class="recImg" [src]="selectedRec.image" [alt]="selectedRec.name" />
-              {{ selectedRec.name }} ({{ selectedRec.type }})
+              <img class="recImg" [src]="food.image" [alt]="food.name" />
+              {{ food.name }} ({{ food.type }})
             </div>
           </mat-option>
         </mat-autocomplete>
