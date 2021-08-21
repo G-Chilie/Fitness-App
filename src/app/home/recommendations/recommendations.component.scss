@@ -2,3 +2,8 @@
   height: 40px;
   width: 40px;
 }
+:host::ng-deep {
+  .mat-form-field-wrapper {
+    padding-bottom: unset !important;
+  }
+}

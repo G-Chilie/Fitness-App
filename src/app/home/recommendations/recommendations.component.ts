@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
@@ -28,7 +28,7 @@ export interface ShowAllFoods {
   styleUrls: ['./recommendations.component.scss'],
 })
 export class RecommendationsComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['image', 'name', 'description', 'actions'];
+  displayedColumns: string[] = ['image', 'name', 'description', 'editAction', 'actions'];
   showFoodsColumns: string[] = ['image', 'name', 'type'];
   isLoading = false;
   recommendationData: any;
@@ -41,6 +41,8 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   selectedType = 'Vegan';
   addRecForm: FormGroup;
   addFoodForm: FormGroup;
+  editAddRecForm: FormGroup;
+  editAddFoodForm: FormGroup;
   recommendationsList: any = [];
   listToPopulate: any = [];
   selectedRec = 'Food';
@@ -49,6 +51,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   selectable = true;
   removable = true;
   recommendations: any = [];
+  selectedId: string = '';
 
   constructor(
     private quoteService: QuoteService,
@@ -66,6 +69,18 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
       recommendationCtrl: ['', [Validators.required]],
     });
     this.addFoodForm = this.formBuilder.group({
+      name: ['', [Validators.required]],
+      type: ['', [Validators.required]],
+      image: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      recipe: ['', [Validators.required]],
+    });
+    this.editAddRecForm = this.formBuilder.group({
+      name: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      recommendationCtrl: [''],
+    });
+    this.editAddFoodForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       type: ['', [Validators.required]],
       image: ['', [Validators.required]],
@@ -262,6 +277,68 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
       );
   }
 
+  editRecommendation(content: TemplateRef<any>, data: any) {
+    this.recommendations = [];
+    this.selectedId = data.id;
+    this.ngxLoader.start();
+    this.editAddRecForm.patchValue({
+      name: data.name ? data.name : '',
+      description: data.description ? data.description : '',
+    });
+    this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
+    this.getFoodRecommendation();
+  }
+
+  editRecommendationSubmit(e: any) {
+    let recommendationTemp = this.recommendations.map((item: any) => item.id);
+    if (this.editAddRecForm.valid) {
+      const data2Send = {
+        name: this.editAddRecForm.controls.name.value,
+        description: this.editAddRecForm.controls.description.value,
+        recommendations: recommendationTemp,
+      };
+      this.quoteService
+        .editRecommendation(data2Send, this.selectedId)
+        .pipe(
+          finalize(() => {
+            this.ngxLoader.stop();
+          })
+        )
+        .subscribe(
+          (res: any) => {
+            if (res.status === 200 && res.body) {
+              this._snackBar.open(`Recommendation Edited!`, '', {
+                duration: 3000,
+                verticalPosition: 'top',
+                panelClass: ['blue-snackbar'],
+              });
+              this.modalService.dismissAll();
+              this.editAddRecForm.reset();
+              this.recommendations = [];
+            }
+            this.getRecommendationsList();
+            this.ngxLoader.stop();
+          },
+          (error) => {
+            this.ngxLoader.stop();
+          }
+        );
+    }
+  }
+
+  removeEditRecom(rec: any): void {
+    const removeIndex = this.listToPopulate.findIndex((item: any) => item.id === rec.id);
+
+    if (removeIndex >= 0) {
+      this.listToPopulate.splice(removeIndex, 1);
+    }
+  }
+
+  selectedEditRecom(event: MatAutocompleteSelectedEvent): void {
+    this.listToPopulate.push(this.editAddRecForm.controls.recommendationCtrl.value);
+    this.recommendations.push(this.editAddRecForm.controls.recommendationCtrl.value);
+  }
+
   filterRecommendationData(data: any) {
     if (data !== undefined) {
       this.dataSource = new MatTableDataSource<Recommendations>(
@@ -289,7 +366,6 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    // this.listToPopulate.push(event.option.viewValue);
     this.listToPopulate.push(this.addRecForm.controls.recommendationCtrl.value);
     this.recommendations.push(this.addRecForm.controls.recommendationCtrl.value);
   }

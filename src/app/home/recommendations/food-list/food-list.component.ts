@@ -13,7 +13,7 @@ import { switchMap } from 'rxjs/operators';
 export class FoodListComponent implements OnChanges {
   @ViewChild('paginatorFood') showAllPaginator: MatPaginator;
   @Input() showAllFoodsDataSource: MatTableDataSource<ShowAllFoods>;
-  showFoodsColumns: string[] = ['image', 'name', 'type', 'actions'];
+  showFoodsColumns: string[] = ['image', 'name', 'type', 'editActions', 'actions'];
   constructor(private quoteService: QuoteService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -34,4 +34,5 @@ export class FoodListComponent implements OnChanges {
         this.showAllFoodsDataSource.data = res.body.data;
       });
   }
+  editFood(data: any) {}
 }

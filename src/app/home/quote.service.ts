@@ -32,7 +32,7 @@ const endPoints = {
   getEmployee: '/api/v1/employee/',
   getPrograms: '/api/v1/program',
   getForms: '/api/v1/form',
-  getRecommendations: '/api/v1/recommendationlist',
+  getRecommendations: '/api/v1/recommendationlist/',
   getCustomers:
     '/api/v1/customer?include=supervisor&inlclude=programHistory&include=question&include=programHistory&limit=100',
   getMessages: '/api/v1/message',
@@ -468,6 +468,19 @@ export class QuoteService {
   saveRecommendations(data: any) {
     return this.httpClient
       .post(endPoints.getRecommendations, data, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in adding new form.')
+      );
+  }
+
+  editRecommendation(data: any, id: string) {
+    return this.httpClient
+      .put(endPoints.getRecommendations + id, data, {
         observe: 'response',
       })
       .pipe(
