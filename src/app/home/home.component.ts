@@ -340,7 +340,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   viewCustomerDetails(content: any, customerId: string) {
     this.selectedCustomerID = customerId;
-    console.log(this.selectedCustomerID);
+
     let selectedCustomerTemp = this.customerData.map((customer: any) => {
       if (customer.id === customerId) {
         return customer;
@@ -361,6 +361,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.currentWeightQuestions = this.selectedCustomer.weightQuestions;
       this.currentFood = this.selectedCustomer.foodRecommendations;
       this.currentSleepDiagram = this.selectedCustomer.diagram;
+      this.dietPlanForm.patchValue(this.selectedCustomer.dietPlan);
     }
 
     this.modalService.open(content, { size: 'xl' });
@@ -525,6 +526,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
                 panelClass: ['blue-snackbar'],
               });
               this.getCustomers();
+              this.dietPlanForm.patchValue(res.dietPlan);
               this.modalService.dismissAll();
               this.editCustomerForm.reset();
             }
