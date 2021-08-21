@@ -30,7 +30,7 @@ export class RecommendationService {
     return this.httpClient
       .get(endpoints.recommendation, {
         observe: 'response',
-        params: { limit: '999' },
+        params: { limit: '999', include: 'employee' },
       })
       .pipe(
         map((res: any) => {

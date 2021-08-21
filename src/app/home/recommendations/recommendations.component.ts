@@ -331,6 +331,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
             image: rec.image,
             description: rec.description,
             id: rec.id,
+            employee: rec.employee,
           };
         })
       );
