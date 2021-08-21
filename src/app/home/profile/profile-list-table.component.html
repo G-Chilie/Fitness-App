@@ -1,0 +1,105 @@
+<div class="mat-elevation-z0">
+  <table mat-table [dataSource]="dataSource" class="w-100">
+    <!-- Username Column -->
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef>Username</th>
+      <td mat-cell *matCellDef="let row" class="text-center">{{ row.username }}</td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let row" class="text-center">{{ row.status }}</td>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let row" class="text-center">{{ row.email }}</td>
+    </ng-container>
+
+    <!-- Discount Code Column -->
+    <ng-container matColumnDef="discountCode">
+      <th mat-header-cell *matHeaderCellDef>Coupon</th>
+      <td mat-cell *matCellDef="let row" class="text-center">{{ row.discountCode }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let row" class="text-center">
+        <button
+          *ngIf="allowedActions.includes('deleteEmp')"
+          mat-flat-button
+          color="warn"
+          type="button"
+          (click)="actions.emit({ action: 'deleteEmp', data: row })"
+        >
+          <mat-icon aria-hidden="false" aria-label="Delete icon">delete</mat-icon>
+          Delete
+        </button>
+        <button
+          *ngIf="allowedActions.includes('hideEmp')"
+          mat-flat-button
+          color="warn"
+          type="button"
+          (click)="actions.emit({ action: 'hideEmp', data: row })"
+        >
+          <mat-icon aria-hidden="false" aria-label="Delete icon">visibility</mat-icon>
+          Hide
+        </button>
+        <button
+          *ngIf="allowedActions.includes('acceptEmp')"
+          mat-flat-button
+          color="primary"
+          type="button"
+          (click)="actions.emit({ action: 'acceptEmp', data: row })"
+        >
+          <mat-icon aria-hidden="false" aria-label="Delete icon">check</mat-icon>
+          Accept
+        </button>
+        <button
+          *ngIf="allowedActions.includes('declineEmp')"
+          mat-flat-button
+          color="warn"
+          type="button"
+          (click)="actions.emit({ action: 'declineEmp', data: row })"
+        >
+          <mat-icon aria-hidden="false" aria-label="Delete icon">cancel</mat-icon>
+          Decline
+        </button>
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="menu"
+          aria-label="Example icon-button with a menu"
+          [matMenuTriggerData]="{ data: row }"
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data found.</td>
+    </tr>
+  </table>
+
+  <mat-menu #menu="matMenu">
+    <ng-template matMenuContent let-data="data">
+      <button mat-menu-item type="button" (click)="actions.emit({ action: 'editEmp', data: data })">
+        <mat-icon>edit</mat-icon>
+        <span>Edit</span>
+      </button>
+
+      <button mat-menu-item type="button" (click)="actions.emit({ action: 'changePassword', data: data })">
+        <mat-icon>vpn_key</mat-icon>
+        <span>Change Password</span>
+      </button>
+    </ng-template>
+  </mat-menu>
+  <mat-paginator #paginator [pageSizeOptions]="[limit]" showFirstLastButtons="false" hidePageSize="true">
+  </mat-paginator>
+</div>

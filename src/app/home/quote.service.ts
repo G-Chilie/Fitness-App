@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { IUserRest } from '@shared/interfaces/user.interface';
 import { environment } from '@env/environment';
 import { CusSearchResObject, Datum } from './home';
 
@@ -13,11 +14,25 @@ export interface RandomQuoteContext {
   category: string;
 }
 
+export interface Message {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  text: string;
+  telegramChatId: number;
+  telegramMessageId: number;
+  isQuestion: boolean;
+  from: string;
+  mimeType: null;
+  fileIds: null;
+}
+
 const endPoints = {
   getEmployees: '/api/v1/employee?&limit=999',
+  getEmployee: '/api/v1/employee/',
   getPrograms: '/api/v1/program',
   getForms: '/api/v1/form',
-  getRecommendations: '/api/v1/recommendation',
+  getRecommendations: '/api/v1/recommendationlist',
   getCustomers:
     '/api/v1/customer?include=supervisor&inlclude=programHistory&include=question&include=programHistory&limit=100',
   getMessages: '/api/v1/message',
@@ -31,6 +46,8 @@ const endPoints = {
   editEmployee: '/api/v1/employee/',
   editForm: '/api/v1/form',
   getSupervisors: '/api/v1/employee?where[status]=ACTIVATED&limit=999',
+  addNewFood: '/api/v1/food',
+  recommendationsList: '/api/v1/recommendationlist?include=recommendations&limit=999',
 };
 
 @Injectable({
@@ -104,7 +121,7 @@ export class QuoteService {
       );
   }
 
-  getAllEmployees(): Observable<any> {
+  getAllEmployees(): Observable<IUserRest[]> {
     return this.httpClient
       .get(endPoints.getEmployees, {
         observe: 'response',
@@ -114,6 +131,19 @@ export class QuoteService {
           return body;
         }),
         catchError(() => 'Error in fetching employees.')
+      );
+  }
+
+  getEmployee(empId: string) {
+    return this.httpClient
+      .get(endPoints.getEmployee + empId, {
+        observe: 'response',
+      })
+      .pipe(
+        map((body: any) => {
+          return body;
+        }),
+        catchError(() => 'Error in fetching employee.')
       );
   }
   // -----------------------------------------------------------------START-CUSTOMER-SEARCH-FORM-------------------------------------------------
@@ -242,12 +272,14 @@ export class QuoteService {
       );
   }
 
-  getMessages(id: any): Observable<any> {
+  getMessages(id: any, page: any = 1): Observable<any> {
     return this.httpClient
       .get(endPoints.telegram, {
         params: {
           'where[telegramChatId]': id,
           'order[createdAt]': 'desc',
+          limit: '100',
+          page: page,
         },
         observe: 'response',
       })
@@ -311,6 +343,19 @@ export class QuoteService {
       );
   }
 
+  // addFood(data: any) {
+  //   return this.httpClient
+  //     .post(endPoints.addNewFood, data, {
+  //       observe: 'response',
+  //     })
+  //     .pipe(
+  //       map((res: any) => {
+  //         return res;
+  //       }),
+  //       catchError(() => 'Error in adding new recommendation.')
+  //     );
+  // }
+
   addProgram(data: any) {
     return this.httpClient
       .post(endPoints.getPrograms, data, {
@@ -361,6 +406,60 @@ export class QuoteService {
           return res;
         }),
         catchError(() => 'Error in registration process.')
+      );
+  }
+
+  // Recommendations
+
+  addFood(data: any) {
+    return this.httpClient
+      .post(endPoints.addNewRecommendation, data, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in adding new form.')
+      );
+  }
+
+  getRecommendation(): Observable<any> {
+    return this.httpClient
+      .get(endPoints.addNewRecommendation, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in fetching programs.')
+      );
+  }
+
+  getAllRecommendationList(): Observable<any> {
+    return this.httpClient
+      .get(endPoints.recommendationsList, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in fetching programs.')
+      );
+  }
+
+  saveRecommendations(data: any) {
+    return this.httpClient
+      .post(endPoints.getRecommendations, data, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in adding new form.')
       );
   }
 }

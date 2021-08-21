@@ -1,30 +1,35 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { finalize } from 'rxjs/operators';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { QuoteService } from '../quote.service';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-
-export interface Profile {
-  username: string;
-  status: string;
-}
-
+import { AccountStatus, IUserRest } from '@shared/interfaces/user.interface';
+import { TEmpActions } from '@app/home/profile/profile-list-table.component';
+/**
+ *  Profile component
+ */
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['username', 'status', 'actions'];
-  statuses: string[] = ['ADMIN', 'ACTIVATED', 'DEACTIVATED'];
+  displayedColumns: string[] = ['username', 'status', 'email', 'discountCode', 'actions'];
+  statuses: AccountStatus[] = [
+    AccountStatus.Admin,
+    AccountStatus.Activated,
+    AccountStatus.Deactivated,
+    AccountStatus.Pending,
+  ];
   isLoading = false;
-  profileData: any;
-  dataSource: MatTableDataSource<Profile>;
+  profileData: IUserRest[];
+  dataSource: MatTableDataSource<IUserRest>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   username: any;
@@ -32,6 +37,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   newEmployeeForm: FormGroup;
   editEmployeeForm: FormGroup;
   changePasswordForm: FormGroup;
+  searchForm: Record<AccountStatus, string>;
 
   constructor(
     private quoteService: QuoteService,
@@ -50,17 +56,24 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       ],
       password: ['', [Validators.required]],
       status: ['', [Validators.required]],
+      email: ['', [Validators.email, Validators.required]],
+      discountCode: [''],
     });
 
     this.editEmployeeForm = this.formBuilder.group({
       username: [''],
       status: [null],
+      email: ['', [Validators.email, Validators.required]],
     });
 
     this.changePasswordForm = this.formBuilder.group({
       newPassword: ['', [Validators.required]],
       confirmNewPassword: ['', [Validators.required]],
     });
+    this.searchForm = this.statuses.reduce((acc, curr) => {
+      acc[curr] = '';
+      return acc;
+    }, {} as Record<AccountStatus, string>);
   }
 
   ngAfterViewInit() {
@@ -145,7 +158,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
   filterProfileData(data: any) {
     if (data !== undefined) {
-      let profileTableData = data.map((profile: any) => {
+      const profileTableData = data.map((profile: any) => {
         return {
           ...profile,
         };
@@ -183,11 +196,12 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       );
   }
 
-  editEmployee(content: any, data: any) {
+  editEmployee(content: TemplateRef<any>, data: IUserRest) {
     this.selectedEmpID = data.id;
     this.editEmployeeForm.patchValue({
       username: data.username ? data.username : '',
       status: data.status ? data.status : null,
+      email: data.email ? data.email : '',
     });
     this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
   }
@@ -265,5 +279,41 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
   compareStatus(st1: any, st2: any) {
     return st1 && st2 && st1 === st2;
+  }
+  hideEmployee(data: IUserRest): void {
+    this.profileData = this.profileData.filter(({ id }) => id !== data.id);
+  }
+
+  onActions(
+    { action, data }: { action: TEmpActions; data: IUserRest },
+    ref: Record<'editEmp' | 'changePassword', TemplateRef<any>>
+  ): void {
+    switch (action) {
+      case 'deleteEmp':
+        this.deleteEmp(data.id);
+        break;
+      case 'editEmp':
+        this.editEmployee(ref.editEmp, data);
+        break;
+      case 'changePassword':
+        this.changePassword(ref.changePassword, data);
+        break;
+      case 'hideEmp':
+        this.hideEmployee(data);
+        break;
+      case 'acceptEmp':
+        this.changeEmpStatus(data, AccountStatus.Activated);
+        break;
+      case 'declineEmp':
+        this.changeEmpStatus(data, AccountStatus.Deactivated);
+        break;
+    }
+  }
+
+  private changeEmpStatus(data: IUserRest, status: AccountStatus) {
+    this.ngxLoader.start();
+    this.quoteService.editEmployee({ status }, data.id).subscribe(() => {
+      this.ngxLoader.stop();
+    });
   }
 }

@@ -147,3 +147,31 @@ simple-snack-bar {
 .cursor-pointer {
   cursor: pointer !important;
 }
+
+.messagetable {
+  table-layout: fixed;
+  word-break: break-word;
+}
+
+td.mat-cell.messagegrid {
+  padding: 5px;
+}
+
+.mat-column-from {
+  width: 10%;
+  border-right: 1px solid currentColor;
+  padding-right: 16px;
+  text-align: center;
+}
+
+.mat-column-text {
+  font-size: 20px;
+  width: 75%;
+  border-right: 1px solid currentColor;
+}
+
+.mat-column-timestamp {
+  min-width: 15%;
+  font-style: italic;
+  text-align: right;
+}

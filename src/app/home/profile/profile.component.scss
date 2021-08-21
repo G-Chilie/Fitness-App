@@ -3,3 +3,13 @@
     padding-bottom: 0 !important;
   }
 }
+
+.card + .card {
+  margin-top: 16px;
+}
+.card-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
