@@ -1,21 +1,25 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, FormGroupDirective, NgForm, Validators, FormArray } from '@angular/forms';
-import { finalize, map, startWith } from 'rxjs/operators';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { finalize } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { QuoteService } from '../quote.service';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { Observable } from 'rxjs';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 export interface Recommendations {
   type: string;
   description: string;
+}
+
+export interface ShowAllFoods {
+  name: string;
+  image: string;
+  type: string;
 }
 
 @Component({
@@ -25,10 +29,13 @@ export interface Recommendations {
 })
 export class RecommendationsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['image', 'name', 'description', 'actions'];
+  showFoodsColumns: string[] = ['image', 'name', 'type'];
   isLoading = false;
   recommendationData: any;
   dataSource: MatTableDataSource<Recommendations>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  showAllFoodsDataSource: MatTableDataSource<ShowAllFoods>;
+  @ViewChild('paginator') paginator: MatPaginator;
+  @ViewChild('paginatorFood') showAllPaginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   foodType: string[] = ['VEGAN', 'VEGETARIAN', 'MEAT', 'DESSERT', 'SNACK'];
   selectedType = 'Vegan';
@@ -55,8 +62,6 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
     this.ngxLoader.start();
     this.addRecForm = this.formBuilder.group({
       name: ['', [Validators.required]],
-      foodType: ['', [Validators.required]],
-      image: ['', [Validators.required]],
       description: ['', [Validators.required]],
       recommendationCtrl: ['', [Validators.required]],
     });
@@ -89,6 +94,30 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
     this.getFoodRecommendation();
   }
 
+  showAllFoods(content: any) {
+    this.modalService.open(content, { size: 'md' });
+    this.ngxLoader.start();
+    this.quoteService
+      .getRecommendation()
+      .pipe(
+        finalize(() => {
+          this.ngxLoader.stop();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.status === 200 && res.body.data) {
+            this.showAllFoodsDataSource = new MatTableDataSource<ShowAllFoods>(res.body.data);
+          }
+
+          this.ngxLoader.stop();
+        },
+        (error) => {
+          this.ngxLoader.stop();
+        }
+      );
+  }
+
   getFoodRecommendation() {
     this.ngxLoader.start();
     this.quoteService
@@ -116,7 +145,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   getRecommendationsList() {
     this.ngxLoader.start();
     this.quoteService
-      .getAllRecommendations()
+      .getAllRecommendationList()
       .pipe(
         finalize(() => {
           this.ngxLoader.stop();
@@ -235,16 +264,17 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
 
   filterRecommendationData(data: any) {
     if (data !== undefined) {
-      let recommendationTableData = data.map((rec: any) => {
-        return {
-          name: rec.name,
-          image: rec.image,
-          description: rec.description,
-          id: rec.id,
-        };
-      });
-
-      this.dataSource = recommendationTableData;
+      this.dataSource = new MatTableDataSource<Recommendations>(
+        data.map((rec: any) => {
+          return {
+            name: rec.name,
+            image: rec.image,
+            description: rec.description,
+            id: rec.id,
+          };
+        })
+      );
+      setTimeout(() => (this.dataSource.paginator = this.paginator));
 
       this.ngxLoader.stop();
     }

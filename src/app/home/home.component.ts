@@ -4,13 +4,14 @@ import { finalize, tap } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialog } from '@angular/material/dialog';
 import * as dayjs from 'dayjs';
-import { QuoteService } from './quote.service';
+import { Message as CollectionMessage, QuoteService } from './quote.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { da } from 'date-fns/locale';
+import { CollectionResponse } from '@app/@shared/interfaces/user.interface';
 
 export interface UserData {
   name: string;
@@ -39,6 +40,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   isAdmin: boolean;
   selectedCustomerName: string;
   isLoading = false;
+  show = false;
+  isShow = false;
+  showInstagram: false;
+  showMoneyBack: false;
   hidePaginator = false;
   customerData: any;
   supervisors: string[] = [];
@@ -64,6 +69,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   currentWeightQuestions: boolean = false;
   currentFood: boolean = false;
   currentSleepDiagram: boolean = false;
+  currentQuestionnaires: boolean = false;
 
   currentActiveTab = 'all';
 
@@ -71,12 +77,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   messageDisplayedColumns: string[] = ['from', 'text', 'timestamp'];
   dataSource: MatTableDataSource<UserData>;
   messageDataSource: MatTableDataSource<Message>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatPaginator) paginatorMessages: MatPaginator;
+  @ViewChild('paginator') paginator: MatPaginator;
+  paginatorMessages: MatPaginator;
   // @ViewChild('categoryPaginator') categoryPaginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   sendMessageForm: FormGroup;
   editCustomerForm: FormGroup;
+
+  messageModal: NgbModalRef;
+
   dietPlanForm: FormGroup;
 
   constructor(
@@ -203,7 +212,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       case 'diagram':
         data2Send['diagram'] = this.currentSleepDiagram;
         break;
+
+      case 'questionnaires':
+        data2Send['questionnaires'] = this.currentQuestionnaires;
+        break;
     }
+
+    console.log(data2Send);
 
     /* API call to change the user preference */
     this.quoteService
@@ -216,6 +231,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       .subscribe(
         (res: any) => {
           if (res.status === 200) {
+            console.log(res);
             this._snackBar.open(`Customer preferences changed!`, '', {
               duration: 3000,
               verticalPosition: 'top',
@@ -324,7 +340,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   viewCustomerDetails(content: any, customerId: string) {
     this.selectedCustomerID = customerId;
-
+    console.log(this.selectedCustomerID);
     let selectedCustomerTemp = this.customerData.map((customer: any) => {
       if (customer.id === customerId) {
         return customer;
@@ -377,9 +393,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return p1 && p2 && p1.id === p2;
   }
 
-  sendMessage(content: any, chatId: any) {
+  sendMessage(chatId: any) {
     this.fetchMessages(chatId);
-    this.modalService.open(content, { size: 'lg', backdropClass: 'light-blue-backdrop' });
+    this.messageModal = this.modalService.open(MessageModalComponent, {
+      size: 'xl',
+      backdropClass: 'light-blue-backdrop',
+    });
+    this.messageModal.componentInstance.parentComponent = this;
   }
 
   sendTelegramMessage(e: any, id: any) {
@@ -528,7 +548,27 @@ export class HomeComponent implements OnInit, AfterViewInit {
       .subscribe(
         (res: any) => {
           if (res.status === 200 && res.body) {
-            this.filterMessages(res.body.data);
+            const collection: CollectionResponse<CollectionMessage> = res.body;
+            if (collection.info.totalPages <= 1) {
+              console.log(collection);
+              this.filterMessages(collection.data);
+            } else {
+              console.log(collection.info.totalPages);
+              for (let i = 2; i <= collection.info.totalPages; i++) {
+                this.fetchMessagesByPage(cID, i).subscribe(
+                  (res: any) => {
+                    if (res.status === 200 && res.body) {
+                      const pagedCollection: CollectionResponse<CollectionMessage> = res.body;
+                      collection.data = collection.data.concat(pagedCollection.data);
+                      this.filterMessages(collection.data);
+                    }
+                  },
+                  (error) => {
+                    this.isLoading = false;
+                  }
+                );
+              }
+            }
           }
 
           this.ngxLoader.stop();
@@ -537,6 +577,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.isLoading = false;
         }
       );
+  }
+
+  fetchMessagesByPage(cID: any, page: number) {
+    return this.quoteService.getMessages(cID, page).pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
+    );
   }
 
   filterMessages(data: any) {
@@ -552,7 +600,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       // this.messageDataSource = this.currentUserMessages;
       this.messageDataSource = new MatTableDataSource(this.currentUserMessages);
-      setTimeout(() => (this.messageDataSource.paginator = this.paginatorMessages));
+      setTimeout(() => {
+        this.paginatorMessages = this.messageModal.componentInstance.paginatorMessages;
+        this.messageDataSource.paginator = this.paginatorMessages;
+      });
     }
   }
 
@@ -625,3 +676,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
 //   templateUrl: 'dialog-content-example-dialog.html',
 // })
 // export class DialogContentExampleDialog {}
+
+@Component({
+  selector: 'modal-message-content-modal',
+  templateUrl: './modals/message.html',
+  //styles: ['./modals/message.css'],
+})
+export class MessageModalComponent implements OnInit, AfterViewInit {
+  parentComponent: HomeComponent;
+  @ViewChild('paginatorMessages') paginatorMessages: MatPaginator;
+
+  constructor(private modalService: NgbModal, private activeModalService: NgbActiveModal) {}
+
+  ngAfterViewInit(): void {}
+
+  ngOnInit(): void {}
+
+  closeModal(reason?: any) {
+    this.activeModalService.dismiss(reason);
+  }
+}
