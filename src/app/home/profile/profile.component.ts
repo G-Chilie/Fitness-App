@@ -9,7 +9,10 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { AccountStatus, IUserRest } from '@shared/interfaces/user.interface';
-
+import { TEmpActions } from '@app/home/profile/profile-list-table.component';
+/**
+ *  Profile component
+ */
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -34,6 +37,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   newEmployeeForm: FormGroup;
   editEmployeeForm: FormGroup;
   changePasswordForm: FormGroup;
+  searchForm: Record<AccountStatus, string>;
 
   constructor(
     private quoteService: QuoteService,
@@ -66,6 +70,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       newPassword: ['', [Validators.required]],
       confirmNewPassword: ['', [Validators.required]],
     });
+    this.searchForm = this.statuses.reduce((acc, curr) => {
+      acc[curr] = '';
+      return acc;
+    }, {} as Record<AccountStatus, string>);
   }
 
   ngAfterViewInit() {
@@ -277,7 +285,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   onActions(
-    { action, data }: { action: 'deleteEmp' | 'editEmp' | 'changePassword' | 'hideEmp'; data: IUserRest },
+    { action, data }: { action: TEmpActions; data: IUserRest },
     ref: Record<'editEmp' | 'changePassword', TemplateRef<any>>
   ): void {
     switch (action) {
@@ -293,6 +301,19 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       case 'hideEmp':
         this.hideEmployee(data);
         break;
+      case 'acceptEmp':
+        this.changeEmpStatus(data, AccountStatus.Activated);
+        break;
+      case 'declineEmp':
+        this.changeEmpStatus(data, AccountStatus.Deactivated);
+        break;
     }
+  }
+
+  private changeEmpStatus(data: IUserRest, status: AccountStatus) {
+    this.ngxLoader.start();
+    this.quoteService.editEmployee({ status }, data.id).subscribe(() => {
+      this.ngxLoader.stop();
+    });
   }
 }
