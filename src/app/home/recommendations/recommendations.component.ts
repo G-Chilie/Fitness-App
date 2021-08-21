@@ -34,7 +34,8 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   recommendationData: any;
   dataSource: MatTableDataSource<Recommendations>;
   showAllFoodsDataSource: MatTableDataSource<ShowAllFoods>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('paginator') paginator: MatPaginator;
+  @ViewChild('paginatorFood') showAllPaginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   foodType: string[] = ['VEGAN', 'VEGETARIAN', 'MEAT', 'DESSERT', 'SNACK'];
   selectedType = 'Vegan';
@@ -106,7 +107,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
       .subscribe(
         (res: any) => {
           if (res.status === 200 && res.body.data) {
-            this.showAllFoodsDataSource = res.body.data;
+            this.showAllFoodsDataSource = new MatTableDataSource<ShowAllFoods>(res.body.data);
           }
 
           this.ngxLoader.stop();
