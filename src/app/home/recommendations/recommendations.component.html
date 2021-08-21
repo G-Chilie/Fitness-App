@@ -90,8 +90,7 @@
   <form [formGroup]="addRecForm" (ngSubmit)="addRecommendation($event)">
     <div class="modal-body ff-14">
       <mat-form-field class="example-full-width w-100 mt-2" appearance="outline">
-        <mat-label>Name</mat-label>
-        <input matInput placeholder="Name" formControlName="namr" name="namr" />
+        <mat-label>Name</mat-label> <input matInput placeholder="Name" formControlName="namr" name="name" />
         <mat-error *ngIf="addRecForm.get('name')?.hasError('required')"> Name is Required! </mat-error>
       </mat-form-field>
 
@@ -116,12 +115,15 @@
   </div>
   <form [formGroup]="addFoodForm" (ngSubmit)="addFood($event)">
     <div class="modal-body ff-14">
+      <mat-form-field class="example-full-width w-100 mt-2" appearance="outline">
+        <mat-label>Name</mat-label> <input matInput placeholder="Name" formControlName="name" name="name" />
+        <mat-error *ngIf="addRecForm.get('name')?.hasError('required')"> Name is Required! </mat-error>
+      </mat-form-field>
+
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Food Type</mat-label>
         <mat-select formControlName="type">
-          <mat-option *ngFor="let rec of foodType" value="{{ rec }}">
-            {{ rec }}
-          </mat-option>
+          <mat-option *ngFor="let rec of foodType" value="{{ rec }}"> {{ rec }} </mat-option>
         </mat-select>
         <mat-error *ngIf="addRecForm.get('type')?.hasError('required')"> Recommendation type is Required! </mat-error>
       </mat-form-field>
