@@ -46,3 +46,18 @@ export enum AccountStatus {
    */
   Pending = 'PENDING',
 }
+
+export type CollectionInfo = {
+  firstPage: 1;
+  totalPages: number;
+  currentPage: number;
+  nextPage: number;
+  total: number;
+  offset: number;
+  limit: number;
+};
+
+export type CollectionResponse<T> = {
+  data: T[];
+  info: CollectionInfo;
+};

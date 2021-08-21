@@ -145,7 +145,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   getRecommendationsList() {
     this.ngxLoader.start();
     this.quoteService
-      .getAllRecommendations()
+      .getAllRecommendationList()
       .pipe(
         finalize(() => {
           this.ngxLoader.stop();

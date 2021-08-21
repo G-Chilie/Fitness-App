@@ -1,0 +1,60 @@
+<div class="container">
+  <div class="modal-header">
+    <h4 class="modal-title">Messages</h4>
+    <button type="button" class="btn btn-light" aria-label="Close" (click)="closeModal('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body ff-14">
+    <mat-table #messagetable [dataSource]="parentComponent.messageDataSource" class="w-100 messagetable">
+      <ng-container matColumnDef="from">
+        <th mat-header-cell *matHeaderCellDef>From</th>
+        <td mat-cell *matCellDef="let row">{{ row.from !== null ? row.from : 'N/A' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="text">
+        <th mat-header-cell *matHeaderCellDef>Text</th>
+        <td mat-cell class="messagegrid" *matCellDef="let row">{{ row.text !== null ? row.text : 'N/A' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="timestamp">
+        <th mat-header-cell *matHeaderCellDef>timestamp</th>
+        <td mat-cell *matCellDef="let row">{{ row.createdAt !== null ? (row.createdAt | date: 'short') : 'N/A' }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="parentComponent.messageDisplayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: parentComponent.messageDisplayedColumns"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data found.</td>
+      </tr>
+    </mat-table>
+    <mat-paginator #paginatorMessages [pageSizeOptions]="[10]" showFirstLastButtons="false" hidePageSize="true">
+    </mat-paginator>
+  </div>
+  <div class="ff-14">
+    <form
+      [formGroup]="parentComponent.sendMessageForm"
+      (ngSubmit)="parentComponent.sendTelegramMessage($event, parentComponent.selectedCustomer.telegramChatId)"
+    >
+      <div class="message-form">
+        <div>
+          <mat-form-field class="example-full-width w-100 mt-2" appearance="outline">
+            <mat-label>Message</mat-label>
+            <textarea matInput placeholder="Message" formControlName="message" name="message"></textarea>
+            <mat-error *ngIf="parentComponent.sendMessageForm.get('message')?.hasError('required')">
+              Message is Required!
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="mb-3 mt-3">
+          <button mat-button class="button-primary" type="submit" [disabled]="parentComponent.sendMessageForm.invalid">
+            Send
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
