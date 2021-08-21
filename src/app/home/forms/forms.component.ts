@@ -113,33 +113,33 @@ export class FormsComponent implements OnInit, AfterViewInit {
     console.log(JSON.stringify(a));
   }
   ngAfterViewInit() {
-    // this.getForms();
-    this.formsData = [
-      {
-        id: 1,
-        name: 'testname1',
-        status: 'on_reg',
-        formowner: 'formowner',
-        createdAt: '2021-08-12',
-      },
-      {
-        id: 2,
-        name: 'testname2',
-        status: 'active',
-        formowner: 'formowner',
-        createdAt: '2021-08-12',
-      },
-      {
-        id: 3,
-        name: 'testname3',
-        status: 'inactive',
-        formowner: 'formowner',
-        createdAt: '2021-08-12',
-      },
-    ];
+    this.getForms();
+    // this.formsData = [
+    //   {
+    //     id: 1,
+    //     name: 'testname1',
+    //     status: 'on_reg',
+    //     formowner: 'formowner',
+    //     createdAt: '2021-08-12',
+    //   },
+    //   {
+    //     id: 2,
+    //     name: 'testname2',
+    //     status: 'active',
+    //     formowner: 'formowner',
+    //     createdAt: '2021-08-12',
+    //   },
+    //   {
+    //     id: 3,
+    //     name: 'testname3',
+    //     status: 'inactive',
+    //     formowner: 'formowner',
+    //     createdAt: '2021-08-12',
+    //   },
+    // ];
 
-    this.filterFormsData(this.formsData);
-    this.ngxLoader.stop();
+    // this.filterFormsData(this.formsData);
+    // this.ngxLoader.stop();
   }
 
   newForm(content: any) {
@@ -178,13 +178,12 @@ export class FormsComponent implements OnInit, AfterViewInit {
       if (key.includes('buttonGroup')) {
         let index = key[key.length - 1];
         if (rawValues['answers' + index].toLowerCase() === 'button') {
-          formValid = rawValues[key].valid;
+          formValid = !!rawValues[key];
         }
       }
     }
 
     if (formValid) {
-      console.log(rawValues);
       let questionArray: QuestionData[] = [];
       for (const [key, value] of Object.entries(rawValues)) {
         if (key.includes('question')) {
@@ -203,8 +202,8 @@ export class FormsComponent implements OnInit, AfterViewInit {
         name: rawValues['name'],
         questions: questionArray,
         status: rawValues['status'],
+        formowner: JSON.parse(localStorage.getItem('userInfo')).username,
       };
-      console.log(JSON.stringify(formData));
       this.quoteService
         .addForm(JSON.stringify(formData))
         .pipe(
