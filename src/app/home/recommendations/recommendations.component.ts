@@ -18,6 +18,12 @@ export interface Recommendations {
   description: string;
 }
 
+export interface ShowAllFoods {
+  name: string;
+  image: string;
+  type: string;
+}
+
 @Component({
   selector: 'app-recommendations',
   templateUrl: './recommendations.component.html',
@@ -25,9 +31,11 @@ export interface Recommendations {
 })
 export class RecommendationsComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['image', 'name', 'description', 'actions'];
+  showFoodsColumns: string[] = ['image', 'name', 'type'];
   isLoading = false;
   recommendationData: any;
   dataSource: MatTableDataSource<Recommendations>;
+  showAllFoodsDataSource: MatTableDataSource<ShowAllFoods>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   foodType: string[] = ['VEGAN', 'VEGETARIAN', 'MEAT', 'DESSERT', 'SNACK'];
@@ -55,8 +63,6 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
     this.ngxLoader.start();
     this.addRecForm = this.formBuilder.group({
       name: ['', [Validators.required]],
-      foodType: ['', [Validators.required]],
-      image: ['', [Validators.required]],
       description: ['', [Validators.required]],
       recommendationCtrl: ['', [Validators.required]],
     });
@@ -87,6 +93,30 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   newRecommendation(content: any) {
     this.modalService.open(content, { size: 'md' });
     this.getFoodRecommendation();
+  }
+
+  showAllFoods(content: any) {
+    this.modalService.open(content, { size: 'md' });
+    this.ngxLoader.start();
+    this.quoteService
+      .getRecommendation()
+      .pipe(
+        finalize(() => {
+          this.ngxLoader.stop();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.status === 200 && res.body.data) {
+            this.showAllFoodsDataSource = res.body.data;
+          }
+
+          this.ngxLoader.stop();
+        },
+        (error) => {
+          this.ngxLoader.stop();
+        }
+      );
   }
 
   getFoodRecommendation() {

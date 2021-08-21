@@ -34,6 +34,7 @@ const endPoints = {
   editForm: '/api/v1/form',
   getSupervisors: '/api/v1/employee?where[status]=ACTIVATED&limit=999',
   addNewFood: '/api/v1/food',
+  recommendationsList: '/api/v1/recommendationlist?include=recommendations',
 };
 
 @Injectable({
@@ -411,6 +412,19 @@ export class QuoteService {
   getRecommendation(): Observable<any> {
     return this.httpClient
       .get(endPoints.addNewRecommendation, {
+        observe: 'response',
+      })
+      .pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(() => 'Error in fetching programs.')
+      );
+  }
+
+  getShowAllFoods(): Observable<any> {
+    return this.httpClient
+      .get(endPoints.recommendationsList, {
         observe: 'response',
       })
       .pipe(
