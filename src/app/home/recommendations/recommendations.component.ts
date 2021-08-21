@@ -30,7 +30,7 @@ export interface ShowAllFoods {
   styleUrls: ['./recommendations.component.scss'],
 })
 export class RecommendationsComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['image', 'name', 'description', 'editAction', 'actions'];
+  displayedColumns: string[] = ['name', 'description', 'creator', 'actions'];
   showFoodsColumns: string[] = ['image', 'name', 'type'];
   isLoading = false;
   recommendationData: any;
@@ -166,8 +166,8 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
     if (this.addRecForm.valid) {
       const data2Send = {
         name: this.addRecForm.controls.name.value,
-        image: this.addRecForm.controls.image.value,
-        type: this.addRecForm.controls.foodType.value,
+        // image: this.addRecForm.controls.image.value,
+        // type: this.addRecForm.controls.foodType.value,
         description: this.addRecForm.controls.description.value,
         recommendations: recommendationTemp,
       };
