@@ -68,6 +68,9 @@ export class LineChartComponent implements OnInit {
 
     plugins: {
       zoom: {
+        limits: {
+          x: { minRange: 9 },
+        },
         pan: {
           enabled: true,
           mode: 'x',
