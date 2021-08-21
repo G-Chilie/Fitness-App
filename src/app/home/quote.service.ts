@@ -31,7 +31,7 @@ const endPoints = {
   getEmployees: '/api/v1/employee?&limit=999',
   getEmployee: '/api/v1/employee/',
   getPrograms: '/api/v1/program',
-  getForms: '/api/v1/form',
+  getForms: '/api/v1/questionnaire',
   getRecommendations: '/api/v1/recommendation',
   getCustomers:
     '/api/v1/customer?include=supervisor&inlclude=programHistory&include=question&include=programHistory&limit=100',

@@ -38,14 +38,26 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 //   })(jQuery);
 // }
 
+export type statusActive = 'ACTIVE';
+export type statusOnRegistration = 'ON_REGISTRATION';
+export type statusInactive = 'INACTIVE';
+export type optionInput = 'input';
+export type optionButton = 'button';
+
+export interface QuestionData {
+  question: string;
+  constraint: string;
+  answerOptions: optionInput | optionButton;
+  buttons?: string[];
+}
+
 export interface FormsData {
   id: string;
   name: string;
-  questions: string;
-  answers: string;
+  questions: QuestionData[];
   createdAt: string;
   formowner: string;
-  status: string;
+  status: statusActive | statusOnRegistration | statusInactive;
 }
 
 @Component({
@@ -65,7 +77,8 @@ export class FormsComponent implements OnInit, AfterViewInit {
   addFormsForm: FormGroup;
   editFormsForm: FormGroup;
   answers: string[] = ['Button', 'Input'];
-  containers: number[] = [1];
+  constraints: string[] = ['isWeight', 'isFood', 'isSleep', 'isHeight', 'isString', 'isDob'];
+  containers: number[][] = [[1]];
 
   constructor(
     private quoteService: QuoteService,
@@ -79,9 +92,14 @@ export class FormsComponent implements OnInit, AfterViewInit {
     this.ngxLoader.start();
     this.addFormsForm = this.formBuilder.group({
       name: ['', [Validators.required]],
-      questions: ['', [Validators.required]],
-      answers: ['', [Validators.required]],
+      questions0: ['', [Validators.required]],
+      answers0: ['', [Validators.required]],
+      constraints0: ['', [Validators.required]],
+      // buttonGroup0: this.formBuilder.group({
+      //   button0: ['', [Validators.required]],
+      // }),
     });
+    console.log(this.addFormsForm.controls);
     if (localStorage.getItem('userStatus') === 'ADMIN') {
       this.isAdmin = true;
     } else {
@@ -89,7 +107,9 @@ export class FormsComponent implements OnInit, AfterViewInit {
     }
     // this.containers.push(1);
   }
-
+  print(a: any) {
+    console.log(JSON.stringify(a));
+  }
   ngAfterViewInit() {
     // this.getForms();
     this.formsData = [
@@ -150,40 +170,55 @@ export class FormsComponent implements OnInit, AfterViewInit {
 
   addForm(e: any) {
     this.ngxLoader.start();
-    // if (this.addFormsForm.valid) {
-    //   const data2Send = {
-    //     name: this.addFormsForm.value.name,
-    //     questions: this.addFormsForm.value.questions,
-    //     answers: this.addFormsForm.value.answers,
-    //   };
-    //   this.quoteService
-    //     .addForm(data2Send)
-    //     .pipe(
-    //       finalize(() => {
-    //         this.ngxLoader.stop();
-    //       })
-    //     )
-    //     .subscribe(
-    //       (res: any) => {
-    //         if (res.status === 200) {
-    //           this._snackBar.open(`Program has been added!`, '', {
-    //             duration: 3000,
-    //             verticalPosition: 'top',
-    //             panelClass: ['blue-snackbar'],
-    //           });
-    //           this.modalService.dismissAll();
-    //           this.addFormsForm.reset();
-    //         }
-    //         this.ngxLoader.stop();
-    //       },
-    //       (error) => {
-    //         this.ngxLoader.stop();
-    //       }
-    //     );
-    // }
-    this.modalService.dismissAll();
-    this.addFormsForm.reset();
-    this.ngxLoader.stop();
+    if (this.addFormsForm.valid) {
+      const rawValues = this.addFormsForm.value;
+      console.log(rawValues);
+      let questionArray: QuestionData[] = [];
+      for (const [key, value] of Object.entries(rawValues)) {
+        if (key.includes('question')) {
+          let index = key[9];
+          console.log('index-' + index);
+          let question: QuestionData = {
+            question: rawValues['questions' + index],
+            answerOptions: rawValues['answers' + index]?.toLowerCase(),
+            constraint: rawValues['constraints' + index],
+          };
+
+          questionArray.push(question);
+        }
+      }
+
+      let formData = {
+        name: rawValues['name'],
+        questions: questionArray,
+        status: 'ACTIVE',
+      };
+      console.log(JSON.stringify(formData));
+      this.quoteService
+        .addForm(JSON.stringify(formData))
+        .pipe(
+          finalize(() => {
+            this.ngxLoader.stop();
+          })
+        )
+        .subscribe(
+          (res: any) => {
+            if (res.status === 200) {
+              this._snackBar.open(`Program has been added!`, '', {
+                duration: 3000,
+                verticalPosition: 'top',
+                panelClass: ['blue-snackbar'],
+              });
+              this.modalService.dismissAll();
+              this.addFormsForm.reset();
+            }
+            this.ngxLoader.stop();
+          },
+          (error) => {
+            this.ngxLoader.stop();
+          }
+        );
+    }
   }
 
   deleteForm(id: string) {
@@ -223,7 +258,26 @@ export class FormsComponent implements OnInit, AfterViewInit {
   }
 
   addQuestion() {
-    this.containers.push(this.containers.length);
+    console.log(this.addFormsForm.value);
+    this.addFormsForm.addControl('questions' + this.containers.length, new FormControl('', Validators.required));
+    this.addFormsForm.addControl('answers' + this.containers.length, new FormControl('', Validators.required));
+    this.addButton(this.containers.push([1]) - 1);
+  }
+
+  addButton(index: number) {
+    console.log(index);
+    let buttonGroup: FormGroup = this.addFormsForm.get('buttonGroup' + index) as FormGroup;
+    if (!buttonGroup) {
+      this.addFormsForm.addControl(
+        'buttonGroup' + index,
+        this.formBuilder.group({
+          button0: ['', [Validators.required]],
+        })
+      );
+      return;
+    }
+    buttonGroup.addControl('button' + this.containers[index].length, new FormControl('', Validators.required));
+    this.containers[index].push(this.containers[index].length);
   }
 
   patchForm(id: any) {
