@@ -19,7 +19,7 @@ export type optionButton = 'button';
 export interface QuestionData {
   question: string;
   constraint: string;
-  answerOptions: optionInput | optionButton;
+  answerOptions: optionInput | optionButton | string[];
   buttons?: string[];
 }
 
@@ -142,6 +142,12 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
             constraint: rawValues['constraints' + index],
           };
           question.constraint = question.answerOptions === 'button' ? 'isString' : question.constraint;
+
+          if (question.answerOptions === 'button') {
+            question.answerOptions = Object.keys(rawValues['buttonGroup' + index]).map(function (key) {
+              return rawValues['buttonGroup' + index][key];
+            });
+          }
           questionArray.push(question);
         }
       }
