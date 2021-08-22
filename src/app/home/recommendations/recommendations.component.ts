@@ -165,7 +165,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
 
   saveRecommendation(e: any) {
     this.ngxLoader.start();
-    const recommendationTemp = this.recommendations.map((item: any) => item.id);
+    const recommendationTemp = this.recommendations.map(({ id }: any) => ({ id }));
     if (this.addRecForm.valid) {
       const data2Send = {
         name: this.addRecForm.controls.name.value,
