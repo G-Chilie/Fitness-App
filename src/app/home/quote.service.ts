@@ -247,6 +247,9 @@ export class QuoteService {
   getAllForms(): Observable<any> {
     return this.httpClient
       .get(endPoints.getForms, {
+        params: {
+          limit: '999',
+        },
         observe: 'response',
       })
       .pipe(
@@ -275,6 +278,7 @@ export class QuoteService {
         catchError(() => 'Error in fetching programs.')
       );
   }
+
   addNewEmployee(data: any) {
     return this.httpClient
       .post(endPoints.addNewEmployee, data, {
