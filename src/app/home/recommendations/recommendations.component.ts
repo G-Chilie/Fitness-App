@@ -45,7 +45,6 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   addFoodForm: FormGroup;
   editAddRecForm: FormGroup;
   editAddFoodForm: FormGroup;
-  recommendationsList: any = [];
   listToPopulate: any = [];
   selectedRec = 'Food';
   separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -69,7 +68,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
     this.addRecForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      recommendationCtrl: ['', [Validators.required]],
+      foods: ['', [Validators.required]],
     });
     this.addFoodForm = this.formBuilder.group({
       name: ['', [Validators.required]],
@@ -81,7 +80,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
     this.editAddRecForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      recommendationCtrl: [''],
+      foods: [''],
     });
     this.editAddFoodForm = this.formBuilder.group({
       name: ['', [Validators.required]],
@@ -173,7 +172,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
         // image: this.addRecForm.controls.image.value,
         // type: this.addRecForm.controls.foodType.value,
         description: this.addRecForm.controls.description.value,
-        recommendations: recommendationTemp,
+        foods: recommendationTemp,
       };
       this.recommendationService
         .addRecommendation(data2Send)
@@ -318,8 +317,8 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   }
 
   selectedEditRecom(event: MatAutocompleteSelectedEvent): void {
-    this.listToPopulate.push(this.editAddRecForm.controls.recommendationCtrl.value);
-    this.recommendations.push(this.editAddRecForm.controls.recommendationCtrl.value);
+    this.listToPopulate.push(this.editAddRecForm.controls.foods.value);
+    this.recommendations.push(this.editAddRecForm.controls.foods.value);
   }
 
   filterRecommendationData(data: any) {
@@ -332,6 +331,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
             description: rec.description,
             id: rec.id,
             employee: rec.employee,
+            foods: rec.foods,
           };
         })
       );
@@ -350,8 +350,8 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.listToPopulate.push(this.addRecForm.controls.recommendationCtrl.value);
-    this.recommendations.push(this.addRecForm.controls.recommendationCtrl.value);
+    this.listToPopulate.push(this.addRecForm.controls.foods.value);
+    this.recommendations.push(this.addRecForm.controls.foods.value);
   }
 
   addNewFood(content: any) {
