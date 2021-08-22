@@ -165,7 +165,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
 
   saveRecommendation(e: any) {
     this.ngxLoader.start();
-    const recommendationTemp = this.recommendations.map(({ id }: any) => ({ id }));
+    const recommendationTemp = this.listToPopulate.map(({ id }: any) => ({ id }));
     if (this.addRecForm.valid) {
       const data2Send = {
         name: this.addRecForm.controls.name.value,
@@ -263,6 +263,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
     this.recommendations = [];
     this.selectedId = data.id;
     this.ngxLoader.start();
+    this.listToPopulate = data.foods ? data.foods : [];
     this.editAddRecForm.patchValue({
       name: data.name ? data.name : '',
       description: data.description ? data.description : '',
@@ -272,12 +273,12 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   }
 
   editRecommendationSubmit(e: any) {
-    const recommendationTemp = this.recommendations.map((item: any) => item.id);
+    const recommendationTemp = this.listToPopulate.map(({ id }: any) => ({ id }));
     if (this.editAddRecForm.valid) {
       const data2Send = {
         name: this.editAddRecForm.controls.name.value,
         description: this.editAddRecForm.controls.description.value,
-        recommendations: recommendationTemp,
+        foods: recommendationTemp,
       };
       this.recommendationService
         .editRecommendation(data2Send, this.selectedId)
