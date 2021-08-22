@@ -145,6 +145,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
               });
               this.modalService.dismissAll();
               this.newEmployeeForm.reset();
+              this.getProfiles();
             }
 
             this.ngxLoader.stop();
@@ -313,6 +314,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   private changeEmpStatus(data: IUserRest, status: AccountStatus) {
     this.ngxLoader.start();
     this.quoteService.editEmployee({ status }, data.id).subscribe(() => {
+      this.getProfiles();
       this.ngxLoader.stop();
     });
   }

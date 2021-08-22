@@ -11,7 +11,15 @@ import {
 import { MatTableDataSource } from '@angular/material/table';
 import { IUserRest } from '@shared/interfaces/user.interface';
 import { MatPaginator } from '@angular/material/paginator';
+import { ThemePalette } from '@angular/material/core/common-behaviors/color';
 export type TEmpActions = 'deleteEmp' | 'editEmp' | 'changePassword' | 'hideEmp' | 'acceptEmp' | 'declineEmp';
+
+export interface IActionButtons {
+  action: TEmpActions;
+  color: ThemePalette;
+  icon: string;
+  label: string;
+}
 /**
  * Profile List table component.
  */
@@ -36,7 +44,7 @@ export class ProfileListTableComponent implements OnChanges {
   /**
    * Allowed actions.
    */
-  @Input() allowedActions: string[];
+  @Input() allowedActions: IActionButtons[];
   /**
    * On Actions.
    */

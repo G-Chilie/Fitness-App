@@ -13,6 +13,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { SharedModule } from '@shared';
+import { FlexModule } from '@angular/flex-layout';
 
 /**
  * Profile module.
@@ -34,6 +35,7 @@ import { SharedModule } from '@shared';
     MatInputModule,
     SharedModule,
     FormsModule,
+    FlexModule,
   ],
 })
 export class ProfileModule {}
