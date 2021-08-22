@@ -42,7 +42,7 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
   formsData: any;
   colDef: string[];
   dataSource: MatTableDataSource<FormsData>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('questionnairePaginator') paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   selectedFormID: any;
   addQuestionnaireForm: FormGroup;
