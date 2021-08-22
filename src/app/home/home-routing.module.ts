@@ -7,7 +7,7 @@ import { Shell } from '@app/shell/shell.service';
 import { ProfileComponent } from './profile/profile.component';
 import { ProgramComponent } from './program/program.component';
 import { RecommendationsComponent } from './recommendations/recommendations.component';
-import { FormsComponent } from './forms/forms.component';
+import { QuestionnaireComponent } from './forms/questionnaire.component';
 
 const routes: Routes = [
   Shell.childRoutes([
@@ -16,7 +16,7 @@ const routes: Routes = [
     { path: 'home/employees', component: ProfileComponent, data: { title: marker('Employees') } },
     { path: 'home/program', component: ProgramComponent, data: { title: marker('Program') } },
     { path: 'home/recommendations', component: RecommendationsComponent, data: { title: marker('Recommendations') } },
-    { path: 'home/forms', component: FormsComponent, data: { title: marker('Forms') } },
+    { path: 'home/forms', component: QuestionnaireComponent, data: { title: marker('Questionnaire') } },
   ]),
 ];
 

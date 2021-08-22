@@ -12,7 +12,7 @@ import { HomeComponent, MessageModalComponent } from './home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RecommendationsComponent } from './recommendations/recommendations.component';
 import { ProgramComponent } from './program/program.component';
-import { FormsComponent } from './forms/forms.component';
+import { QuestionnaireComponent } from './forms/questionnaire.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
 import { ChartsModule } from 'ng2-charts';
 import { TextEllipsisComponent } from './text-ellipsis/text-ellipsis.component';
@@ -70,7 +70,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     HomeComponent,
     RecommendationsComponent,
     ProgramComponent,
-    FormsComponent,
+    QuestionnaireComponent,
     LineChartComponent,
     TextEllipsisComponent,
     FoodListComponent,
