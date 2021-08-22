@@ -294,7 +294,7 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
           name: form.name,
           questions: form.questions,
           answers: form.answers,
-          formowner: form.formowner,
+          formowner: form.employee.username,
           status: form.status,
           createdAt: form.createdAt,
         };

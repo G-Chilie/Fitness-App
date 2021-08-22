@@ -248,6 +248,7 @@ export class QuoteService {
     return this.httpClient
       .get(endPoints.getForms, {
         params: {
+          include: 'employee',
           limit: '999',
         },
         observe: 'response',
