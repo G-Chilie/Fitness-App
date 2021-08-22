@@ -367,6 +367,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.currentFood = this.selectedCustomer.foodRecommendations;
       this.currentSleepDiagram = this.selectedCustomer.diagram;
       this.dietPlanForm.patchValue(this.selectedCustomer.dietPlan);
+      this.notesForm.patchValue({
+        notes: this.selectedCustomer.notes,
+      });
     }
 
     this.modalService.open(content, { size: 'xl' });
@@ -553,6 +556,33 @@ export class HomeComponent implements OnInit, AfterViewInit {
       return;
     } else {
       // CODE HERE
+      const data2Send = {
+        notes: this.notesForm.value.notes,
+      };
+      this.quoteService
+        .editCustomer(data2Send, customerID)
+        .pipe(
+          finalize(() => {
+            this.ngxLoader.stop();
+          })
+        )
+        .subscribe(
+          (res: any) => {
+            if (res.status === 200) {
+              this._snackBar.open(`Customer details changed!`, '', {
+                duration: 3000,
+                verticalPosition: 'top',
+                panelClass: ['blue-snackbar'],
+              });
+              this.getCustomers();
+              this.modalService.dismissAll();
+            }
+            this.ngxLoader.stop();
+          },
+          (error) => {
+            this.ngxLoader.stop();
+          }
+        );
     }
   }
 
