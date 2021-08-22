@@ -1,42 +1,14 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { QuoteService } from '../quote.service';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-// declare var jQuery: any;
-
-// function addQuestion() {
-//   var html = '';
-//   html =  '<div fxLayout="row" fxLayoutAlign="start center" >' +
-//   '<mat-form-field class="example-full-width w-100 mt-2 cus-padding" appearance="outline">' +
-//     '<mat-label>Questions</mat-label>' +
-//     '<input matInput placeholder="questions" formControlName="questions" name="questions" autocomplete="off" class="width-80"/>' +
-//     '<mat-error *ngIf="addFormsForm.get(\'questions\')?.hasError(\'required\')"> Questions is Required! </mat-error>' +
-//   '</mat-form-field>' +
-//   '<button type="button" (click)="addQuestion()" class="btn btn-light cus-button">' +
-//     '<mat-icon>add_circle_outline</mat-icon>' +
-//   '</button>'+
-// '</div>'+
-// '<div fxLayout="row" fxLayoutAlign="start center">' +
-//   '<mat-label class="custom-label">Answers :</mat-label>'+
-//   '<mat-form-field appearance="outline" class="w-90 mt-2">'+
-//     '<mat-select formControlName="answer">'+
-//       '<mat-option *ngFor="let answer of answers" value={{ answer }}>'+
-//         '{{ answer }}'+
-//       '</mat-option>'+
-//     '</mat-select>'+
-//     '<mat-error *ngIf="addFormsForm.get(\'answer\')?.hasError(\'required\')"> Answers is Required! </mat-error>'+
-//   '</mat-form-field>'+
-// '</div>';
-//   (function ($) {
-//     $(".add-quesitons").after(html);
-//   })(jQuery);
-// }
+import { GlobalService } from '@core/global.service';
 
 export type statusActive = 'ACTIVE';
 export type statusOnRegistration = 'ON_REGISTRATION';
@@ -61,21 +33,20 @@ export interface FormsData {
 }
 
 @Component({
-  selector: 'app-forms',
-  templateUrl: './forms.component.html',
-  styleUrls: ['./forms.component.scss'],
+  selector: 'app-questionnaire',
+  templateUrl: './questionnaire.component.html',
+  styleUrls: ['./questionnaire.component.scss'],
 })
-export class FormsComponent implements OnInit, AfterViewInit {
+export class QuestionnaireComponent implements OnInit, AfterViewInit {
   isLoading = false;
   formsData: any;
-  isAdmin: boolean;
-  colDef: string[] = ['name', 'formowner', 'status', 'createdAt', 'actions'];
+  colDef: string[];
   dataSource: MatTableDataSource<FormsData>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   selectedFormID: any;
-  addFormsForm: FormGroup;
-  editFormsForm: FormGroup;
+  addQuestionnaireForm: FormGroup;
+  editQuestionnaireForm: FormGroup;
   answers: string[] = ['Button', 'Input'];
   constraints: string[] = ['isWeight', 'isFood', 'isSleep', 'isHeight', 'isString', 'isDob'];
   status: string[] = ['ACTIVE', 'ON_REGISTRATION', 'INACTIVE'];
@@ -83,15 +54,23 @@ export class FormsComponent implements OnInit, AfterViewInit {
 
   constructor(
     private quoteService: QuoteService,
+    public globalService: GlobalService,
     private modalService: NgbModal,
     private ngxLoader: NgxUiLoaderService,
     private formBuilder: FormBuilder,
     private _snackBar: MatSnackBar
-  ) {}
+  ) {
+    this.colDef = [];
+    this.colDef.push('name');
+    if (this.globalService.isUserAdmin) {
+      this.colDef.push('formowner');
+    }
+    this.colDef.push('status', 'createdAt', 'actions');
+  }
 
   ngOnInit(): void {
     this.ngxLoader.start();
-    this.addFormsForm = this.formBuilder.group({
+    this.addQuestionnaireForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       status: ['', [Validators.required]],
       questions0: ['', [Validators.required]],
@@ -101,45 +80,14 @@ export class FormsComponent implements OnInit, AfterViewInit {
         button0: ['', [Validators.required]],
       }),
     });
-    console.log(this.addFormsForm.controls);
-    if (localStorage.getItem('userStatus') === 'ADMIN') {
-      this.isAdmin = true;
-    } else {
-      this.isAdmin = false;
-    }
-    // this.containers.push(1);
   }
+
   print(a: any) {
     console.log(JSON.stringify(a));
   }
+
   ngAfterViewInit() {
     this.getForms();
-    // this.formsData = [
-    //   {
-    //     id: 1,
-    //     name: 'testname1',
-    //     status: 'on_reg',
-    //     formowner: 'formowner',
-    //     createdAt: '2021-08-12',
-    //   },
-    //   {
-    //     id: 2,
-    //     name: 'testname2',
-    //     status: 'active',
-    //     formowner: 'formowner',
-    //     createdAt: '2021-08-12',
-    //   },
-    //   {
-    //     id: 3,
-    //     name: 'testname3',
-    //     status: 'inactive',
-    //     formowner: 'formowner',
-    //     createdAt: '2021-08-12',
-    //   },
-    // ];
-
-    // this.filterFormsData(this.formsData);
-    // this.ngxLoader.stop();
   }
 
   newForm(content: any) {
@@ -172,11 +120,11 @@ export class FormsComponent implements OnInit, AfterViewInit {
 
   addForm(e: any) {
     this.ngxLoader.start();
-    const rawValues = this.addFormsForm.value;
-    let formValid: boolean = true;
+    const rawValues = this.addQuestionnaireForm.value;
+    let formValid = true;
     for (const [key, value] of Object.entries(rawValues)) {
       if (key.includes('buttonGroup')) {
-        let index = key[key.length - 1];
+        const index = key[key.length - 1];
         if (rawValues['answers' + index].toLowerCase() === 'button') {
           formValid = !!rawValues[key];
         }
@@ -184,11 +132,11 @@ export class FormsComponent implements OnInit, AfterViewInit {
     }
 
     if (formValid) {
-      let questionArray: QuestionData[] = [];
+      const questionArray: QuestionData[] = [];
       for (const [key, value] of Object.entries(rawValues)) {
         if (key.includes('question')) {
-          let index = key[key.length - 1];
-          let question: QuestionData = {
+          const index = key[key.length - 1];
+          const question: QuestionData = {
             question: rawValues['questions' + index],
             answerOptions: rawValues['answers' + index]?.toLowerCase(),
             constraint: rawValues['constraints' + index],
@@ -198,10 +146,10 @@ export class FormsComponent implements OnInit, AfterViewInit {
         }
       }
 
-      let formData = {
-        name: rawValues['name'],
+      const formData = {
+        name: rawValues.name,
         questions: questionArray,
-        status: rawValues['status'],
+        status: rawValues.status,
         formowner: JSON.parse(localStorage.getItem('userInfo')).username,
       };
       this.quoteService
@@ -220,7 +168,7 @@ export class FormsComponent implements OnInit, AfterViewInit {
                 panelClass: ['blue-snackbar'],
               });
               this.modalService.dismissAll();
-              this.addFormsForm.reset();
+              this.addQuestionnaireForm.reset();
             }
             this.ngxLoader.stop();
           },
@@ -259,7 +207,7 @@ export class FormsComponent implements OnInit, AfterViewInit {
 
   editForm(content: any, data: any) {
     this.selectedFormID = data.id;
-    this.editFormsForm.patchValue({
+    this.editQuestionnaireForm.patchValue({
       name: data.name ? data.name : '',
       questions: data.questions ? data.questions : null,
       answers: data.answers ? data.answers : null,
@@ -268,18 +216,24 @@ export class FormsComponent implements OnInit, AfterViewInit {
   }
 
   addQuestion() {
-    console.log(this.addFormsForm.value);
-    this.addFormsForm.addControl('questions' + this.containers.length, new FormControl('', Validators.required));
-    this.addFormsForm.addControl('answers' + this.containers.length, new FormControl('', Validators.required));
-    this.addFormsForm.addControl('constraints' + this.containers.length, new FormControl('', Validators.required));
+    console.log(this.addQuestionnaireForm.value);
+    this.addQuestionnaireForm.addControl(
+      'questions' + this.containers.length,
+      new FormControl('', Validators.required)
+    );
+    this.addQuestionnaireForm.addControl('answers' + this.containers.length, new FormControl('', Validators.required));
+    this.addQuestionnaireForm.addControl(
+      'constraints' + this.containers.length,
+      new FormControl('', Validators.required)
+    );
     this.addButton(this.containers.push([1]) - 1);
   }
 
   addButton(index: number) {
     console.log(index);
-    let buttonGroup: FormGroup = this.addFormsForm.get('buttonGroup' + index) as FormGroup;
+    const buttonGroup: FormGroup = this.addQuestionnaireForm.get('buttonGroup' + index) as FormGroup;
     if (!buttonGroup) {
-      this.addFormsForm.addControl(
+      this.addQuestionnaireForm.addControl(
         'buttonGroup' + index,
         this.formBuilder.group({
           button0: ['', [Validators.required]],
@@ -292,8 +246,8 @@ export class FormsComponent implements OnInit, AfterViewInit {
   }
 
   patchForm(id: any) {
-    if (this.editFormsForm.valid) {
-      const data2Send = this.editFormsForm.value;
+    if (this.editQuestionnaireForm.valid) {
+      const data2Send = this.editQuestionnaireForm.value;
       this.quoteService
         .editForm(data2Send, id)
         .pipe(
@@ -311,7 +265,7 @@ export class FormsComponent implements OnInit, AfterViewInit {
               });
               this.getForms();
               this.modalService.dismissAll();
-              this.editFormsForm.reset();
+              this.editQuestionnaireForm.reset();
             }
             this.ngxLoader.stop();
           },
@@ -328,7 +282,7 @@ export class FormsComponent implements OnInit, AfterViewInit {
 
   filterFormsData(data: any) {
     if (data !== undefined) {
-      let formTableData = data.map((form: any) => {
+      const formTableData = data.map((form: any) => {
         return {
           id: form.id,
           name: form.name,
@@ -339,7 +293,8 @@ export class FormsComponent implements OnInit, AfterViewInit {
           createdAt: form.createdAt,
         };
       });
-      this.dataSource = formTableData;
+      this.dataSource = new MatTableDataSource<FormsData>(formTableData);
+      setTimeout(() => (this.dataSource.paginator = this.paginator));
     }
   }
 }

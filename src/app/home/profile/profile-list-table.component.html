@@ -26,46 +26,18 @@
 
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Actions</th>
-      <td mat-cell *matCellDef="let row" class="text-center">
+      <td mat-cell *matCellDef="let row" class="text-center" fxLayout="row" fxLayoutGap="4px">
         <button
-          *ngIf="allowedActions.includes('deleteEmp')"
+          *ngFor="let action of allowedActions"
           mat-flat-button
-          color="warn"
+          [color]="action.color"
           type="button"
-          (click)="actions.emit({ action: 'deleteEmp', data: row })"
+          (click)="actions.emit({ action: action.action, data: row })"
         >
-          <mat-icon aria-hidden="false" aria-label="Delete icon">delete</mat-icon>
-          Delete
-        </button>
-        <button
-          *ngIf="allowedActions.includes('hideEmp')"
-          mat-flat-button
-          color="warn"
-          type="button"
-          (click)="actions.emit({ action: 'hideEmp', data: row })"
-        >
-          <mat-icon aria-hidden="false" aria-label="Delete icon">visibility</mat-icon>
-          Hide
-        </button>
-        <button
-          *ngIf="allowedActions.includes('acceptEmp')"
-          mat-flat-button
-          color="primary"
-          type="button"
-          (click)="actions.emit({ action: 'acceptEmp', data: row })"
-        >
-          <mat-icon aria-hidden="false" aria-label="Delete icon">check</mat-icon>
-          Accept
-        </button>
-        <button
-          *ngIf="allowedActions.includes('declineEmp')"
-          mat-flat-button
-          color="warn"
-          type="button"
-          (click)="actions.emit({ action: 'declineEmp', data: row })"
-        >
-          <mat-icon aria-hidden="false" aria-label="Delete icon">cancel</mat-icon>
-          Decline
+          <mat-icon aria-hidden="false" [attr.aria-label]="action.label" *ngIf="action.icon">{{
+            action.icon
+          }}</mat-icon>
+          {{ action.label }}
         </button>
         <button
           mat-icon-button

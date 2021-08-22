@@ -2,7 +2,9 @@
   <div class="row">
     <div class="col-12">
       <div class="mt-4">
-        <button mat-button class="button-primary" type="button" (click)="newForm(formContent)">New Forms</button>
+        <button mat-button class="button-primary" type="button" (click)="newForm(formContent)">
+          New Questionnaire
+        </button>
       </div>
     </div>
   </div>
@@ -23,7 +25,7 @@
                 <td mat-cell *matCellDef="let row" class="text-center">{{ row.status }}</td>
               </ng-container>
 
-              <ng-container *ngIf="isAdmin" matColumnDef="formowner">
+              <ng-container matColumnDef="formowner">
                 <th mat-header-cell *matHeaderCellDef>Form owner</th>
                 <td mat-cell *matCellDef="let row" class="text-center">{{ row.formowner }}</td>
               </ng-container>
@@ -59,8 +61,8 @@
                 <td class="mat-cell" colspan="4">No data found.</td>
               </tr>
             </table>
-
-            <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator> -->
+            <mat-paginator #paginator [pageSizeOptions]="[10]" showFirstLastButtons="false" hidePageSize="true">
+            </mat-paginator>
           </div>
         </div>
       </div>
@@ -70,21 +72,21 @@
 
 <ng-template #formContent let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">New Form</h4>
+    <h4 class="modal-title">New Questionnaire</h4>
     <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form [formGroup]="addFormsForm" (ngSubmit)="addForm($event)">
+  <form [formGroup]="addQuestionnaireForm" (ngSubmit)="addForm($event)">
     <div class="modal-body ff-14">
       <mat-form-field class="example-full-width w-100" appearance="outline">
         <mat-label>Name</mat-label>
         <input matInput placeholder="name" formControlName="name" autocomplete="off" />
-        <mat-error *ngIf="addFormsForm.get('name')?.hasError('required')"> Formname is Required! </mat-error>
-        <mat-error *ngIf="addFormsForm.get('name')?.hasError('minlength')">
+        <mat-error *ngIf="addQuestionnaireForm.get('name')?.hasError('required')"> Formname is Required! </mat-error>
+        <mat-error *ngIf="addQuestionnaireForm.get('name')?.hasError('minlength')">
           Formname should be atleast 4 characters long!
         </mat-error>
-        <mat-error *ngIf="addFormsForm.get('name')?.hasError('maxlength')">
+        <mat-error *ngIf="addQuestionnaireForm.get('name')?.hasError('maxlength')">
           Formname can be atmax 20 characters long!
         </mat-error>
       </mat-form-field>
@@ -96,7 +98,7 @@
               {{ s }}
             </mat-option>
           </mat-select>
-          <mat-error *ngIf="addFormsForm.get('status')?.hasError('required')"> Status is Required! </mat-error>
+          <mat-error *ngIf="addQuestionnaireForm.get('status')?.hasError('required')"> Status is Required! </mat-error>
         </mat-form-field>
       </div>
       <div *ngFor="let constain of containers; let i = index">
@@ -111,7 +113,7 @@
               autocomplete="off"
               class="width-80"
             />
-            <mat-error *ngIf="addFormsForm.get('questions' + i)?.hasError('required')">
+            <mat-error *ngIf="addQuestionnaireForm.get('questions' + i)?.hasError('required')">
               Questions is Required!
             </mat-error>
           </mat-form-field>
@@ -128,10 +130,16 @@
                 {{ answer }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="addFormsForm.get('answers' + i)?.hasError('required')"> Answers is Required! </mat-error>
+            <mat-error *ngIf="addQuestionnaireForm.get('answers' + i)?.hasError('required')">
+              Answers is Required!
+            </mat-error>
           </mat-form-field>
         </div>
-        <div *ngIf="addFormsForm.get('answers' + i)?.value === 'Input'" fxLayout="row" fxLayoutAlign="start center">
+        <div
+          *ngIf="addQuestionnaireForm.get('answers' + i)?.value === 'Input'"
+          fxLayout="row"
+          fxLayoutAlign="start center"
+        >
           <div fxLayout="row" fxLayoutAlign="start center">
             <mat-label class="custom-label">Constraint :</mat-label>
             <mat-form-field appearance="outline" class="w-90 mt-2">
@@ -140,14 +148,18 @@
                   {{ constraint }}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="addFormsForm.get('constraints' + i)?.hasError('required')">
+              <mat-error *ngIf="addQuestionnaireForm.get('constraints' + i)?.hasError('required')">
                 Constraints is Required!
               </mat-error>
             </mat-form-field>
           </div>
         </div>
         <div *ngFor="let c of containers[i]; let j = index">
-          <div *ngIf="addFormsForm.get('answers' + i)?.value === 'Button'" fxLayout="row" fxLayoutAlign="start center">
+          <div
+            *ngIf="addQuestionnaireForm.get('answers' + i)?.value === 'Button'"
+            fxLayout="row"
+            fxLayoutAlign="start center"
+          >
             <div formGroupName="{{ 'buttonGroup' + i }}">
               <mat-form-field class="example-full-width w-100 mt-2 cus-padding" appearance="outline">
                 <mat-label>{{ 'Button ' + i }}</mat-label>
@@ -159,7 +171,9 @@
                   autocomplete="off"
                   class="width-80"
                 />
-                <mat-error *ngIf="addFormsForm.controls['buttonGroup' + i]?.get('button' + j)?.hasError('required')">
+                <mat-error
+                  *ngIf="addQuestionnaireForm.controls['buttonGroup' + i]?.get('button' + j)?.hasError('required')"
+                >
                   Button Answer is Required!
                 </mat-error>
               </mat-form-field>
@@ -193,7 +207,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form [formGroup]="editFormsForm" (ngSubmit)="patchForm(selectedFormID)">
+  <form [formGroup]="editQuestionnaireForm" (ngSubmit)="patchForm(selectedFormID)">
     <div class="modal-body ff-14">
       <div>
         <mat-form-field class="example-full-width w-100" appearance="outline">
@@ -211,7 +225,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button mat-button class="button-primary" type="submit" [disabled]="editFormsForm.invalid">Save</button>
+      <button mat-button class="button-primary" type="submit" [disabled]="editQuestionnaireForm.invalid">Save</button>
     </div>
   </form>
 </ng-template>

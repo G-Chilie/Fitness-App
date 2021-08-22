@@ -10,6 +10,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { RecommendationService } from '@app/home/recommendations/recommendation.service';
+import { FoodService } from '@app/home/recommendations/food.service';
 
 export interface Recommendations {
   type: string;
@@ -28,7 +30,7 @@ export interface ShowAllFoods {
   styleUrls: ['./recommendations.component.scss'],
 })
 export class RecommendationsComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['image', 'name', 'description', 'editAction', 'actions'];
+  displayedColumns: string[] = ['name', 'description', 'creator', 'actions'];
   showFoodsColumns: string[] = ['image', 'name', 'type'];
   isLoading = false;
   recommendationData: any;
@@ -43,18 +45,18 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   addFoodForm: FormGroup;
   editAddRecForm: FormGroup;
   editAddFoodForm: FormGroup;
-  recommendationsList: any = [];
   listToPopulate: any = [];
   selectedRec = 'Food';
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  selectedRecommendation: any = [];
+  allFoods: any = [];
   selectable = true;
   removable = true;
   recommendations: any = [];
-  selectedId: string = '';
+  selectedId = '';
 
   constructor(
-    private quoteService: QuoteService,
+    private recommendationService: RecommendationService,
+    private foodService: FoodService,
     private modalService: NgbModal,
     private ngxLoader: NgxUiLoaderService,
     private formBuilder: FormBuilder,
@@ -66,7 +68,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
     this.addRecForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      recommendationCtrl: ['', [Validators.required]],
+      foods: ['', [Validators.required]],
     });
     this.addFoodForm = this.formBuilder.group({
       name: ['', [Validators.required]],
@@ -78,7 +80,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
     this.editAddRecForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      recommendationCtrl: [''],
+      foods: [''],
     });
     this.editAddFoodForm = this.formBuilder.group({
       name: ['', [Validators.required]],
@@ -92,7 +94,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     // this.dataSource.paginator = this.paginator;
     // this.dataSource.sort = this.sort;
-    this.getRecommendationsList();
+    this.fetchRecommendations();
   }
 
   applyFilter(event: Event) {
@@ -106,14 +108,17 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
 
   newRecommendation(content: any) {
     this.modalService.open(content, { size: 'md' });
-    this.getFoodRecommendation();
+    this.fetchAllFoods();
   }
 
   showAllFoods(content: any) {
     this.modalService.open(content, { size: 'md' });
     this.ngxLoader.start();
-    this.quoteService
-      .getRecommendation()
+    this.fetchAllFoods();
+  }
+  fetchAllFoods() {
+    this.foodService
+      .getFoods()
       .pipe(
         finalize(() => {
           this.ngxLoader.stop();
@@ -123,6 +128,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
         (res: any) => {
           if (res.status === 200 && res.body.data) {
             this.showAllFoodsDataSource = new MatTableDataSource<ShowAllFoods>(res.body.data);
+            this.allFoods = res.body.data;
           }
 
           this.ngxLoader.stop();
@@ -133,34 +139,10 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
       );
   }
 
-  getFoodRecommendation() {
+  fetchRecommendations() {
     this.ngxLoader.start();
-    this.quoteService
+    this.recommendationService
       .getRecommendation()
-      .pipe(
-        finalize(() => {
-          this.ngxLoader.stop();
-        })
-      )
-      .subscribe(
-        (res: any) => {
-          if (res.status === 200 && res.body.data) {
-            this.recommendationsList = res.body.data;
-            this.selectedRecommendation = [...this.recommendationsList];
-          }
-
-          this.ngxLoader.stop();
-        },
-        (error) => {
-          this.ngxLoader.stop();
-        }
-      );
-  }
-
-  getRecommendationsList() {
-    this.ngxLoader.start();
-    this.quoteService
-      .getAllRecommendationList()
       .pipe(
         finalize(() => {
           this.ngxLoader.stop();
@@ -183,17 +165,17 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
 
   saveRecommendation(e: any) {
     this.ngxLoader.start();
-    let recommendationTemp = this.recommendations.map((item: any) => item.id);
+    const recommendationTemp = this.listToPopulate.map(({ id }: any) => ({ id }));
     if (this.addRecForm.valid) {
       const data2Send = {
         name: this.addRecForm.controls.name.value,
-        image: this.addRecForm.controls.image.value,
-        type: this.addRecForm.controls.foodType.value,
+        // image: this.addRecForm.controls.image.value,
+        // type: this.addRecForm.controls.foodType.value,
         description: this.addRecForm.controls.description.value,
-        recommendations: recommendationTemp,
+        foods: recommendationTemp,
       };
-      this.quoteService
-        .saveRecommendations(data2Send)
+      this.recommendationService
+        .addRecommendation(data2Send)
         .pipe(
           finalize(() => {
             this.ngxLoader.stop();
@@ -209,7 +191,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
               });
               this.modalService.dismissAll();
               this.addRecForm.reset();
-              this.getRecommendationsList();
+              this.fetchRecommendations();
             }
             this.ngxLoader.stop();
           },
@@ -224,7 +206,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
     this.ngxLoader.start();
     if (this.addFoodForm.valid) {
       const data2Send = this.addFoodForm.value;
-      this.quoteService
+      this.foodService
         .addFood(data2Send)
         .pipe(
           finalize(() => {
@@ -253,7 +235,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
 
   deleteRecommendation(id: string) {
     this.ngxLoader.start();
-    this.quoteService
+    this.recommendationService
       .deleteRecommendation(id)
       .pipe(
         finalize(() => {
@@ -281,23 +263,24 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
     this.recommendations = [];
     this.selectedId = data.id;
     this.ngxLoader.start();
+    this.listToPopulate = data.foods ? data.foods : [];
     this.editAddRecForm.patchValue({
       name: data.name ? data.name : '',
       description: data.description ? data.description : '',
     });
     this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
-    this.getFoodRecommendation();
+    this.fetchAllFoods();
   }
 
   editRecommendationSubmit(e: any) {
-    let recommendationTemp = this.recommendations.map((item: any) => item.id);
+    const recommendationTemp = this.listToPopulate.map(({ id }: any) => ({ id }));
     if (this.editAddRecForm.valid) {
       const data2Send = {
         name: this.editAddRecForm.controls.name.value,
         description: this.editAddRecForm.controls.description.value,
-        recommendations: recommendationTemp,
+        foods: recommendationTemp,
       };
-      this.quoteService
+      this.recommendationService
         .editRecommendation(data2Send, this.selectedId)
         .pipe(
           finalize(() => {
@@ -316,7 +299,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
               this.editAddRecForm.reset();
               this.recommendations = [];
             }
-            this.getRecommendationsList();
+            this.fetchRecommendations();
             this.ngxLoader.stop();
           },
           (error) => {
@@ -335,8 +318,8 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   }
 
   selectedEditRecom(event: MatAutocompleteSelectedEvent): void {
-    this.listToPopulate.push(this.editAddRecForm.controls.recommendationCtrl.value);
-    this.recommendations.push(this.editAddRecForm.controls.recommendationCtrl.value);
+    this.listToPopulate.push(this.editAddRecForm.controls.foods.value);
+    this.recommendations.push(this.editAddRecForm.controls.foods.value);
   }
 
   filterRecommendationData(data: any) {
@@ -348,6 +331,8 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
             image: rec.image,
             description: rec.description,
             id: rec.id,
+            employee: rec.employee,
+            foods: rec.foods,
           };
         })
       );
@@ -366,8 +351,8 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.listToPopulate.push(this.addRecForm.controls.recommendationCtrl.value);
-    this.recommendations.push(this.addRecForm.controls.recommendationCtrl.value);
+    this.listToPopulate.push(this.addRecForm.controls.foods.value);
+    this.recommendations.push(this.addRecForm.controls.foods.value);
   }
 
   addNewFood(content: any) {
@@ -378,7 +363,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
     this.ngxLoader.start();
     if (this.addFoodForm.valid) {
       const data2Send = this.addFoodForm.value;
-      this.quoteService
+      this.foodService
         .addFood(data2Send)
         .pipe(
           finalize(() => {

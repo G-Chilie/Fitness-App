@@ -27,10 +27,11 @@
                   | filter: $any('status'):['ACTIVATED', 'ADMIN']:false
                   | filter: 'username':[searchForm.ACTIVATED]
               "
-              [allowedActions]="['deleteEmp']"
+              [allowedActions]="[{ action: 'deleteEmp', icon: 'delete', color: 'warn', label: 'Disable' }]"
               [limit]="5"
               (actions)="onActions($event, { editEmp: profileContent, changePassword: changePasswordContent })"
-            ></app-profile-list-table>
+            >
+            </app-profile-list-table>
           </div>
         </div>
         <div class="card card-primary">
@@ -47,7 +48,7 @@
                 profileData | filter: $any('status'):['DEACTIVATED'] | filter: 'username':[searchForm.DEACTIVATED]
               "
               [displayedColumns]="['username', 'status', 'email', 'discountCode', 'actions']"
-              [allowedActions]="['hideEmp']"
+              [allowedActions]="[{ action: 'hideEmp', icon: 'visibility', color: 'warn', label: 'Hide' }]"
               [limit]="5"
               (actions)="onActions($event, { editEmp: profileContent, changePassword: changePasswordContent })"
             ></app-profile-list-table>
@@ -64,7 +65,10 @@
           <div class="card-body">
             <app-profile-list-table
               [users]="profileData | filter: $any('status'):['PENDING'] | filter: 'username':[searchForm.PENDING]"
-              [allowedActions]="['acceptEmp', 'declineEmp']"
+              [allowedActions]="[
+                { action: 'acceptEmp', icon: 'check', color: 'primary', label: 'Accept' },
+                { action: 'declineEmp', icon: 'delete', color: 'warn', label: 'Decline' }
+              ]"
               [limit]="5"
               (actions)="onActions($event, { editEmp: profileContent, changePassword: changePasswordContent })"
             ></app-profile-list-table>

@@ -87,6 +87,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   messageModal: NgbModalRef;
 
   dietPlanForm: FormGroup;
+  notesForm: FormGroup;
 
   constructor(
     private quoteService: QuoteService,
@@ -142,6 +143,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       thursday: [''],
       friday: [''],
       saturday: [''],
+    });
+
+    this.notesForm = this.formBuilder.group({
+      notes: ['', Validators.required],
     });
 
     if (localStorage.getItem('userStatus') === 'ADMIN') {
@@ -340,7 +345,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   viewCustomerDetails(content: any, customerId: string) {
     this.selectedCustomerID = customerId;
-    console.log(this.selectedCustomerID);
+
     let selectedCustomerTemp = this.customerData.map((customer: any) => {
       if (customer.id === customerId) {
         return customer;
@@ -361,6 +366,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.currentWeightQuestions = this.selectedCustomer.weightQuestions;
       this.currentFood = this.selectedCustomer.foodRecommendations;
       this.currentSleepDiagram = this.selectedCustomer.diagram;
+      this.dietPlanForm.patchValue(this.selectedCustomer.dietPlan);
+      this.notesForm.patchValue({
+        notes: this.selectedCustomer.notes,
+      });
     }
 
     this.modalService.open(content, { size: 'xl' });
@@ -370,6 +379,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.modalService.open(content, { size: 'xl' });
   }
   viewDietPlan(content: any) {
+    this.modalService.open(content, { size: 'md' });
+  }
+
+  viewNotes(content: any) {
     this.modalService.open(content, { size: 'md' });
   }
 
@@ -525,8 +538,44 @@ export class HomeComponent implements OnInit, AfterViewInit {
                 panelClass: ['blue-snackbar'],
               });
               this.getCustomers();
+              this.dietPlanForm.patchValue(res.dietPlan);
               this.modalService.dismissAll();
               this.editCustomerForm.reset();
+            }
+            this.ngxLoader.stop();
+          },
+          (error) => {
+            this.ngxLoader.stop();
+          }
+        );
+    }
+  }
+
+  submitNote(customerID: any) {
+    if (!this.notesForm.valid) {
+      return;
+    } else {
+      // CODE HERE
+      const data2Send = {
+        notes: this.notesForm.value.notes,
+      };
+      this.quoteService
+        .editCustomer(data2Send, customerID)
+        .pipe(
+          finalize(() => {
+            this.ngxLoader.stop();
+          })
+        )
+        .subscribe(
+          (res: any) => {
+            if (res.status === 200) {
+              this._snackBar.open(`Customer details changed!`, '', {
+                duration: 3000,
+                verticalPosition: 'top',
+                panelClass: ['blue-snackbar'],
+              });
+              this.getCustomers();
+              this.modalService.dismissAll();
             }
             this.ngxLoader.stop();
           },
