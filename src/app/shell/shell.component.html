@@ -67,13 +67,13 @@
             </a>
             <mat-divider></mat-divider>
           </span>
-          <span *ngIf="isAdmin">
-            <a mat-list-item routerLink="/home/forms" routerLinkActive="active" (click)="isMobile && sidenav.close()">
-              <mat-icon aria-hidden="false" aria-label="Example home icon">layers</mat-icon>
-              <span translate class="ml-5">Forms</span>
-            </a>
-            <mat-divider></mat-divider>
-          </span>
+          <!--<span *ngIf="isAdmin">!-->
+          <a mat-list-item routerLink="/home/forms" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+            <mat-icon aria-hidden="false" aria-label="Example home icon">layers</mat-icon>
+            <span translate class="ml-5">Forms</span>
+          </a>
+          <mat-divider></mat-divider>
+          <!--</span>!-->
           <a mat-list-item routerLink="/about" routerLinkActive="active" (click)="logout()">
             <mat-icon aria-hidden="false" aria-label="Example home icon">logout</mat-icon>
             <span translate class="ml-5">Logout</span>

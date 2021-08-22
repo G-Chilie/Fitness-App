@@ -78,6 +78,7 @@ export class FormsComponent implements OnInit, AfterViewInit {
   editFormsForm: FormGroup;
   answers: string[] = ['Button', 'Input'];
   constraints: string[] = ['isWeight', 'isFood', 'isSleep', 'isHeight', 'isString', 'isDob'];
+  status: string[] = ['ACTIVE', 'ON_REGISTRATION', 'INACTIVE'];
   containers: number[][] = [[1]];
 
   constructor(
@@ -92,12 +93,13 @@ export class FormsComponent implements OnInit, AfterViewInit {
     this.ngxLoader.start();
     this.addFormsForm = this.formBuilder.group({
       name: ['', [Validators.required]],
+      status: ['', [Validators.required]],
       questions0: ['', [Validators.required]],
       answers0: ['', [Validators.required]],
       constraints0: ['', [Validators.required]],
-      // buttonGroup0: this.formBuilder.group({
-      //   button0: ['', [Validators.required]],
-      // }),
+      buttonGroup0: this.formBuilder.group({
+        button0: ['', [Validators.required]],
+      }),
     });
     console.log(this.addFormsForm.controls);
     if (localStorage.getItem('userStatus') === 'ADMIN') {
@@ -111,33 +113,33 @@ export class FormsComponent implements OnInit, AfterViewInit {
     console.log(JSON.stringify(a));
   }
   ngAfterViewInit() {
-    // this.getForms();
-    this.formsData = [
-      {
-        id: 1,
-        name: 'testname1',
-        status: 'on_reg',
-        formowner: 'formowner',
-        createdAt: '2021-08-12',
-      },
-      {
-        id: 2,
-        name: 'testname2',
-        status: 'active',
-        formowner: 'formowner',
-        createdAt: '2021-08-12',
-      },
-      {
-        id: 3,
-        name: 'testname3',
-        status: 'inactive',
-        formowner: 'formowner',
-        createdAt: '2021-08-12',
-      },
-    ];
+    this.getForms();
+    // this.formsData = [
+    //   {
+    //     id: 1,
+    //     name: 'testname1',
+    //     status: 'on_reg',
+    //     formowner: 'formowner',
+    //     createdAt: '2021-08-12',
+    //   },
+    //   {
+    //     id: 2,
+    //     name: 'testname2',
+    //     status: 'active',
+    //     formowner: 'formowner',
+    //     createdAt: '2021-08-12',
+    //   },
+    //   {
+    //     id: 3,
+    //     name: 'testname3',
+    //     status: 'inactive',
+    //     formowner: 'formowner',
+    //     createdAt: '2021-08-12',
+    //   },
+    // ];
 
-    this.filterFormsData(this.formsData);
-    this.ngxLoader.stop();
+    // this.filterFormsData(this.formsData);
+    // this.ngxLoader.stop();
   }
 
   newForm(content: any) {
@@ -170,20 +172,28 @@ export class FormsComponent implements OnInit, AfterViewInit {
 
   addForm(e: any) {
     this.ngxLoader.start();
-    if (this.addFormsForm.valid) {
-      const rawValues = this.addFormsForm.value;
-      console.log(rawValues);
+    const rawValues = this.addFormsForm.value;
+    let formValid: boolean = true;
+    for (const [key, value] of Object.entries(rawValues)) {
+      if (key.includes('buttonGroup')) {
+        let index = key[key.length - 1];
+        if (rawValues['answers' + index].toLowerCase() === 'button') {
+          formValid = !!rawValues[key];
+        }
+      }
+    }
+
+    if (formValid) {
       let questionArray: QuestionData[] = [];
       for (const [key, value] of Object.entries(rawValues)) {
         if (key.includes('question')) {
-          let index = key[9];
-          console.log('index-' + index);
+          let index = key[key.length - 1];
           let question: QuestionData = {
             question: rawValues['questions' + index],
             answerOptions: rawValues['answers' + index]?.toLowerCase(),
             constraint: rawValues['constraints' + index],
           };
-
+          question.constraint = question.answerOptions === 'button' ? 'isString' : question.constraint;
           questionArray.push(question);
         }
       }
@@ -191,9 +201,9 @@ export class FormsComponent implements OnInit, AfterViewInit {
       let formData = {
         name: rawValues['name'],
         questions: questionArray,
-        status: 'ACTIVE',
+        status: rawValues['status'],
+        formowner: JSON.parse(localStorage.getItem('userInfo')).username,
       };
-      console.log(JSON.stringify(formData));
       this.quoteService
         .addForm(JSON.stringify(formData))
         .pipe(
@@ -261,6 +271,7 @@ export class FormsComponent implements OnInit, AfterViewInit {
     console.log(this.addFormsForm.value);
     this.addFormsForm.addControl('questions' + this.containers.length, new FormControl('', Validators.required));
     this.addFormsForm.addControl('answers' + this.containers.length, new FormControl('', Validators.required));
+    this.addFormsForm.addControl('constraints' + this.containers.length, new FormControl('', Validators.required));
     this.addButton(this.containers.push([1]) - 1);
   }
 
