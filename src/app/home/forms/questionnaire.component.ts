@@ -40,12 +40,12 @@ export interface FormsData {
 })
 export class QuestionnaireComponent implements OnInit, AfterViewInit {
   isLoading = false;
-  formsData: any;
+  QuestionnaireData: any;
   colDef: string[];
   dataSource: MatTableDataSource<FormsData>;
   @ViewChild('questionnairePaginator') paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  selectedFormID: any;
+  selectedQuestionnaireID: any;
   addQuestionnaireForm: FormGroup;
   editQuestionnaireForm: FormGroup;
   questionnaires: any = [];
@@ -100,14 +100,14 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
     this.getQuestionnaires();
   }
 
-  newForm(content: any) {
+  newQuestionnaire(content: any) {
     this.modalService.open(content, { size: 'md' });
   }
 
   getQuestionnaires() {
     this.ngxLoader.start();
     this.quoteService
-      .getAllForms()
+      .getAllQuestionnaire()
       .pipe(
         finalize(() => {
           this.ngxLoader.stop();
@@ -116,8 +116,8 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
       .subscribe(
         (res: any) => {
           if (res.status === 200 && res.body.data) {
-            this.formsData = res.body.data;
-            this.filterFormsData(this.formsData);
+            this.QuestionnaireData = res.body.data;
+            this.filterQuestionnaireData(this.QuestionnaireData);
           }
 
           this.ngxLoader.stop();
@@ -128,20 +128,20 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
       );
   }
 
-  addForm(e: any) {
+  addQuestionnaire(e: any) {
     this.ngxLoader.start();
     const rawValues = this.addQuestionnaireForm.value;
-    let formValid = true;
+    let questionnaireValid = true;
     for (const [key, value] of Object.entries(rawValues)) {
       if (key.includes('buttonGroup')) {
         const index = key[key.length - 1];
         if (rawValues['answers' + index].toLowerCase() === 'button') {
-          formValid = !!rawValues[key];
+          questionnaireValid = !!rawValues[key];
         }
       }
     }
 
-    if (formValid) {
+    if (questionnaireValid) {
       const questionArray: QuestionData[] = [];
       for (const [key, value] of Object.entries(rawValues)) {
         if (key.includes('question')) {
@@ -169,7 +169,7 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
         formowner: JSON.parse(localStorage.getItem('userInfo')).username,
       };
       this.quoteService
-        .addForm(JSON.stringify(formData))
+        .addQuestionnaire(JSON.stringify(formData))
         .pipe(
           finalize(() => {
             this.ngxLoader.stop();
@@ -195,10 +195,10 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
     }
   }
 
-  deleteForm(id: string) {
+  deleteQuestionnaire(id: string) {
     this.ngxLoader.start();
     this.quoteService
-      .deleteForm(id)
+      .deleteQuestionnaire(id)
       .pipe(
         finalize(() => {
           this.ngxLoader.stop();
@@ -207,7 +207,7 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
       .subscribe(
         (res: any) => {
           if (res.status === 200 && res.body) {
-            this._snackBar.open(`Form deleted!`, '', {
+            this._snackBar.open(`Questionnaire deleted!`, '', {
               duration: 3000,
               verticalPosition: 'top',
               panelClass: ['blue-snackbar'],
@@ -223,7 +223,7 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
 
   editQuestionnaire(content: TemplateRef<any>, data: any) {
     this.questionnaires = [];
-    this.selectedFormID = data.id;
+    this.selectedQuestionnaireID = data.id;
     this.ngxLoader.start();
     this.listToPopulate = data.foods ? data.foods : [];
     this.editQuestionnaireForm.patchValue({
@@ -264,11 +264,11 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
     this.containers[index].push(this.containers[index].length);
   }
 
-  patchForm(id: any) {
+  patchQuestionnaire(id: any) {
     if (this.editQuestionnaireForm.valid) {
       const data2Send = this.editQuestionnaireForm.value;
       this.quoteService
-        .editForm(data2Send, id)
+        .editQuestionnaire(data2Send, id)
         .pipe(
           finalize(() => {
             this.ngxLoader.stop();
@@ -299,20 +299,20 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
     return st1 && st2 && st1 === st2;
   }
 
-  filterFormsData(data: any) {
+  filterQuestionnaireData(data: any) {
     if (data !== undefined) {
-      const formTableData = data.map((form: any) => {
+      const questionnaire = data.map((ques: any) => {
         return {
-          id: form.id,
-          name: form.name,
-          questions: form.questions,
-          answers: form.answers,
-          formowner: form.employee.username,
-          status: form.status,
-          createdAt: form.createdAt,
+          id: ques.id,
+          name: ques.name,
+          questions: ques.questions,
+          answers: ques.answers,
+          formowner: ques.employee.username,
+          status: ques.status,
+          createdAt: ques.createdAt,
         };
       });
-      this.dataSource = new MatTableDataSource<FormsData>(formTableData);
+      this.dataSource = new MatTableDataSource<FormsData>(questionnaire);
       setTimeout(() => (this.dataSource.paginator = this.paginator));
     }
   }

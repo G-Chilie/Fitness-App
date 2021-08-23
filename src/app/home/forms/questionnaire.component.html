@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12">
       <div class="mt-4">
-        <button mat-button class="button-primary" type="button" (click)="newForm(formContent)">
+        <button mat-button class="button-primary" type="button" (click)="newQuestionnaire(formContent)">
           New Questionnaire
         </button>
       </div>
@@ -38,7 +38,7 @@
               <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef>Actions</th>
                 <td mat-cell *matCellDef="let row" class="text-center">
-                  <button mat-flat-button color="warn" type="button" (click)="deleteForm(row.id)">
+                  <button mat-flat-button color="warn" type="button" (click)="deleteQuestionnaire(row.id)">
                     <mat-icon aria-hidden="false" aria-label="Delete icon">delete</mat-icon>
                     Delete
                   </button>
@@ -82,7 +82,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form [formGroup]="addQuestionnaireForm" (ngSubmit)="addForm($event)">
+  <form [formGroup]="addQuestionnaireForm" (ngSubmit)="addQuestionnaire($event)">
     <div class="modal-body ff-14">
       <mat-form-field class="example-full-width w-100" appearance="outline">
         <mat-label>Name</mat-label>
@@ -212,7 +212,7 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form [formGroup]="editQuestionnaireForm" (ngSubmit)="patchForm(selectedFormID)">
+  <form [formGroup]="editQuestionnaireForm" (ngSubmit)="patchQuestionnaire(selectedQuestionnaireID)">
     <div class="modal-body ff-14">
       <div>
         <mat-form-field class="example-full-width w-100" appearance="outline">
