@@ -106,7 +106,7 @@ export class QuoteService {
       );
   }
 
-  editForm(data: any, formID: string) {
+  editQuestionnaire(data: any, formID: string) {
     return this.httpClient
       .put(endPoints.editForm + formID, data, {
         observe: 'response',
@@ -205,7 +205,7 @@ export class QuoteService {
       );
   }
 
-  deleteForm(id: string): Observable<any> {
+  deleteQuestionnaire(id: string): Observable<any> {
     return this.httpClient
       .delete(endPoints.getForms + '/' + id, {
         observe: 'response',
@@ -244,7 +244,7 @@ export class QuoteService {
       );
   }
 
-  getAllForms(): Observable<any> {
+  getAllQuestionnaire(): Observable<any> {
     return this.httpClient
       .get(endPoints.getForms, {
         params: {
@@ -319,7 +319,7 @@ export class QuoteService {
       );
   }
 
-  addForm(data: any) {
+  addQuestionnaire(data: any) {
     return this.httpClient
       .post(endPoints.getForms, data, {
         observe: 'response',
