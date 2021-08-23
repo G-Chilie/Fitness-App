@@ -45,6 +45,10 @@ export enum AccountStatus {
    * Pending.
    */
   Pending = 'PENDING',
+  /**
+   * Hidden.
+   */
+  Hidden = 'HIDDEN',
 }
 
 export type CollectionInfo = {
