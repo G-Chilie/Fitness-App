@@ -73,6 +73,11 @@
               <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef>Actions</th>
                 <td mat-cell *matCellDef="let row" class="text-center">
+                  <button mat-flat-button color="primary" type="button" (click)="editProgram(editProgramContent, row)">
+                    <mat-icon aria-hidden="false" aria-label="Edit icon">edit</mat-icon>
+                    Edit
+                  </button>
+
                   <button mat-flat-button color="warn" type="button" (click)="deleteProgram(row.id)">
                     <mat-icon aria-hidden="false" aria-label="Delete icon">delete</mat-icon>
                     Delete
@@ -150,6 +155,63 @@
     </div>
     <div class="modal-footer">
       <button mat-button class="button-primary" type="submit" [disabled]="addProgramForm.invalid">Save</button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #editProgramContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">New Program</h4>
+    <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="editProgramForm" (ngSubmit)="editProgramSubmit($event)">
+    <div class="modal-body ff-14">
+      <div>
+        <mat-form-field class="example-full-width w-100" appearance="outline">
+          <mat-label>Name</mat-label> <input matInput placeholder="Name" formControlName="name" name="name" />
+          <mat-error *ngIf="editProgramForm.get('name')?.hasError('required')"> Name is Required! </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="example-full-width w-100" appearance="outline">
+          <mat-label>Product IDs</mat-label>
+          <input
+            matInput
+            placeholder="Product IDs (Seperate with commas)"
+            formControlName="productIds"
+            name="productIds"
+          />
+          <mat-error *ngIf="editProgramForm.get('productIds')?.hasError('required')">
+            Product IDs are Required!
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field class="example-full-width w-100" appearance="outline">
+          <mat-label>Duration</mat-label>
+          <input matInput placeholder="Duration" type="number" formControlName="duration" name="duration" />
+          <mat-error *ngIf="editProgramForm.get('duration')?.hasError('required')"> Duration is Required! </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="d-flex flex-column">
+        <mat-checkbox class="example-margin" formControlName="moneyback" name="moneyback">Moneyback</mat-checkbox>
+        <mat-checkbox class="example-margin" formControlName="questionnaire" name="questionnaire"
+          >Questionnaire</mat-checkbox
+        >
+
+        <mat-checkbox class="example-margin" formControlName="foodRecommendations" name="foodRecommendations"
+          >Food Recommendations</mat-checkbox
+        >
+        <mat-checkbox class="example-margin" formControlName="question" name="question">Questions</mat-checkbox>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button mat-button class="button-primary" type="submit" [disabled]="editProgramForm.invalid">Save</button>
     </div>
   </form>
 </ng-template>
