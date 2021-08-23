@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { AccountStatus, IUserRest } from '@shared/interfaces/user.interface';
 import { TEmpActions } from '@app/home/profile/profile-list-table.component';
+
 /**
  *  Profile component
  */
@@ -26,6 +27,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     AccountStatus.Activated,
     AccountStatus.Deactivated,
     AccountStatus.Pending,
+    AccountStatus.Hidden,
   ];
   isLoading = false;
   profileData: IUserRest[];
@@ -174,7 +176,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   deleteEmp(id: string) {
     this.ngxLoader.start();
     this.quoteService
-      .deleteEmployee(id)
+      .setEmployeeStatus(id, AccountStatus.Deactivated)
       .pipe(
         finalize(() => {
           this.ngxLoader.stop();
@@ -282,7 +284,29 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     return st1 && st2 && st1 === st2;
   }
   hideEmployee(data: IUserRest): void {
-    this.profileData = this.profileData.filter(({ id }) => id !== data.id);
+    this.ngxLoader.start();
+    this.quoteService
+      .setEmployeeStatus(data.id, AccountStatus.Hidden)
+      .pipe(
+        finalize(() => {
+          this.ngxLoader.stop();
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.status === 200 && res.body) {
+            this._snackBar.open(`User ${res.body.username} is ${res.body.status}`, '', {
+              duration: 3000,
+              verticalPosition: 'top',
+              panelClass: ['blue-snackbar'],
+            });
+          }
+          this.ngxLoader.stop();
+        },
+        (error) => {
+          this.ngxLoader.stop();
+        }
+      );
   }
 
   onActions(

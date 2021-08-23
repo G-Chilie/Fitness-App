@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EMPTY, Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { IUserRest } from '@shared/interfaces/user.interface';
+import { AccountStatus, IUserRest } from '@shared/interfaces/user.interface';
 import { environment } from '@env/environment';
 import { CusSearchResObject, Datum } from './home';
 
@@ -178,8 +178,8 @@ export class QuoteService {
       );
   }
 
-  deleteEmployee(id: string): Observable<any> {
-    const bodyObj = { status: 'DEACTIVATED' };
+  setEmployeeStatus(id: string, status: AccountStatus): Observable<any> {
+    const bodyObj = { status };
     return this.httpClient
       .put(endPoints.deleteEmployee + id, bodyObj, {
         observe: 'response',
