@@ -198,7 +198,7 @@
 
 <mat-menu #menu="matMenu">
   <ng-template matMenuContent let-data="data">
-    <button mat-menu-item type="button" (click)="editForm(editFormContent, data)">
+    <button mat-menu-item type="button" (click)="editQuestionnaire(editFormContent, data)">
       <mat-icon>edit</mat-icon>
       <span>Edit</span>
     </button>
@@ -207,7 +207,7 @@
 
 <ng-template #editFormContent let-modal>
   <div class="modal-header">
-    <h4 class="modal-title">Edit Employee</h4>
+    <h4 class="modal-title">Edit Questionnaire</h4>
     <button type="button" class="btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -216,16 +216,16 @@
     <div class="modal-body ff-14">
       <div>
         <mat-form-field class="example-full-width w-100" appearance="outline">
-          <mat-label>Username</mat-label>
-          <input matInput placeholder="Username" formControlName="username" name="" />
+          <mat-label>Name</mat-label> <input matInput placeholder="Name" formControlName="name" name="name" />
         </mat-form-field>
       </div>
-
-      <div>
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-select formControlName="answer" placeholder="Answers" [compareWith]="compareAnswer">
-            <mat-option [value]="answer" *ngFor="let answer of answers">{{ answer }} </mat-option>
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <mat-label class="custom-label">Status :</mat-label>
+        <mat-form-field appearance="outline" class="w-90 mt-2">
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let s of status" value="{{ s }}"> {{ s }} </mat-option>
           </mat-select>
+          <mat-error *ngIf="addQuestionnaireForm.get('status')?.hasError('required')"> Status is Required! </mat-error>
         </mat-form-field>
       </div>
     </div>

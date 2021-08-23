@@ -44,7 +44,7 @@ const endPoints = {
   sendTelegramMessage: '/api/v1/proxy/telegram/message/',
   editCustomer: '/api/v1/customer/',
   editEmployee: '/api/v1/employee/',
-  editForm: '/api/v1/form',
+  editForm: '/api/v1/questionnaire/',
   getSupervisors: '/api/v1/employee?where[status]=ACTIVATED&limit=999',
 };
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
@@ -9,6 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { GlobalService } from '@core/global.service';
+import { QuestionnaireService } from '@app/home/forms/questionnaire.service';
 
 export type statusActive = 'ACTIVE';
 export type statusOnRegistration = 'ON_REGISTRATION';
@@ -47,12 +48,16 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
   selectedFormID: any;
   addQuestionnaireForm: FormGroup;
   editQuestionnaireForm: FormGroup;
+  questionnaires: any = [];
   answers: string[] = ['Button', 'Input'];
   constraints: string[] = ['isWeight', 'isFood', 'isSleep', 'isHeight', 'isString', 'isDob'];
   status: string[] = ['ACTIVE', 'ON_REGISTRATION', 'INACTIVE'];
+  listToPopulate: any = [];
+
   containers: number[][] = [[1]];
 
   constructor(
+    private questionnaireervice: QuestionnaireService,
     private quoteService: QuoteService,
     public globalService: GlobalService,
     private modalService: NgbModal,
@@ -80,6 +85,11 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
         button0: ['', [Validators.required]],
       }),
     });
+
+    this.editQuestionnaireForm = this.formBuilder.group({
+      name: [''],
+      status: [''],
+    });
   }
 
   print(a: any) {
@@ -87,14 +97,14 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.getForms();
+    this.getQuestionnaires();
   }
 
   newForm(content: any) {
     this.modalService.open(content, { size: 'md' });
   }
 
-  getForms() {
+  getQuestionnaires() {
     this.ngxLoader.start();
     this.quoteService
       .getAllForms()
@@ -211,14 +221,17 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
       );
   }
 
-  editForm(content: any, data: any) {
+  editQuestionnaire(content: TemplateRef<any>, data: any) {
+    this.questionnaires = [];
     this.selectedFormID = data.id;
+    this.ngxLoader.start();
+    this.listToPopulate = data.foods ? data.foods : [];
     this.editQuestionnaireForm.patchValue({
       name: data.name ? data.name : '',
-      questions: data.questions ? data.questions : null,
-      answers: data.answers ? data.answers : null,
+      description: data.description ? data.description : '',
     });
     this.modalService.open(content, { size: 'md', backdropClass: 'light-blue-backdrop' });
+    this.getQuestionnaires();
   }
 
   addQuestion() {
@@ -269,7 +282,7 @@ export class QuestionnaireComponent implements OnInit, AfterViewInit {
                 verticalPosition: 'top',
                 panelClass: ['blue-snackbar'],
               });
-              this.getForms();
+              this.getQuestionnaires();
               this.modalService.dismissAll();
               this.editQuestionnaireForm.reset();
             }

@@ -75,7 +75,6 @@ export class ProgramComponent implements OnInit, AfterViewInit {
       moneyback: [true],
       foodRecommendations: [true],
       question: [true],
-      questionnaire: [true],
     });
   }
 
