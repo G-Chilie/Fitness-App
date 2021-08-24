@@ -16,6 +16,7 @@ export class FoodService {
     return this.httpClient
       .get(endpoints.food, {
         observe: 'response',
+        params: { limit: '999' },
       })
       .pipe(
         map((res: any) => {
