@@ -159,7 +159,7 @@
           />
         </mat-chip-list>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-          <mat-option *ngFor="let food of allFoods" [value]="food">
+          <mat-option *ngFor="let food of allFoods | filter: $any('name'): [(addRecForm.controls.foods.valueChanges | async)]" [value]="food">
             <div>
               <img class="recImg" [src]="food.image" [alt]="food.name" />
               {{ food.name }} ({{ food.type }})
