@@ -1,8 +1,7 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ShowAllFoods } from '@app/home/recommendations/recommendations.component';
-import { QuoteService } from '@app/home/quote.service';
 import { switchMap } from 'rxjs/operators';
 import { FoodService } from '@app/home/recommendations/food.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
