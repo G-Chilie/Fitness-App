@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { MatPaginator } from '@angular/material/paginator';
@@ -38,6 +38,7 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   showAllFoodsDataSource: MatTableDataSource<ShowAllFoods>;
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('paginatorFood') showAllPaginator: MatPaginator;
+  @ViewChild('foodInput') foodInput: ElementRef<HTMLInputElement>;
   @ViewChild(MatSort) sort: MatSort;
   foodType: string[] = ['VEGAN', 'VEGETARIAN', 'MEAT', 'DESSERT', 'SNACK'];
   selectedType = 'Vegan';
@@ -353,6 +354,10 @@ export class RecommendationsComponent implements OnInit, AfterViewInit {
   selected(event: MatAutocompleteSelectedEvent): void {
     this.listToPopulate.push(this.addRecForm.controls.foods.value);
     this.recommendations.push(this.addRecForm.controls.foods.value);
+    if (this.foodInput) {
+      this.foodInput.nativeElement.value = '';
+    }
+    this.addRecForm.controls.foods.setValue('');
   }
 
   addNewFood(content: any) {
