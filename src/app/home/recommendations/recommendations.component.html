@@ -151,6 +151,7 @@
             <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
           </mat-chip>
           <input
+            #foodInput
             placeholder="Add Foods..."
             [formControl]="addRecForm.controls.foods"
             [matAutocomplete]="auto"
@@ -159,7 +160,10 @@
           />
         </mat-chip-list>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-          <mat-option *ngFor="let food of allFoods | filter: $any('name'): [(addRecForm.controls.foods.valueChanges | async)]" [value]="food">
+          <mat-option
+            *ngFor="let food of allFoods | filter: $any('name'):[addRecForm.controls.foods.valueChanges | async]"
+            [value]="food"
+          >
             <div>
               <img class="recImg" [src]="food.image" [alt]="food.name" />
               {{ food.name }} ({{ food.type }})
