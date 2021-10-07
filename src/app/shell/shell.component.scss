@@ -71,3 +71,21 @@
   align-items: center;
   cursor: pointer;
 }
+// ==================================FOOTER=====================================================
+.footer-container {
+  background-color: #363740;
+}
+
+.first-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.example-icon {
+  padding: 0 14px;
+}
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+// ==================================FOOTER=====================================================
